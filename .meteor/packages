@@ -14,7 +14,6 @@ tracker                 # Meteor's client-side reactive programming library
 
 standard-minifiers      # JS/CSS minifiers run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
-ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 fastclick
 coffeescript
@@ -29,8 +28,9 @@ mizzao:autocomplete
 manuel:reactivearray
 dburles:collection-helpers
 accounts-password
-iandouglas:accounts-ui-semantic-ui
 babrahams:constellation
 meteorhacks:aggregate
-nefiltari:yaki
 raix:handlebar-helpers
+brettle:accounts-deluxe
+useraccounts:semantic-ui
+useraccounts:flow-routing

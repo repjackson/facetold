@@ -1,9 +1,9 @@
 head
-    title facet
+    title aborty
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
     meta(name='mobile-web-app-capable', content='yes')
     meta(name='apple-mobile-web-app-capable', content='yes')
-    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+    meta(name='apple-mobile-web-app-status-bar-style', content='blue')
     meta(name='format-detection', content='telephone=no')
     link(rel='apple-touch-icon', sizes='57x57', href='/apple-touch-icon-57x57.png')
     link(rel='apple-touch-icon', sizes='60x60', href='/apple-touch-icon-60x60.png')
@@ -29,71 +29,68 @@ head
 template(name='layout')
     +Template.dynamic template=nav
     +Template.dynamic template=cloud
-    +Template.dynamic template=body
+    +Template.dynamic template=main
 
 
 template(name='nav')
-    .ui.inverted.black.menu
-        a#home.ui.item(href='/' class=homeLinkClass)
+    .ui.inverted.blue.menu
+        a#home.ui.item(href='/')
             i.home.icon
-            |Facet
+            |Aborty
         .item
-            .ui.input
-                input#globalsearch(type='text' placeholder='search' autofocus='')
-        .item
-            .ui.input
-                +inputAutocomplete(settings=tagsettings id='tagsearch' class='' placeholder="drilldown/'clear'")
         if currentUser
-            a#add.item(href='/add')
-                i.plus.icon
-                |Add
-        +loginButtons align='right'
+            a#add.item(href='/profile')
+                i.user.icon
+                |Profile
+        +atNavButton
+
 
 template(name='cloud')
+    p I need help with
     if selectedTags
-        #clear.ui.circular.icon.black.button: i.remove.icon
+        #clear.ui.circular.icon.blue.button: i.remove.icon
     each selectedTags
-        .unselectTag.ui.black.button #{this}
+        .unselectTag.ui.blue.button #{this}
     each displayedtags
-        .ui.black.basic.button.selectTag
+        .ui.blue.basic.button.selectTag
             |#{this.name}
             small (#{this.count})
 
-template(name='tagresult')
-    .ui.large.label #{name}
-        small (#{count})
+template(name='people')
+    each people
+        +person
 
-template(name='posts')
-    each posts
-        +post
-
-template(name='post')
+template(name='person')
     .ui.segment
-        if isAuthor
-            a#edit.ui.basic.compact.black.button(href=editaddress) edit
-        if body
-            .body
-                |{{nl2br body}}
+        .ui.small.horizontal.list
+            each wanted
+                .item #{this}
+            each offered
+                .item #{this}
+            each offered
+                .item #{this}
 
-template(name='edit')
-    .ui.segment
-        with post
-            .ui.form
-                .field
-                    textarea(rows='20') #{body}
-            .ui.hidden.divider
-            .bottomGroup
-                #save.ui.black.button Save
-                #cancel.ui.black.button Cancel
-                #delete.ui.right.floated.black.button Delete
-
-
-template(name='add')
+template(name='profile')
     .ui.segment
         .ui.form
-            .field
-                textarea(rows='20')
-        .ui.hidden.divider
-        .bottomGroup
-            #add.ui.black.button Add
-            #cancel.ui.right.floated.black.button Cancel
+            .labeled.field
+                .ui.label I want help with
+                each wanted
+                    .ui.labeled.icon.label
+                        |#{this}
+                        i.delete.icon
+                input#want(type='text' placeholder='add facet')
+            .labeled.field
+                .ui.label I can help with
+                each offered
+                    .ui.labeled.icon.label
+                        |#{this}
+                        i.delete.icon
+                input#offer(type='text' placeholder='add facet')
+            .labeled.field
+                .ui.label Location Tags
+                each locationTags
+                    .ui.labeled.icon.label
+                        |#{this}
+                        i.delete.icon
+                input#locationTags(type='text' placeholder='')
