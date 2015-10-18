@@ -5,7 +5,7 @@
     "api": false,
     "breadcrumb": false,
     "button": true,
-    "card": false,
+    "card": true,
     "checkbox": false,
     "colorize": false,
     "comment": false,
@@ -38,7 +38,7 @@
     "reveal": false,
     "search": true,
     "segment": true,
-    "shape": false,
+    "shape": true,
     "sidebar": false,
     "site": true,
     "state": false,
@@ -48,7 +48,7 @@
     "tab": false,
     "table": false,
     "transition": true,
-    "visibility": false,
+    "visibility": true,
     "visit": false
   },
   "themes": {

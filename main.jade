@@ -1,5 +1,5 @@
 head
-    title aborty
+    title Aborty
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
     meta(name='mobile-web-app-capable', content='yes')
     meta(name='apple-mobile-web-app-capable', content='yes')
@@ -28,69 +28,117 @@ head
 
 template(name='layout')
     +Template.dynamic template=nav
-    +Template.dynamic template=cloud
+    +Template.dynamic template=wants
+    +Template.dynamic template=offers
+    +Template.dynamic template=places
+    // .ui.container
     +Template.dynamic template=main
 
 
 template(name='nav')
     .ui.inverted.blue.menu
-        a#home.ui.item(href='/')
-            i.home.icon
-            |Aborty
-        .item
-        if currentUser
-            a#add.item(href='/profile')
-                i.user.icon
-                |Profile
-        +atNavButton
+        a.ui.item(href='/') Aborty
+        .right.menu
+            if currentUser
+                a.item(href='/profile') Profile
+            +loginButtons
+
+template(name='wants')
+    .ui.segment
+        |Find people who need help with...
+        if selectedwants
+            #clearwants.ui.circular.icon.blue.button: i.remove.icon
+        each selectedwants
+            .unselectwant.ui.blue.button #{this}
+        each wants
+            .selectwant.ui.blue.basic.button
+                |#{this.name}
+                small (#{this.count})
 
 
-template(name='cloud')
-    p I need help with
-    if selectedTags
-        #clear.ui.circular.icon.blue.button: i.remove.icon
-    each selectedTags
-        .unselectTag.ui.blue.button #{this}
-    each displayedtags
-        .ui.blue.basic.button.selectTag
-            |#{this.name}
-            small (#{this.count})
+template(name='offers')
+    .ui.segment
+        |and/or to help with...
+        if selectedoffers
+            #clearoffers.ui.circular.icon.blue.button: i.remove.icon
+        each selectedoffers
+            .unselectoffer.ui.blue.button #{this}
+        each offers
+            .selectoffer.ui.blue.basic.button
+                |#{this.name}
+                small (#{this.count})
+
+
+template(name='places')
+    .ui.segment
+        |and/or who live near...
+        if selectedplaces
+            #clearplaces.ui.circular.icon.blue.button: i.remove.icon
+        each selectedplaces
+            .unselectplace.ui.blue.button #{this}
+        each places
+            .selectplace.ui.blue.basic.button
+                |#{this.name}
+                small (#{this.count})
+
 
 template(name='people')
-    each people
-        +person
+    .ui.cards
+        each people
+            +person
+
 
 template(name='person')
-    .ui.segment
-        .ui.small.horizontal.list
-            each wanted
-                .item #{this}
-            each offered
-                .item #{this}
-            each offered
-                .item #{this}
+    .ui.people.shape
+        .sides
+            .active.side
+                .ui.card
+                    .ui.content
+                        .ui.header #{username}
+                            .right.floated
+                                .contact.ui.basic.small.button Contact
+                    .ui.content
+                        strong Wants help with
+                        each profile.wants
+                            .ui.basic.label #{this}
+                    .ui.content
+                        strong Can help with
+                        each profile.offers
+                            .ui.basic.label #{this}
+                    .ui.content
+                        strong Is near
+                        each profile.places
+                            .ui.basic.label #{this}
+            .side
+                .ui.card
+                    .content
+                        .ui.form
+                            input.message(type='text' placeholder='message')
+                            .ui.button Send
+                            .cancel.ui.button Cancel
+
 
 template(name='profile')
-    .ui.segment
-        .ui.form
-            .labeled.field
-                .ui.label I want help with
-                each wanted
-                    .ui.labeled.icon.label
+    with user
+        .ui.form.segment
+            .ui.segment.inline.field
+                .ui.header I want help with
+                each profile.wants
+                    .ui.basic.icon.label
                         |#{this}
-                        i.delete.icon
-                input#want(type='text' placeholder='add facet')
-            .labeled.field
-                .ui.label I can help with
-                each offered
-                    .ui.labeled.icon.label
+                        i.delete.icon.removewant
+                input#addwant(type='text' placeholder='add tag')
+            .ui.segment.inline.field
+                .ui.header I can help with
+                each profile.offers
+                    .ui.basic.icon.label
                         |#{this}
-                        i.delete.icon
-                input#offer(type='text' placeholder='add facet')
-            .labeled.field
-                .ui.label Location Tags
-                each locationTags
-                    .ui.labeled.icon.label
+                        i.delete.icon.removeoffer
+                input#addoffer(type='text' placeholder='add tag')
+            .ui.segment.inline.field
+                .ui.header Place Tags
+                each profile.places
+                    .ui.basic.icon.label
                         |#{this}
-                        i.delete.icon
-                input#locationTags(type='text' placeholder='')
+                        i.delete.icon.removelocation
+                input#addplace(type='text' placeholder='add tag')

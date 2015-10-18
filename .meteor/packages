@@ -13,7 +13,6 @@ jquery                  # Helpful client-side library
 tracker                 # Meteor's client-side reactive programming library
 
 standard-minifiers      # JS/CSS minifiers run for production mode
-es5-shim                # ECMAScript 5 compatibility for older browsers.
 
 fastclick
 coffeescript
@@ -31,6 +30,4 @@ accounts-password
 babrahams:constellation
 meteorhacks:aggregate
 raix:handlebar-helpers
-brettle:accounts-deluxe
-useraccounts:semantic-ui
-useraccounts:flow-routing
+iandouglas:accounts-ui-semantic-ui
