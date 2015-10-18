@@ -112,10 +112,11 @@ template(name='person')
             .side
                 .ui.card
                     .content
+                        .header Message #{username}
                         .ui.form
                             input.message(type='text' placeholder='message')
-                            .ui.button Send
-                            .cancel.ui.button Cancel
+                            .ui.basic.blue.button Send
+                            .cancel.ui.basic.blue.button Cancel
 
 
 template(name='profile')
@@ -142,3 +143,7 @@ template(name='profile')
                         |#{this}
                         i.delete.icon.removelocation
                 input#addplace(type='text' placeholder='add tag')
+            .ui.segment.inline.field
+                .ui.header Contact Info
+                input#contact(type='text' placeholder='phone/email')
+

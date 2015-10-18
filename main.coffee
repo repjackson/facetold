@@ -5,6 +5,7 @@
 
 FlowRouter.route '/',
     action: (params, queryParams)->
+        GAnalytics.pageview("/")
         BlazeLayout.render 'layout',
             nav: 'nav'
             wants: 'wants'
@@ -14,21 +15,10 @@ FlowRouter.route '/',
 
 FlowRouter.route '/profile',
     action: (params, queryParams)->
+        GAnalytics.pageview("/profile")
         BlazeLayout.render 'layout',
             nav: 'nav'
             main: 'profile'
-
-FlowRouter.route '/wants',
-    action: (params, queryParams)->
-        BlazeLayout.render 'layout',
-            nav: 'nav'
-            main: 'want'
-
-FlowRouter.route '/offers',
-    action: (params, queryParams)->
-        BlazeLayout.render 'layout',
-            nav: 'nav'
-            main: 'offers'
 
 
 if Meteor.isClient
@@ -77,8 +67,7 @@ if Meteor.isClient
         people: -> Meteor.users.find { _id: $ne: Meteor.userId() }
 
     Template.person.onRendered ->
-        $('.shape').shape
-            duration: '5000ms'
+        $('.shape').shape()
 
     Template.person.events
         'click .contact': (e,t)-> t.$('.shape').shape('flip over')
