@@ -30,6 +30,8 @@ accounts-password
 babrahams:constellation
 meteorhacks:aggregate
 raix:handlebar-helpers
-iandouglas:accounts-ui-semantic-ui
-datariot:ganalytics
 meteorhacks:kadira
+nefiltari:yaki
+accounts-ui
+momentjs:moment
+zimme:active-route

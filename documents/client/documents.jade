@@ -1,0 +1,60 @@
+
+template(name='docs')
+    .ui.segment
+        h4 Filter by tags
+        .ui.input
+            input#globalsearch(type='text' placeholder='Global Search')
+        .ui.input
+            +inputAutocomplete(settings=tagsettings id='tagsearch' class='' placeholder="Tag Drilldown/'clear'")
+        if selecteddoctags
+            #cleardoctags.ui.circular.large.active.icon.button: i.remove.icon
+        each selecteddoctags
+            .unselectdoctag.ui.active.large.button #{this}
+        each doctags
+            .selectdoctag.ui.button
+                |#{this.name}
+                small (#{this.count})
+    each docs
+        +doc
+
+template(name='doc')
+    .ui.segment
+        each doctags
+            .ui.basic.label #{this}
+        .ui.segment #{body}
+        if isAuthor
+            .editDoc.ui.button
+                i.pencil.icon
+                |Edit
+        .ui.basic.label
+            |by #{author.username} (#{author.points} points)
+        if $gt user.points 0
+            .sendpoint.ui.button
+                i.send.icon
+                |Send Point
+                small (My Points: #{user.points})
+        |Posted #{when}
+
+template(name='editdoc')
+    with doc
+        .ui.form.segment
+            |Every post costs one point
+            .ui.segment.inline.field
+                #generateTags.ui.button Generate Tags
+                each doctags
+                    .ui.basic.icon.label
+                        |#{this}
+                        i.delete.icon.removeTag
+                input#addDocTag(type='text' placeholder='add tag')
+            .ui.field
+                textarea#docbody #{body}
+            #save.ui.button Save
+            #delete.ui.right.floated.button Delete
+    .ui.modal
+        .content
+            .header Confirm Delete
+            .meta This will refund you one point
+            .description #{body}
+        .actions
+            .ui.button.cancel Cancel
+            .ui.button.approve Delete

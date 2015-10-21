@@ -1,0 +1,66 @@
+template(name='market')
+    .ui.segment
+        h4 Filter Market Items by Tags
+        .ui.input
+            input#globalItemsearch(type='text' placeholder='Global Search')
+        .ui.input
+            +inputAutocomplete(settings=itemsettings id='marketItemSearch' class='' placeholder="Item Tag Drilldown/'clear'")
+        if selectedItemTags
+            #clearItemTags.ui.circular.large.active.icon.button: i.remove.icon
+        each selectedItemTags
+            .unselectItemTag.ui.active.large.button #{this}
+        each itemTags
+            .selectItemTag.ui.button
+                |#{this.name}
+                small (#{this.count})
+    each marketitems
+        +marketitem
+
+template(name='marketitem')
+    .ui.card
+        .ui.content
+            each itemtags
+                .ui.basic.label #{this}
+        .ui.content #{itembody}
+        .ui.content Price: #{price} points
+        if canBuy
+            .content
+                .buyItem.ui.button Buy for #{price} points
+        if isAuthor
+            .editItem.ui.button
+                i.pencil.icon
+                |Edit
+
+template(name='editItem')
+    with item
+        .ui.form.segment
+            .ui.icon.info.message
+                i.info.icon
+                .content: .header Every item costs one point to post
+            .ui.segment.inline.field
+                #generateTags.ui.button Generate Tags
+                each itemTags
+                    .ui.basic.icon.label
+                        |#{this}
+                        i.delete.icon.removeItemTag
+                input#addItemTag(type='text' placeholder='add tag')
+            .ui.field
+                textarea#itemBody #{itemBody}
+            .ui.two.wide.field
+                .label Price (in points)
+                input(type='number' min='0' value=price)
+            .actions
+                #save.ui.button
+                    i.check.icon
+                    |Save
+                #delete.ui.right.floated.button
+                    i.remove.icon
+                    |Delete
+    .ui.modal
+        .content
+            .header Confirm Delete
+            .meta This will refund you one point
+            .description #{body}
+        .actions
+            .ui.button.cancel Cancel
+            .ui.button.approve Delete
