@@ -28,31 +28,33 @@ head
 
 template(name='layout')
     +nav
-    .layout
-        +Template.dynamic template=main
+    +Template.dynamic template=main
 
 template(name='nav')
-    .ui.inverted.fixed.menu
-        a.ui.item(href='/people' class="{{isActivePath path='/people'}}") People
-        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}") Documents
-        a.ui.item(href='/market' class="{{isActivePath path='/market'}}") Market
+    .ui.inverted.labeled.icon.stackable.pointing.menu
+        a.ui.item(href='/people' class="{{isActivePath path='/people'}}")
+            i.user.icon
+            |People
+        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}")
+            i.file.text.icon
+            |Docs
+        a.ui.item(href='/market' class="{{isActivePath path='/market'}}")
+            i.shop.icon
+            |Market
         .right.menu
             if currentUser
-                .ui.item Points: #{user.points}
-                a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}") Messages (#{user.unreadcount})
-                a#adddoc.item
-                    i.plus.icon
-                    |Document
-                a#addItem.item
-                    i.plus.icon
-                    |Market Item
-                a.item(href='/profile' class="{{isActivePath path='/profile'}}") Profile
-            .ui.item
-                +loginButtons align='right'
-
+                a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}")
+                    i.mail.icon
+                    |Messages: #{user.unreadcount}
+                a.item(href='/profile' class="{{isActivePath path='/profile'}}")
+                    i.user.icon
+                    |#{user.username} (#{user.points}p)
+            +atNavButton
+            // .ui.item
+            //     +loginButtons align='right'
 
 template(name='tagresult')
-    .ui.large.label #{name}
+    .ui.large.basic.label #{name}
         small (#{count})
 
 

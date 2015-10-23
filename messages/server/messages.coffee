@@ -11,7 +11,8 @@ Meteor.methods
             read: false
 
         Meteor.users.update recipientId, $inc: unreadcount: 1
-        Meteor.users.update Meteor.userId(), $addToSet: cantsendto: recipientId
+        Meteor.users.update Meteor.userId(),
+            $inc: points: -1
 
     deletemessage: (messageId)->
         message = Messages.findOne messageId

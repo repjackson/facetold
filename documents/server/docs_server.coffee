@@ -6,32 +6,35 @@ Docs.allow
 
 Meteor.publish 'docs', (selectedDocTags)->
     match = {}
-    if selectedDocTags.length > 0 then match.doctags = $all: selectedDocTags
+    if selectedDocTags.length > 0 then match.docTags = $all: selectedDocTags
     return Docs.find match,
         limit: 10
         sort:
             timestamp: -1
 
 
-Meteor.publish 'doctags', (selecteddoctags)->
+Meteor.publish 'doc', (docId) ->
+    Docs.find(docId)
+
+Meteor.publish 'docTags', (selecteddocTags)->
     self = @
     match = {}
 
-    if selecteddoctags.length > 0 then match.doctags = $all: selecteddoctags
+    if selecteddocTags.length > 0 then match.docTags = $all: selecteddocTags
 
     cloud = Docs.aggregate [
         { $match: match }
-        { $project: doctags: 1 }
-        { $unwind: '$doctags' }
-        { $group: _id: '$doctags', count: $sum: 1 }
-        { $match: _id: $nin: selecteddoctags }
+        { $project: docTags: 1 }
+        { $unwind: '$docTags' }
+        { $group: _id: '$docTags', count: $sum: 1 }
+        { $match: _id: $nin: selecteddocTags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
     cloud.forEach (tag) ->
-        self.added 'doctags', Random.id(),
+        self.added 'docTags', Random.id(),
             name: tag.name
             count: tag.count
 
@@ -48,41 +51,41 @@ Meteor.methods
 
         Docs.update postId,
             $set:
-                body: text
-                doctags: lowered
+                docBody: text
+                docTags: lowered
 
 
-    sendpoint: (recipient)->
-        Meteor.users.update Meteor.userId(), $inc: points: -1
-        Meteor.users.update recipient, $inc: points: 1
-
-    savedoc: (docId, text)->
+    saveDoc: (docId, text)->
         Docs.update docId,
             $set: body: text
 
-        cloud = Meteor.users.aggregate [
-            { $match: _id: Meteor.userId() }
+        docCloud = Docs.aggregate [
+            { $match: authorId: Meteor.userId() }
             { $project: docTags: 1 }
             { $unwind: '$docTags' }
             { $group: _id: '$docTags', count: $sum: 1 }
             { $sort: count: -1, _id: 1 }
-            { $limit: 100 }
+            { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 } ]
 
         Meteor.users.update Meteor.userId(),
-            $set: cloud: cloud
+            $set: docCloud: docCloud
 
 
-    addDoc: ->
-        newDocId = Docs.insert
-            authorId: Meteor.userId()
-            body: ''
-            doctags: []
-            timestamp: Date.now()
-        Meteor.users.update Meteor.userId(), $inc: points: -1
-        return newDocId
-
-    deletedoc: (docId)->
-        Docs.remove docId
-        Meteor.users.update Meteor.userId(), $inc: points: 1
-
+    voteUp: (docId)->
+        my = Meteor.user()
+        #undo upvote
+        if Meteor.user().upVotes and docId in Meteor.user().upVotes
+            Docs.update docId,
+                $inc: points: -1
+                $pull: upVoters: Meteor.userId()
+            Meteor.users.update Meteor.userId(),
+                $pull: upVotes: docId
+            return
+        else
+            Docs.update docId,
+                $inc: points: 1
+                $addToSet: upVoters: Meteor.userId()
+            Meteor.users.update Meteor.userId(),
+                $addToSet: upVotes: docId
+            return

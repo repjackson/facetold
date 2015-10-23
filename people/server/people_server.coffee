@@ -1,12 +1,32 @@
+Meteor.methods
+    'createSchema': ->
+        #jsonSchemaDoc = JSON.parse(Assets.getBinary('tree.jsonld'))
+        #jsonSchema = new JSONSchema(jsonSchemaDoc)
+        #simpleSchema = jsonSchema.toSimpleSchema()
+        #console.log simpleSchema
+        console.log (Assets.getBinary('tree.jsonld'))
+
+
+
 Meteor.users.allow
     update: (userId, doc)-> doc._id is Meteor.userId()
     remove: (userId, doc)-> doc._id is Meteor.userId()
 
 Accounts.onCreateUser (options, user)->
     user =
-        points: 100
+        points: 50
         unreadcount: 0
     user
+
+Meteor.publish 'person', (personId)->
+    Meteor.users.find personId,
+        fields:
+            username: 1,
+            profile: 1,
+            unreadcount: 1
+            points: 1
+            docCloud: 1
+            marketCloud: 1
 
 
 
@@ -17,6 +37,8 @@ Meteor.publish 'allpeople', ->
             profile: 1,
             unreadcount: 1
             points: 1
+            docCloud: 1
+            marketCloud: 1
 
 
 Meteor.publish 'people', (selectedwants, selectedoffers, selectedplaces) ->
@@ -46,7 +68,7 @@ Meteor.publish 'wants', (selectedwants, selectedoffers, selectedplaces)->
         { $group: _id: '$profile.wants', count: $sum: 1 }
         { $match: _id: $nin: selectedwants }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 } ]
     cloud.forEach (want) -> self.added 'wants', Random.id(), name: want.name, count: want.count
     self.ready()
@@ -67,7 +89,7 @@ Meteor.publish 'offers', (selectedwants, selectedoffers, selectedplaces)->
         { $group: _id: '$profile.offers', count: $sum: 1 }
         { $match: _id: $nin: selectedoffers }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 } ]
     cloud.forEach (offer) -> self.added 'offers', Random.id(), name: offer.name, count: offer.count
     self.ready()
@@ -87,7 +109,7 @@ Meteor.publish 'places', (selectedwants, selectedoffers, selectedplaces)->
         { $group: _id: '$profile.places', count: $sum: 1 }
         { $match: _id: $nin: selectedplaces }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 } ]
     cloud.forEach (place) -> self.added 'places', Random.id(), name: place.name, count: place.count
     self.ready()

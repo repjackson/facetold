@@ -1,17 +1,20 @@
 
 template(name='docs')
     .ui.segment
-        h4 Filter by tags
+        if currentUser
+            #addDoc.ui.basic.button
+                i.plus.icon
+                |Add Doc (-1p)
         .ui.input
             input#globalsearch(type='text' placeholder='Global Search')
         .ui.input
-            +inputAutocomplete(settings=tagsettings id='tagsearch' class='' placeholder="Tag Drilldown/'clear'")
-        if selecteddoctags
-            #cleardoctags.ui.circular.large.active.icon.button: i.remove.icon
-        each selecteddoctags
-            .unselectdoctag.ui.active.large.button #{this}
-        each doctags
-            .selectdoctag.ui.button
+            +inputAutocomplete(settings=tagsettings id='tagsearch' class='' placeholder="search/'clear'")
+        if selectedDocTags
+            #cleardocTags.ui.circular.icon.button: i.remove.icon
+        each selectedDocTags
+            .unselectDocTag.ui.big.active.compact.button #{this}
+        each docTags
+            .selectDocTag.ui.large.compact.button
                 |#{this.name}
                 small (#{this.count})
     each docs
@@ -19,42 +22,53 @@ template(name='docs')
 
 template(name='doc')
     .ui.segment
-        each doctags
-            .ui.basic.label #{this}
-        .ui.segment #{body}
-        if isAuthor
-            .editDoc.ui.button
-                i.pencil.icon
-                |Edit
-        .ui.basic.label
-            |by #{author.username} (#{author.points} points)
-        if $gt user.points 0
-            .sendpoint.ui.button
-                i.send.icon
-                |Send Point
-                small (My Points: #{user.points})
-        |Posted #{when}
+        .body
+            |{{nl2br body}}
+        .tags
+            each docTags
+                .ui.label(class=docTagLabelClass) #{this}
+        .actions
+            if isAuthor
+                .editDoc.ui.button
+                    i.pencil.icon
+                    |Edit
+            if currentUser
+                unless isAuthor
+                    .voteUp.ui.icon.button
+                        i.thumbs.up.icon(class=voteUpIconClass)
+                .cloneDoc.ui.button
+                    i.fork.icon
+                    |Clone
+            unless isAuthor
+                if $gt user.points 0
+                    .sendpoint.ui.button
+                        i.send.icon
+                        |Give Point
+                        small (#{user.points})
+            .ui.large.label by #{author.username} #{author.points}p
+            |Posted #{when}
 
 template(name='editdoc')
     with doc
         .ui.form.segment
-            |Every post costs one point
             .ui.segment.inline.field
                 #generateTags.ui.button Generate Tags
-                each doctags
-                    .ui.basic.icon.label
+                each docTags
+                    .ui.large.icon.label
                         |#{this}
                         i.delete.icon.removeTag
                 input#addDocTag(type='text' placeholder='add tag')
             .ui.field
                 textarea#docbody #{body}
-            #save.ui.button Save
-            #delete.ui.right.floated.button Delete
+            #save.ui.large.button Save
+            #delete.ui.compact.right.floated.button Delete (+1p)
+            // .ui.small.info.message
+            //     .content Each post costs a point
     .ui.modal
+        .header Confirm Delete
         .content
-            .header Confirm Delete
             .meta This will refund you one point
             .description #{body}
         .actions
             .ui.button.cancel Cancel
-            .ui.button.approve Delete
+            .ui.red.button.approve Delete

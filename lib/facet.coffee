@@ -2,10 +2,10 @@
 @Offers = new Meteor.Collection 'offers'
 @Places = new Meteor.Collection 'places'
 @Docs = new Meteor.Collection 'docs'
-@Doctags = new Meteor.Collection 'doctags'
+@Doctags = new Meteor.Collection 'docTags'
 @Messages = new Meteor.Collection 'messages'
 @Marketitems = new Meteor.Collection 'marketitems'
-@Itemtags = new Meteor.Collection 'itemtags'
+@Itemtags = new Meteor.Collection 'itemTags'
 
 FlowRouter.route '/',
     triggersEnter: [ (context, redirect) ->
@@ -42,6 +42,8 @@ FlowRouter.route '/edititem/:itemId',
 
 
 Docs.helpers
+    author: (doc)-> Meteor.users.findOne @authorId
+Marketitems.helpers
     author: (doc)-> Meteor.users.findOne @authorId
 
 Messages.helpers

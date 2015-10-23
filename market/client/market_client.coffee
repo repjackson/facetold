@@ -1,9 +1,14 @@
 selectedItemTags = new ReactiveArray []
 
 Template.market.helpers
-    doctags: -> Doctags.find {}, limit: 20
-    docs: -> Docs.find {}, limit: 10
+    itemTags: ->
+        itemCount = Marketitems.find().count()
+        if 0 < itemCount < 5 then Itemtags.find { count: $lt: itemCount } else Itemtags.find {}
+
+    marketitems: -> Marketitems.find {}, limit: 5
+
     selectedItemTags: -> selectedItemTags.list()
+
     itemsettings: -> {
         position: 'bottom'
         limit: 10
@@ -17,21 +22,25 @@ Template.market.helpers
     }
 
 Template.market.events
+    'click #addItem': -> Meteor.call 'addItem', (err, newItemId)->
+        if err then throw new Meteor.Error err
+        FlowRouter.go '/edititem/'+newItemId
+
     'autocompleteselect #marketItemSearch': (event, template, doc)->
         selectedItemTags.push doc.name.toString()
         $('#marketItemSearch').val('')
 
-    'keyup #globalItemsearch': (e,t)->
+    'keyup #globalItemSearch': (e,t)->
         e.preventDefault()
         if event.which is 13
-            val = $('#globalItemsearch').val()
+            val = $('#globalItemSearch').val()
             if val is 'clear'
                 selectedItemTags.clear()
                 $('#marketItemSearch').val ''
-                $('#globalItemsearch').val ''
+                $('#globalItemSearch').val ''
             else
                 selectedItemTags.push val.toString()
-                $('#globalItemsearch').val ''
+                $('#globalItemSearch').val ''
 
     'keyup #marketItemSearch': (event, template)->
         event.preventDefault()
@@ -41,28 +50,34 @@ Template.market.events
                 when 'clear'
                     selectedItemTags.clear()
                     $('#marketItemSearch').val ''
-                    $('#globalItemsearch').val ''
+                    $('#globalItemSearch').val ''
 
 
-    'click .selectItemtag': -> selectedItemTags.push @name.toString()
-    'click .unselectdoctag': -> selectedItemTags.remove @toString()
+    'click .selectItemTag': -> selectedItemTags.push @name.toString()
+
+    'click .unselectItemTag': -> selectedItemTags.remove @toString()
+
     'click #clearItemTags': -> selectedItemTags.clear()
 
 
 Template.market.onCreated ->
     @autorun -> Meteor.subscribe 'itemTags', selectedItemTags.array()
-    @autorun -> Meteor.subscribe 'items', selectedItemTags.array()
+
+    @autorun -> Meteor.subscribe 'marketItems', selectedItemTags.array()
+
     @autorun -> Meteor.subscribe 'allpeople'
 
 
 Template.marketitem.helpers
     isAuthor: -> Meteor.userId() is @authorId
 
-    canBuy: -> Meteor.user().points > @price
+    canBuy: -> Meteor.user()?.points > @price
 
     when: -> moment(@timestamp).fromNow()
 
-    user: -> Meteor.user()
+    itemTagLabelClass: -> if @valueOf() in selectedItemTags.array() then 'black' else ''
+
+    user: -> Meteor.user()?
 
 
 Template.marketitem.events
@@ -86,13 +101,16 @@ Template.editItem.events
     'click .removeItemTag': ->
         Marketitems.update FlowRouter.getParam('itemId'), $pull: itemTags: @valueOf()
 
-    'click #save': ->
+    'click #saveItem': ->
         text = $('textarea').val()
-        Meteor.call 'saveItem', FlowRouter.getParam('itemId'), text, (err, result)->
-            if err then throw new Meteor.Error err
-            FlowRouter.go '/docs'
+        price = $('#itemPrice').val()
+        priceInt = parseInt(price)
 
-    'click #delete': ->
+        Meteor.call 'saveItem', FlowRouter.getParam('itemId'), text, priceInt, (err, result)->
+            if err then throw new Meteor.Error err
+            FlowRouter.go '/market'
+
+    'click #deleteItem': ->
         $('.modal').modal(
             onApprove: ->
                 Meteor.call 'deleteItem', FlowRouter.getParam('itemId'), ->
@@ -104,5 +122,7 @@ Template.editItem.events
         e.preventDefault()
         if e.which is 13
             val = $('#addItemTag').val()
-            Docs.update FlowRouter.getParam('itemId'), $addToSet: doctags: val
+            Marketitems.update FlowRouter.getParam('itemId'),
+                $addToSet: itemTags: val
+                ,->
             $('#addItemTag').val('')

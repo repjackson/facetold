@@ -6,7 +6,7 @@ template(name='wants')
         each selectedwants
             .unselectwant.ui.large.active.button #{this}
         each wants
-            .selectwant.ui.button
+            .selectwant.ui.large.basic.compact.button
                 |#{this.name}
                 small (#{this.count})
 
@@ -18,7 +18,7 @@ template(name='offers')
         each selectedoffers
             .unselectoffer.ui.large.active.button #{this}
         each offers
-            .selectoffer.ui.button
+            .selectoffer.ui.large.basic.compact.button
                 |#{this.name}
                 small (#{this.count})
 
@@ -30,7 +30,7 @@ template(name='places')
         each selectedplaces
             .unselectplace.ui.large.active.button #{this}
         each places
-            .selectplace.ui.button
+            .selectplace.ui.large.basic.compact.button
                 |#{this.name}
                 small (#{this.count})
 
@@ -52,47 +52,55 @@ template(name='person')
         .ui.content
             strong Wants help with
             each profile.wants
-                .ui.basic.label #{this}
+                .ui.label(class=wantTagClass) #{this}
         .ui.content
             strong Can help with
             each profile.offers
-                .ui.basic.label #{this}
+                .ui.label(class=offerTagClass) #{this}
         .ui.content
             strong Is near
             each profile.places
-                .ui.basic.label #{this}
-        if cansend
+                .ui.label(class=placeTagClass) #{this}
+        if currentUser
             .content
-                .ui.input
-                    input#message(type='text' placeholder='Message #{username}')
+                .ui.fluid.icon.input
+                    input#message(type='text' placeholder='Message #{username} (-1p)')
+                    i.mail.icon
 
 template(name='profile')
+    // +quickFlow autoFlowDef=flowDef template="semanticUI"
     with user
         .ui.form.segment
             .ui.segment.inline.field
                 | I want help with
                 each profile.wants
-                    .ui.basic.icon.label
+                    .ui.basic.large.icon.label
                         |#{this}
                         i.delete.icon.removewant
                 input#addwant(type='text' placeholder='add tag')
             .ui.segment.inline.field
                 | I can help with
                 each profile.offers
-                    .ui.basic.icon.label
+                    .ui.basic.large.icon.label
                         |#{this}
                         i.delete.icon.removeoffer
                 input#addoffer(type='text' placeholder='add tag')
             .ui.segment.inline.field
                 | Place Tags
                 each profile.places
-                    .ui.basic.icon.label
+                    .ui.basic.large.icon.label
                         |#{this}
                         i.delete.icon.removelocation
                 input#addplace(type='text' placeholder='add tag')
             .ui.segment
                 | My Document Tag Cloud
-                each cloud
+                each docCloud
+                    .ui.basic.label
+                        |#{this.name}
+                        small (#{this.count})
+            .ui.segment
+                | My Market Item Tag Cloud
+                each marketCloud
                     .ui.basic.label
                         |#{this.name}
                         small (#{this.count})

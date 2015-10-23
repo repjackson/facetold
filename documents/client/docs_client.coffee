@@ -1,14 +1,21 @@
-selecteddoctags = new ReactiveArray []
+selectedDocTags = new ReactiveArray []
 
 Template.docs.onCreated ->
-    @autorun -> Meteor.subscribe 'doctags', selecteddoctags.array()
-    @autorun -> Meteor.subscribe 'docs', selecteddoctags.array()
+    @autorun -> Meteor.subscribe 'docTags', selectedDocTags.array()
+
+    @autorun -> Meteor.subscribe 'docs', selectedDocTags.array()
+
     @autorun -> Meteor.subscribe 'allpeople'
 
 Template.docs.helpers
-    doctags: -> Doctags.find {}, limit: 20
-    docs: -> Docs.find {}, limit: 10
-    selecteddoctags: -> selecteddoctags.list()
+    docTags: ->
+        docCount = Docs.find().count()
+        if 0 < docCount < 5 then Doctags.find { count: $lt: docCount } else Doctags.find()
+
+    docs: -> Docs.find {}, limit: 5
+
+    selectedDocTags: -> selectedDocTags.list()
+
     tagsettings: -> {
         position: 'bottom'
         limit: 10
@@ -22,8 +29,12 @@ Template.docs.helpers
     }
 
 Template.docs.events
+    'click #addDoc': -> Meteor.call 'addDoc', (err, newDocId)->
+        if err then throw new Meteor.Error err
+        FlowRouter.go '/editdoc/'+newDocId
+
     'autocompleteselect #tagsearch': (event, template, doc)->
-        selecteddoctags.push doc.name.toString()
+        selectedDocTags.push doc.name.toString()
         $('#tagsearch').val('')
 
     'keyup #globalsearch': (e,t)->
@@ -31,11 +42,11 @@ Template.docs.events
         if event.which is 13
             val = $('#globalsearch').val()
             if val is 'clear'
-                selecteddoctags.clear()
+                selectedDocTags.clear()
                 $('#tagsearch').val ''
                 $('#globalsearch').val ''
             else
-                selecteddoctags.push val.toString()
+                selectedDocTags.push val.toString()
                 $('#globalsearch').val ''
 
     'keyup #tagsearch': (event, template)->
@@ -44,14 +55,16 @@ Template.docs.events
             val = $('#tagsearch').val()
             switch val
                 when 'clear'
-                    selecteddoctags.clear()
+                    selectedDocTags.clear()
                     $('#tagsearch').val ''
                     $('#globalsearch').val ''
 
 
-    'click .selectdoctag': -> selecteddoctags.push @name.toString()
-    'click .unselectdoctag': -> selecteddoctags.remove @toString()
-    'click #cleardoctags': -> selecteddoctags.clear()
+    'click .selectDocTag': -> selectedDocTags.push @name.toString()
+
+    'click .unselectDocTag': -> selectedDocTags.remove @toString()
+
+    'click #cleardocTags': -> selectedDocTags.clear()
 
 
 Template.doc.helpers
@@ -59,11 +72,22 @@ Template.doc.helpers
     cansend: -> @authorId not in Meteor.user().cantsendto
     when: -> moment(@timestamp).fromNow()
     user: -> Meteor.user()
+    docTagLabelClass: -> if @valueOf() in selectedDocTags.array() then 'black' else 'basic'
+    voteUpIconClass: -> if @_id in Meteor.user()?.upVotes? then '' else 'outline'
+
 
 Template.doc.events
-    'click .editDoc': -> FlowRouter.go '/editdoc/'+@_id
-    'click .sendpoint': -> Meteor.call 'sendpoint', @authorId, ->
+    'click .editDoc': ->
+        FlowRouter.go '/editdoc/'+@_id
 
+    'click .sendpoint': ->
+        Meteor.call 'sendpoint', @authorId, ->
+
+    'click .cloneDoc': -> Meteor.call 'cloneDoc', @_id, (err, newDocId)->
+        if err then throw new Meteor.Error err
+        FlowRouter.go '/editdoc/'+newDocId
+
+    'click .voteUp': -> Meteor.call 'voteUp', @_id
 
 Template.editdoc.onCreated ->
     @autorun -> Meteor.subscribe 'doc', FlowRouter.getParam('docId')
@@ -75,23 +99,29 @@ Template.editdoc.events
     'click #generateTags': ->
         text = $('textarea').val()
         Meteor.call 'generateTags', FlowRouter.getParam('docId'), text
-    'click .removeTag': -> Docs.update FlowRouter.getParam('docId'), $pull: doctags: @valueOf()
+
+    'click .removeTag': ->
+        Docs.update FlowRouter.getParam('docId'),
+            $pull: docTags: @valueOf()
+            , ->
+
     'click #save': ->
         text = $('textarea').val()
-        Meteor.call 'savedoc', FlowRouter.getParam('docId'), text, (err, result)->
+        Meteor.call 'saveDoc', FlowRouter.getParam('docId'), text, (err, result)->
             if err then throw new Meteor.Error err
             FlowRouter.go '/docs'
 
     'click #delete': ->
         $('.modal').modal(
             onApprove: ->
-                Meteor.call 'deletedoc', FlowRouter.getParam('docId'), ->
+                Meteor.call 'deleteDoc', FlowRouter.getParam('docId'), ->
                 $('.ui.modal').modal('hide')
                 FlowRouter.go '/docs'
         	).modal 'show'
+
     'keyup #addDocTag': (e)->
         e.preventDefault()
         if e.which is 13
             val = $('#addDocTag').val()
-            Docs.update FlowRouter.getParam('docId'), $addToSet: doctags: val
+            Docs.update FlowRouter.getParam('docId'), $addToSet: docTags: val
             $('#addDocTag').val('')
