@@ -1,0 +1,15 @@
+.ui.segment
+    .ui.input
+        input#globalsearch(type='text' placeholder='Global Search')
+    .ui.input
+        +inputAutocomplete(settings=tagsettings id='tagsearch' class='' placeholder="search/'clear'")
+    if selectedtags
+        #cleartags.ui.circular.icon.button: i.remove.icon
+    each selectedtags
+        .unselectDocTag.ui.big.active.compact.button #{this}
+    each tags
+        .selectDocTag.ui.large.compact.button
+            |#{this.name}
+            small (#{this.count})
+each docs
+    +doc

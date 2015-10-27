@@ -31,27 +31,21 @@ template(name='layout')
     +Template.dynamic template=main
 
 template(name='nav')
-    .ui.inverted.labeled.icon.stackable.pointing.menu
-        a.ui.item(href='/people' class="{{isActivePath path='/people'}}")
-            i.user.icon
-            |People
-        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}")
-            i.file.text.icon
-            |Docs
-        a.ui.item(href='/market' class="{{isActivePath path='/market'}}")
-            i.shop.icon
-            |Market
+    .ui.inverted.pointing.menu
+        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}") Facet
+        if currentUser
+            a#addDoc.ui.item Add
         .right.menu
             if currentUser
-                a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}")
-                    i.mail.icon
-                    |Messages: #{user.unreadcount}
-                a.item(href='/profile' class="{{isActivePath path='/profile'}}")
-                    i.user.icon
-                    |#{user.username} (#{user.points}p)
-            +atNavButton
-            // .ui.item
-            //     +loginButtons align='right'
+                // a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}")
+                //     i.mail.icon
+                //     |Messages: #{user.unreadcount}
+                // a.item(href='/profile' class="{{isActivePath path='/profile'}}")
+                //     i.user.icon
+                //     |#{user.username} (#{user.points}p)
+            // +atNavButton
+            a.ui.item
+                +loginButtons align='right'
 
 template(name='tagresult')
     .ui.large.basic.label #{name}

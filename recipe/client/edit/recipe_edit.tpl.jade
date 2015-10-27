@@ -1,0 +1,82 @@
+.ui.form
+    with recipeobject
+        #name.field
+            label Recipe Name: #{recipename}
+            input#recipename(type='text' placeholder='change name')
+        .ui.segment.field
+            h4 Time
+            label Total Time: #{totaltime}
+            .field.ui.segment
+                label Prep Time: #{preptime} #{prepunits}
+                .inline.field
+                    label In minutes
+                    .ui.inverted.buttons
+                        .ui.button.ptm(class='{{ptmclass 0}}') 0
+                        .ui.button.ptm(class='{{ptmclass 5}}') 5
+                        .ui.button.ptm(class='{{ptmclass 10}}') 10
+                        .ui.button.ptm(class='{{ptmclass 15}}') 15
+                        .ui.button.ptm(class='{{ptmclass 30}}') 30
+                        .ui.button.ptm(class='{{ptmclass 45}}') 45
+                .inline.field
+                    label or hours
+                    .ui.inverted.buttons
+                        .ui.button.pth(class='{{pthclass 1}}') 1
+                        .ui.button.pth(class='{{pthclass 1.5}}') 1.5
+                        .ui.button.pth(class='{{pthclass 2.5}}') 2.5
+                        .ui.button.pth(class='{{pthclass 3}}') 3
+                        .ui.button.pth(class='{{pthclass 4}}') 4
+                        .ui.button.pth(class='{{pthclass 5}}') 5
+            .field.ui.segment
+                label Cooking Time: #{cooktime} #{cookunits}
+                .inline.field
+                    label In minutes
+                    .ui.inverted.buttons
+                        .ui.button.ctm(class='{{ctmclass 0}}') 0
+                        .ui.button.ctm(class='{{ctmclass 5}}') 5
+                        .ui.button.ctm(class='{{ctmclass 10}}') 10
+                        .ui.button.ctm(class='{{ctmclass 15}}') 15
+                        .ui.button.ctm(class='{{ctmclass 30}}') 30
+                        .ui.button.ctm(class='{{ctmclass 45}}') 45
+                .inline.field
+                    label or hours
+                    .ui.inverted.buttons
+                        .ui.button.cth(class='{{cthclass 1}}') 1
+                        .ui.button.cth(class='{{cthclass 1.5}}') 1.5
+                        .ui.button.cth(class='{{cthclass 2.5}}') 2.5
+                        .ui.button.cth(class='{{cthclass 3}}') 3
+                        .ui.button.cth(class='{{cthclass 4}}') 4
+                        .ui.button.cth(class='{{cthclass 5}}') 5
+        .ui.segment
+            h4 Ingredients
+            .ui.relaxed.divided.list
+                each ingredients
+                    .item
+                        .right.floated.content
+                            i.remove.link.removeingredient.icon
+                        .content #{this.amount} #{this.name}
+            #addingredient.field
+                label Add Ingredient
+                .four.fields
+                    .two.wide.field
+                        label Amount
+                        input#amount(type='text' placeholder='1/4')
+                    .three.wide.field
+                        label Unit
+                        input#unit(type='text' placeholder='tsp, 16 oz can')
+                    .four.wide.field
+                        label Ingredient
+                        input#ingredient(type='text' placeholder='apple, beans')
+                    .four.wide.field
+                        label Descriptor
+                        input#descriptor(type='text' placeholder='small, minced')
+        .ui.segment
+            h4 Steps
+            .ui.relaxed.divided.list
+                each steps
+                    .item
+                        .right.floated.content
+                            i.remove.link.removestep.icon
+                        .content #{this}
+            .field
+                label Add Step
+                input#addstep(type='text' placeholder='Add Step')

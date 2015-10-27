@@ -4,9 +4,9 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedDocTags)->
+Meteor.publish 'docs', (selectedtags)->
     match = {}
-    if selectedDocTags.length > 0 then match.docTags = $all: selectedDocTags
+    if selectedtags.length > 0 then match.tags = $all: selectedtags
     return Docs.find match,
         limit: 10
         sort:
@@ -16,25 +16,25 @@ Meteor.publish 'docs', (selectedDocTags)->
 Meteor.publish 'doc', (docId) ->
     Docs.find(docId)
 
-Meteor.publish 'docTags', (selecteddocTags)->
+Meteor.publish 'tags', (selectedtags)->
     self = @
     match = {}
 
-    if selecteddocTags.length > 0 then match.docTags = $all: selecteddocTags
+    if selectedtags.length > 0 then match.tags = $all: selectedtags
 
     cloud = Docs.aggregate [
         { $match: match }
-        { $project: docTags: 1 }
-        { $unwind: '$docTags' }
-        { $group: _id: '$docTags', count: $sum: 1 }
-        { $match: _id: $nin: selecteddocTags }
+        { $project: tags: 1 }
+        { $unwind: '$tags' }
+        { $group: _id: '$tags', count: $sum: 1 }
+        { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
         { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
     cloud.forEach (tag) ->
-        self.added 'docTags', Random.id(),
+        self.added 'tags', Random.id(),
             name: tag.name
             count: tag.count
 
@@ -52,18 +52,16 @@ Meteor.methods
         Docs.update postId,
             $set:
                 docBody: text
-                docTags: lowered
+                tags: lowered
 
 
-    saveDoc: (docId, text)->
-        Docs.update docId,
-            $set: body: text
+    saveDoc: (docId)->
 
         docCloud = Docs.aggregate [
             { $match: authorId: Meteor.userId() }
-            { $project: docTags: 1 }
-            { $unwind: '$docTags' }
-            { $group: _id: '$docTags', count: $sum: 1 }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
             { $sort: count: -1, _id: 1 }
             { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 } ]

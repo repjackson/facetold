@@ -1,0 +1,26 @@
+.ui.segment
+    each parts
+        +Template.dynamic(template=templateViewName)
+    .actions
+        .ui.segment
+            each tags
+                .ui.basic.label #{this}
+        if isAuthor
+            .edit.ui.button
+                i.pencil.icon
+                |Edit
+        if currentUser
+            unless isAuthor
+                .voteUp.ui.icon.button
+                    i.thumbs.up.icon(class=voteUpIconClass)
+            .cloneDoc.ui.button
+                i.fork.icon
+                |Clone
+        unless isAuthor
+            if $gt user.points 0
+                .sendpoint.ui.button
+                    i.send.icon
+                    |Give Point
+                    small (#{user.points})
+        .ui.large.label by #{author.username}
+        |Posted #{when}
