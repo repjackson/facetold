@@ -9,14 +9,9 @@ Template.doc.helpers
 
     voteUpIconClass: -> if @_id in Meteor.user()?.upVotes? then '' else 'outline'
 
-    parts: (e,t)->
-        console.log @parts
-        parts = _.keys @parts?
-        console.log 'part array', parts
-        parts
+    templateViewName: -> "#{@}_view"
 
-    templateViewName: ->
-        @+'_view'
+    subtemplatecontext: -> Template.parentData(1).parts[this]
 
 Template.doc.events
     'click .edit': ->

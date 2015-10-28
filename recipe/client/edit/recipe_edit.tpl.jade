@@ -1,11 +1,11 @@
 .ui.form
     with recipeobject
-        #name.field
+        #name.inline.field
             label Recipe Name: #{recipename}
             input#recipename(type='text' placeholder='change name')
         .ui.segment.field
             h4 Time
-            label Total Time: #{totaltime}
+            label Total Time: #{totaltimedisplay}
             .field.ui.segment
                 label Prep Time: #{preptime} #{prepunits}
                 .inline.field
@@ -53,8 +53,8 @@
                     .item
                         .right.floated.content
                             i.remove.link.removeingredient.icon
-                        .content #{this.amount} #{this.name}
-            #addingredient.field
+                        .content #{this.amount} #{this.unit} #{this.ingredient} #{this.descriptor}
+            .ui.field
                 label Add Ingredient
                 .four.fields
                     .two.wide.field
@@ -69,6 +69,7 @@
                     .four.wide.field
                         label Descriptor
                         input#descriptor(type='text' placeholder='small, minced')
+                // #addingredient.ui.button Add
         .ui.segment
             h4 Steps
             .ui.relaxed.divided.list

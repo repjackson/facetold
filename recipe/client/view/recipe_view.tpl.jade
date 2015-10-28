@@ -1,31 +1,15 @@
-.ui.form
-    with recipeobject
-        #name.field
-            label Recipe Name: #{recipename}
-            input#recipename(type='text' placeholder='change name')
-        .ui.segment
-            h4 Ingredients
-            .ui.relaxed.divided.list
-                each ingredients
-                    .item
-                        .right.floated.content
-                            i.remove.link.removeingredient.icon
-                        .content #{this.amount} #{this.name}
-            #addingredient.field
-                label Add Ingredient
-                .two.fields
-                    .two.wide.field
-                        input#ingredientamount.ui.two.wide.input(type='number' min='0' placeholder='Amount')
-                    .field
-                        input#ingredientname.ui.four.wide.input(type='text' placeholder='Ingredient')
-        .ui.segment
-            h4 Steps
-            .ui.relaxed.divided.list
-                each steps
-                    .item
-                        .right.floated.content
-                            i.remove.link.removestep.icon
-                        .content #{this}
-            .field
-                label Add Step
-                input#addstep(type='text' placeholder='Add Step')
+.ui.segment
+    h5 Recipe Name: #{recipename}
+    h5 Total Time: #{totaltimedisplay}
+    h5 Prep Time: #{preptime} #{prepunits}
+    h5 Cook Time: #{cooktime} #{cookunits}
+    .ui.segment
+        h4 Ingredients
+        .ui.relaxed.divided.list
+            each ingredients
+                .item #{this.amount} #{this.unit} #{this.ingredient} #{this.descriptor}
+    .ui.segment
+        h4 Steps
+        .ui.relaxed.divided.list
+            each steps
+                .item #{this}

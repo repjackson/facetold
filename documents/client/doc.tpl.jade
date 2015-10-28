@@ -1,8 +1,9 @@
 .ui.segment
-    each parts
-        +Template.dynamic(template=templateViewName)
+    each partlist
+        +Template.dynamic(template=templateViewName data=subtemplatecontext)
     .actions
         .ui.segment
+            |Document Tags
             each tags
                 .ui.basic.label #{this}
         if isAuthor

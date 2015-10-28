@@ -8,42 +8,42 @@ Meteor.methods
         Meteor.users.update recipientId, $inc: points: 1
 
     addDoc: ->
-        newDocId = Docs.insert
+        newdocid = Docs.insert
             authorId: Meteor.userId()
             timestamp: Date.now()
 
         Meteor.users.update Meteor.userId(), $inc: points: -1
 
-        return newDocId
+        return newdocid
 
-    cloneDoc: (docId)->
-        doc = Docs.findOne docId
+    cloneDoc: (docid)->
+        doc = Docs.findOne docid
 
-        newDocId = Docs.insert
+        newdocid = Docs.insert
             authorId: Meteor.userId()
             body: doc.body
             tags: doc.tags
             timestamp: Date.now()
         Meteor.users.update Meteor.userId(), $inc: points: -1
-        return newDocId
+        return newdocid
 
-    deleteDoc: (docId)->
-        Docs.remove docId
+    deleteDoc: (docid)->
+        Docs.remove docid
         Meteor.users.update Meteor.userId(), $inc: points: 1
 
-    addpart: (docId, part)->
+    addpart: (docid, part)->
         parts = {}
         parts[part] = {}
 
-        Docs.update docId,
+        Docs.update docid,
             $addToSet:
                 partlist: part
                 tags: part
             $set: parts: parts
 
 
-    removepart: (docId, part)->
-        Docs.update docId,
+    removepart: (docid, part)->
+        Docs.update docid,
             $pull:
                 partlist: part
                 tags: part

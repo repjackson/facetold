@@ -6,12 +6,14 @@ Template.edit.helpers
 
     selectedfeatures: ->
         console.log 'parts', @parts
+        console.log 'selected',parts
         parts = _.keys @parts?
         console.log parts
 
     availableFeatures: ->
         parts = _.keys @parts?
-        _.difference(features, parts)
+        console.log 'availeble',parts
+        _.difference(Features, parts)
 
     templateEditName: ->
         @+'_edit'
@@ -32,7 +34,7 @@ Template.edit.events
 
     'click #addpart': ->
         part = @valueOf()
-        Meteor.call 'addpart', FlowRouter.getParam('docId'), part, ->
+        Meteor.call 'addpart', FlowRouter.getParam('docId'), part
 
 
     'click .removepart':->

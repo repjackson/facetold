@@ -1,29 +1,12 @@
 Meteor.methods
-    addingredient: (docId, amount, name)->
-        Docs.update { _id: docId, "bodyparts.name": "recipe" },
-            $push:
-                "bodyparts.$.ingredients":
-                    amount: amount
-                    name: name
-            $addToSet:
-                tags: name
+    calctime: (docid)->
+        doc = Docs.findOne docid
+        if doc.parts.recipe.cookunits is 'hours' then cooktimemins = doc.parts.recipe.cooktime * 60
+        else cooktimemins = doc.parts.recipe.cooktime
 
-    removeingredient: (docId, ingredient)->
-        Docs.update { _id: docId, "bodyparts.name": "recipe" },
-            $pull:
-                "bodyparts.$.ingredients": ingredient
-                tags: ingredient.name
+        if doc.parts.recipe.prepunits is 'hours' then preptimemins = doc.parts.recipe.preptime * 60
+        else preptimemins = doc.parts.recipe.preptime
 
-    addstep: (docId, step)->
-        Docs.update { _id: docId, "bodyparts.name": "recipe" },
-            $push:
-                "bodyparts.$.steps": step
-            $addToSet:
-                tags: step
+        totaltime = parseInt(preptimemins) + parseInt(cooktimemins)
 
-    removestep: (docId, step)->
-        Docs.update { _id: docId, "bodyparts.name": "recipe" },
-            $pull:
-                "bodyparts.$.steps": step
-                tags: step
-
+        Docs.update docid, $set: 'parts.recipe.totaltime': totaltime

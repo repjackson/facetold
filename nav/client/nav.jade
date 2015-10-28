@@ -32,9 +32,7 @@ template(name='layout')
 
 template(name='nav')
     .ui.inverted.pointing.menu
-        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}") Facet
-        if currentUser
-            a#addDoc.ui.item Add
+        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}") Home
         .right.menu
             if currentUser
                 // a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}")
@@ -44,6 +42,7 @@ template(name='nav')
                 //     i.user.icon
                 //     |#{user.username} (#{user.points}p)
             // +atNavButton
+            a#addDoc.ui.item Add
             a.ui.item
                 +loginButtons align='right'
 

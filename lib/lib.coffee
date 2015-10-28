@@ -1,13 +1,8 @@
 @Messages = new Meteor.Collection 'messages'
 
 FlowRouter.route '/',
-    triggersEnter: [ (context, redirect) ->
-        redirect '/docs'
-    ]
-
-FlowRouter.route '/docs',
     action: (params, queryParams)->
-        BlazeLayout.render 'layout', main: 'docs'
+        BlazeLayout.render 'layout', main: 'home'
 
 FlowRouter.route '/edit/:docId',
     action: (params, queryParams)->
@@ -26,6 +21,4 @@ Messages.helpers
     to: (doc)-> Meteor.users.findOne @toId
 
 
-@Schemas = {}
-
-@features = ['recipe', 'review']
+@Features = ['recipe', 'review']
