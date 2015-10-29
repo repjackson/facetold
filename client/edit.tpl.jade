@@ -1,24 +1,24 @@
-with doc
-    .ui.form.segment
-        if availableFeatures
-            .ui.segment
-                |Add Body Part
-                each availableFeatures
-                    #addpart.ui.button #{this}
+.ui.form.segment
+    if availableFeatures
         .ui.segment
-            .ui.segment
-                |Document Tags
-                each tags
-                    .ui.large.basic.label #{this}
+            |Add Part
+            each availableFeatures
+                #addpart.ui.button #{this}
+    .ui.segment
+        .ui.segment
+            |Document Tags
+            each tags
+                .ui.large.basic.label #{this}
+        if partlist
             each partlist
                 .ui.segment
                     h3.capitalized
                         |#{this}
                         a.removepart(href='#') (-)
                     .ui.divider
-                    +Template.dynamic(template=templateEditName)
-            #save.ui.large.button Save Doc
-            #delete.ui.compact.right.floated.button Delete
+                    +Template.dynamic(template=templateEditName data=subtemplatecontext)
+        #save.ui.large.button Save Document
+        #delete.ui.compact.right.floated.button Delete Document
 .ui.delete.basic.modal
     .header Confirm Delete
     .content

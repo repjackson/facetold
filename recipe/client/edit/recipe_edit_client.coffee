@@ -1,7 +1,7 @@
 Template.recipe_edit.helpers
     recipeobject: ->
-        currentDoc = Docs.findOne(FlowRouter.getParam('docId'))
-        currentDoc.parts?.recipe
+        currentDoc = Docs.findOne(Session.get 'editing')
+        currentDoc.parts?.recipe?
 
     pthclass: (val)-> if @preptime is val.toString() and @prepunits is 'hours' then 'active' else 'basic'
     ptmclass: (val)-> if @preptime is val.toString() and @prepunits is 'mins' then 'active' else 'basic'
@@ -21,7 +21,7 @@ Template.recipe_edit.events
         e.preventDefault()
         if e.which is 13
             name = $('#recipename').val()
-            docid = FlowRouter.getParam('docId')
+            docid = Session.get 'editing'
 
             Docs.update docid, $set: 'parts.recipe.recipename': name
 
@@ -35,7 +35,7 @@ Template.recipe_edit.events
             ingredient = $('#ingredient').val()
             descriptor = $('#descriptor').val()
 
-            docid = FlowRouter.getParam('docId')
+            docid = Session.get 'editing'
             Docs.update docid,
                 $addToSet:
                     'parts.recipe.ingredients':
@@ -51,7 +51,7 @@ Template.recipe_edit.events
             $('#descriptor').val('')
 
     'click .removeingredient': (e,t)->
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
         ingredient = @ingredient
         Docs.update docid,
             $pull:
@@ -61,50 +61,50 @@ Template.recipe_edit.events
     'keyup #addstep': (e,t)->
         e.preventDefault()
         if e.which is 13
-            docid = FlowRouter.getParam('docId')
+            docid = Session.get 'editing'
             step = $('#addstep').val()
             Docs.update docid, $addToSet: 'parts.recipe.steps': step
             $('#addstep').val('')
 
     'click .removestep': (e,t)->
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
         Docs.update docid, $pull: 'parts.recipe.steps': @valueOf()
 
 
     'click .cth': (e,t)->
         cookhours =  e.currentTarget.innerHTML
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
         Docs.update docid,
             $set:
                 'parts.recipe.cooktime': cookhours
                 'parts.recipe.cookunits': 'hours'
-        Meteor.call 'calctime', FlowRouter.getParam('docId')
+        Meteor.call 'calctime', Session.get 'editing'
 
     'click .ctm': (e,t)->
         cookmins =  e.currentTarget.innerHTML
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
 
         Docs.update docid,
             $set:
                 'parts.recipe.cooktime': cookmins
                 'parts.recipe.cookunits': 'mins'
-        Meteor.call 'calctime', FlowRouter.getParam('docId')
+        Meteor.call 'calctime', Session.get 'editing'
 
 
     'click .pth': (e,t)->
         prephours =  e.currentTarget.innerHTML
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
         Docs.update docid,
             $set:
                 'parts.recipe.preptime': prephours
                 'parts.recipe.prepunits': 'hours'
-        Meteor.call 'calctime', FlowRouter.getParam('docId')
+        Meteor.call 'calctime', Session.get 'editing'
 
     'click .ptm': (e,t)->
         prephours=  e.currentTarget.innerHTML
-        docid = FlowRouter.getParam('docId')
+        docid = Session.get 'editing'
         Docs.update docid,
             $set:
                 'parts.recipe.preptime': prephours
                 'parts.recipe.prepunits': 'mins'
-        Meteor.call 'calctime', FlowRouter.getParam('docId')
+        Meteor.call 'calctime', Session.get 'editing'

@@ -26,28 +26,35 @@ head
     meta(name='msapplication-TileImage', content='/mstile-144x144.png')
     meta(name='theme-color', content='#ffffff')
 
-template(name='layout')
+
+body
     +nav
-    +Template.dynamic template=main
+    +home
 
 template(name='nav')
     .ui.inverted.pointing.menu
-        a.ui.item(href='/docs' class="{{isActivePath path='/docs'}}") Home
+        a#home.ui.item(href='/') Home
         .right.menu
             if currentUser
-                // a.ui.item(href='/messages' class="{{isActivePath path='/messages'}}")
-                //     i.mail.icon
-                //     |Messages: #{user.unreadcount}
-                // a.item(href='/profile' class="{{isActivePath path='/profile'}}")
-                //     i.user.icon
-                //     |#{user.username} (#{user.points}p)
-            // +atNavButton
-            a#addDoc.ui.item Add
+                a#addDoc.ui.item Add
             a.ui.item
                 +loginButtons align='right'
 
-template(name='tagresult')
-    .ui.large.basic.label #{name}
-        small (#{count})
-
-
+template(name='home')
+    unless isediting
+        .ui.segment
+            .ui.input
+                input#search(type='text' placeholder='Search')
+            if selectedtags
+                #cleartags.ui.circular.icon.button: i.remove.icon
+            each selectedtags
+                .unselecttag.ui.big.active.compact.button #{this}
+            each tags
+                .selecttag.ui.large.compact.button
+                    |#{this.name}
+                    small (#{this.count})
+    each docs
+        if isediting
+            +edit
+        else
+            +doc

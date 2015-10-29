@@ -8,27 +8,18 @@ meteor-base             # Packages every Meteor app needs to have
 mongo                   # The database Meteor supports right now
 blaze-html-templates    # Compile .html files into Meteor Blaze views
 session                 # Client-side reactive dictionary for your app
-jquery                  # Helpful client-side library
 tracker                 # Meteor's client-side reactive programming library
 
-standard-minifiers      # JS/CSS minifiers run for production mode
 
-fastclick
 coffeescript
 mquandalle:jade
 mquandalle:stylus
 semantic:ui
 flemay:less-autoprefixer
-kadira:flow-router
-kadira:blaze-layout
 random
 manuel:reactivearray
-dburles:collection-helpers
 accounts-password
-babrahams:constellation
 meteorhacks:aggregate
-raix:handlebar-helpers
-momentjs:moment
-zimme:active-route
 accounts-ui
-mizzao:autocomplete
+jquery
+babrahams:constellation

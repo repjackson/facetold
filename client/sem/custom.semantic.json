@@ -9,7 +9,7 @@
     "checkbox": false,
     "colorize": false,
     "comment": false,
-    "container": true,
+    "container": false,
     "dimmer": true,
     "divider": true,
     "dropdown": true,
@@ -36,7 +36,7 @@
     "rating": false,
     "reset": true,
     "reveal": false,
-    "search": true,
+    "search": false,
     "segment": true,
     "shape": false,
     "sidebar": false,
@@ -48,7 +48,7 @@
     "tab": false,
     "table": false,
     "transition": true,
-    "visibility": true,
+    "visibility": false,
     "visit": false
   },
   "themes": {
