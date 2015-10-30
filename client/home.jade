@@ -41,20 +41,56 @@ template(name='nav')
                 +loginButtons align='right'
 
 template(name='home')
-    unless isediting
+    unless editmode
         .ui.segment
             .ui.input
                 input#search(type='text' placeholder='Search')
             if selectedtags
-                #cleartags.ui.circular.icon.button: i.remove.icon
+                #cleartags.ui.circular.icon.basic.active.button: i.remove.icon
             each selectedtags
-                .unselecttag.ui.big.active.compact.button #{this}
-            each tags
-                .selecttag.ui.large.compact.button
+                .unselecttag.ui.big.active.compact.basic.button #{this}
+            each globaltags
+                .selecttag.ui.large.compact.basic.button
                     |#{this.name}
                     small (#{this.count})
     each docs
-        if isediting
-            +edit
-        else
-            +doc
+        .ui.clearing.segment
+            each tags
+                .ui.large.basic.label
+                    i.tag.icon
+                    |#{this}
+            if isediting
+                #delete.ui.right.floated.circular.icon.basic.button: i.remove.icon
+                #save.ui.right.floated.circular.icon.basic.button: i.check.icon
+            else if isAuthor
+                .edit.ui.blue.right.floated.circular.icon.basic.button: i.pencil.icon
+            if partlist
+                .ui.menu
+                    each partlist
+                        a.ui.item.partmenuitem(class=this) #{this}
+                if isediting
+                    if availableparts
+                        .ui.segment
+                            |Add Part
+                            each availableparts
+                                #addpart.ui.button #{this}
+                                    // small
+                                    //     a.removepart(href='#') (remove #{this} part)
+                                    // .ui.divider
+                    +Template.dynamic(template=templateEditName data=subtemplatecontext)
+                else
+                    each partlist
+                        +Template.dynamic(template=templateViewName data=subtemplatecontext)
+
+    .ui.delete.basic.modal
+        .header Confirm Delete
+        .actions
+            .ui.button.cancel Cancel
+            .ui.red.button.approve Delete
+    .ui.removepart.basic.modal
+        .header Confirm Part Removal
+        .content
+            .meta This removes the saved information
+        .actions
+            .ui.button.cancel Cancel
+            .ui.red.big.button.approve Remove

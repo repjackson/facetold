@@ -3,14 +3,24 @@ Template.recipe_edit.helpers
         currentDoc = Docs.findOne(Session.get 'editing')
         currentDoc.parts?.recipe?
 
-    pthclass: (val)-> if @preptime is val.toString() and @prepunits is 'hours' then 'active' else 'basic'
-    ptmclass: (val)-> if @preptime is val.toString() and @prepunits is 'mins' then 'active' else 'basic'
+    pthclass: (val)-> if @preptime is val.toString() and @prepunits is 'hours' then 'blue' else 'basic'
+    ptmclass: (val)-> if @preptime is val.toString() and @prepunits is 'mins' then 'blue' else 'basic'
 
-    cthclass: (val)-> if @cooktime is val.toString() and @cookunits is 'hours' then 'active' else 'basic'
-    ctmclass: (val)-> if @cooktime is val.toString() and @cookunits is 'mins' then 'active' else 'basic'
+    cthclass: (val)-> if @cooktime is val.toString() and @cookunits is 'hours' then 'blue' else 'basic'
+    ctmclass: (val)-> if @cooktime is val.toString() and @cookunits is 'mins' then 'blue' else 'basic'
 
     totaltimedisplay: ->
-        if @totaltime? < 60 then @totaltime+' mins'
+        if not @totaltime? then ''
+        else if @totaltime < 60 then @totaltime+' mins'
+        else
+            hours = Math.floor(@totaltime / 60)
+            mins = @totaltime % 60
+            "#{hours} hours #{mins} mins"
+
+Template.recipe_view.helpers
+    totaltimedisplay: ->
+        if not @totaltime? then ''
+        else if @totaltime < 60 then @totaltime+' mins'
         else
             hours = Math.floor(@totaltime / 60)
             mins = @totaltime % 60
