@@ -84,25 +84,32 @@ template(name='docs')
         +doc
 
 
+template(name='edit')
+    each tags
+        .ui.large.basic.label
+            i.remove.link.removedoctag.icon
+            |#{this}
+    .ui.left.icon.input
+        i.plus.icon
+        input#addtag(type='text' placeholder='Add Tag' autofocus='')
+    .actions
+        #save.ui.circular.basic.button
+            i.check.icon
+            |Save
+        #delete.ui.circular.basic.button
+            i.trash.icon
+            |Delete
+    .ui.fluid.input
+        input#place(type='text' placeholder='Add Address')
+    .ui.fluid.input
+        input#datetimepicker(type="text" placeholder='Add Date/Time')
+
+
+
 template(name='doc')
     .ui.segment
         if isediting
-            each tags
-                .ui.large.basic.label
-                    i.remove.link.removedoctag.icon
-                    |#{this}
-            .ui.left.icon.input
-                i.plus.icon
-                input#addtag(type='text' placeholder='Add Tag' autofocus='')
-            .actions
-                #save.ui.circular.basic.button
-                    i.check.icon
-                    |Save
-                #delete.ui.circular.basic.button
-                    i.trash.icon
-                    |Delete
-            .ui.segment
-                +location
+            +edit
         else
             each tags
                 .doctag.ui.compact.button(class=doctagclass) #{this}

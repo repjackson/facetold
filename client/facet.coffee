@@ -56,12 +56,6 @@ Template.person.events
     'click .persontag': ->
         if @name in selectedtags.array() then selectedtags.remove @name else selectedtags.push @name
 
-Template.location.events
-    'click .getlocation':
-        Location.locate ((pos) ->
-            console.log 'Got a position!', pos
-            )
-
 Template.home.helpers
     ismydocsmode: -> Session.equals 'mode', 'mydocs'
     globaltags: ->
@@ -154,12 +148,7 @@ Template.home.events
         tag = @valueOf()
         docid = Session.get 'editing'
         doc = Docs.findOne docid
-        if doc.tags.length is 1
-            Docs.remove docid
-            Meteor.call 'calcusercloud', ->
-            Session.set 'editing', null
-        else
-            Docs.update docid, $pull: tags: tag
+        Docs.update docid, $pull: tags: tag
         Meteor.users.update Meteor.userId(), $pull: tags: tag
 
     'click .selecttag': -> selectedtags.push @name.toString()
@@ -171,3 +160,45 @@ Template.home.events
     'click #home': -> Session.set 'editing', null
 
 
+Meteor.startup ->
+    GoogleMaps.load
+        key: 'AIzaSyBWVZCEIuKZaRl04lCttrg7PneGJbJpcks'
+        libraries: 'places'
+
+
+Template.edit.onRendered ->
+    $('#datetimepicker').datetimepicker(
+        onChangeDateTime: (dp,$input)->
+            console.log moment($input.val()).format("dddd, MMMM Do YYYY, h:mm:ss a")
+            minute = moment($input.val()).minute()
+            hour = moment($input.val()).hour()
+
+            datenum = moment($input.val()).date()
+            date = moment(datenum).format('Do')
+
+            weekdaynum = moment($input.val()).isoWeekday()
+            weekday = moment(weekdaynum).format('dddd')
+
+            monthnum = moment($input.val()).month()
+            month = moment(monthnum).format('MMMM')
+
+            datearray = [minute, hour, date, weekday, month]
+            console.log datearray
+
+            docid = Session.get 'editing'
+
+            doc = Docs.findOne docid
+            tagswithoutdate = _.difference(doc.tags, doc.datearray)
+            tagswithnew = _.union(tagswithoutdate, datearray)
+
+            Docs.update docid,
+                $set:
+                    tags: tagswithnew
+                    datearray: datearray
+        )
+
+    @autorun ->
+        if GoogleMaps.loaded()
+            $('#place').geocomplete().bind 'geocode:result', (event, result) ->
+                docid = Session.get 'editing'
+                Meteor.call 'updatelocation', docid, result, ->
