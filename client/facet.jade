@@ -31,29 +31,49 @@ body
 
 template(name='home')
     unless editmode
-        .ui.segment
-            .ui.large.basic.label
+        .ui.menu
+            .ui.item
                 +loginButtons
             if currentUser
-                #add.ui.circular.green.basic.icon.button: i.plus.icon
                 if ismydocsmode
-                    #viewpeople.ui.circular.basic.button view people
+                    a#viewpeople.ui.item
+                        i.users.icon
+                        |People
                 else
-                    #viewmydocs.ui.circular.basic.button view my docs
-            .ui.input
-                input#search(type='text' placeholder='Search/clear/add' autofocus='')
+                    a#viewmydocs.ui.item
+                        i.folder.icon
+                        |My Docs
+                a#add.ui.item
+                    i.plus.icon
+                    |Add
+        h3.ui.center.aligned.header
+            if ismydocsmode
+                i.file.text.outline.icon
+                |My Documents
+            else
+                i.users.icon
+                |People
+        .ui.center.aligned.segment
+            .ui.left.icon.input
+                i.search.icon
+                input#search(type='text' placeholder="Search/'clear'" autofocus='')
             if selectedtags
-                #cleartags.ui.circular.icon.button: i.remove.icon
+                #cleartags.ui.circular.compact.grey.icon.button
+                    i.remove.icon
+                    // |Clear
             each selectedtags
-                .unselecttag.ui.button #{this}
+                .unselecttag.ui.compact.grey.button
+                    i.minus.icon
+                    |#{this}
             each globaltags
-                .selecttag.ui.basic.button
+                .selecttag.ui.compact.basic.button
                     |#{this.name}
                     small (#{this.count})
-    if ismydocsmode
-        +docs
-    else
-        +people
+    .ui.center.aligned.container
+        if ismydocsmode
+            +docs
+        else
+            +people
 
 template(name='people')
     each peoplelist
@@ -71,18 +91,32 @@ template(name='doc')
                 .ui.large.basic.label
                     i.remove.link.removedoctag.icon
                     |#{this}
-            .ui.input
-                input#addtag(type='text' placeholder='add tag' autofocus='')
-            #save.ui.green.circular.icon.basic.button: i.check.icon
+            .ui.left.icon.input
+                i.plus.icon
+                input#addtag(type='text' placeholder='Add Tag' autofocus='')
+            .actions
+                #save.ui.circular.basic.button
+                    i.check.icon
+                    |Save
+                #delete.ui.circular.basic.button
+                    i.trash.icon
+                    |Delete
+            .ui.segment
+                +location
         else
             each tags
-                .ui.large.basic.label #{this}
-            if isAuthor
-                .edit.ui.blue.circular.icon.basic.button: i.pencil.icon
+                .doctag.ui.compact.button(class=doctagclass) #{this}
+            .actions
+                |#{when}
+                if isAuthor
+                    .edit.ui.circular.basic.icon.small.button: i.pencil.icon
 
 
 template(name='person')
     .ui.segment
-        h4 #{username}
+        h3
+            i.disabled.user.icon
+            |#{username}
         each cloud
-            .ui.large.basic.label #{this.name} (#{this.count})
+            .persontag.ui.compact.button(class=persontagclass)
+                |#{this.name} (#{this.count})

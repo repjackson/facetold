@@ -23,3 +23,7 @@ meteorhacks:aggregate
 accounts-ui
 jquery
 babrahams:constellation
+momentjs:moment
+constellation:theme-opaque
+jeremy:geocomplete
+mirrorcell:geolocation-plus

@@ -30,13 +30,14 @@ Meteor.publish 'docs', (selectedtags, editing)->
     if selectedtags.length > 0 then match.tags = $all: selectedtags
     return Docs.find match,
         sort:
-            timestamp: -1
+            time: -1
 
 Meteor.publish 'people', (selectedtags)->
     match = {}
     if selectedtags.length > 0 then match.tags = $all: selectedtags
     return Meteor.users.find match,
         fields:
+            username: 1
             cloud: 1
             tags: 1
 
