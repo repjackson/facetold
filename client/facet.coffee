@@ -169,14 +169,16 @@ Meteor.startup ->
 Template.edit.onRendered ->
     $('#datetimepicker').datetimepicker(
         onChangeDateTime: (dp,$input)->
-            console.log moment($input.val()).format("dddd, MMMM Do YYYY, h:mm:ss a")
-            minute = moment($input.val()).minute()
-            hour = moment($input.val()).hour()
+            val = $input.val()
 
-            datenum = moment($input.val()).date()
+            console.log moment(val).format("dddd, MMMM Do YYYY, h:mm:ss a")
+            minute = moment(val).minute()
+            hour = moment(val).hour()
+
+            datenum = moment(val).date()
             date = moment(datenum).format('Do')
 
-            weekdaynum = moment($input.val()).isoWeekday()
+            weekdaynum = moment(val).isoWeekday()
             weekday = moment(weekdaynum).format('dddd')
 
             monthnum = moment($input.val()).month()
