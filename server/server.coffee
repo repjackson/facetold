@@ -1,7 +1,13 @@
+Accounts.onCreateUser (options, user)->
+    user.number = 10
+    user.requests = 0
+    user
+
+
 Meteor.methods
     calcusercloud: ->
-        cloud = Docs.aggregate [
-            { $match: authorId: Meteor.userId() }
+        cloud = Offersaggregate [
+            { $match: aid: Meteor.userId() }
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
@@ -18,68 +24,69 @@ Meteor.methods
                 tags: list
 
 
-Docs.allow
-    insert: (userId, doc)-> userId
-    update: (userId, doc)-> doc.authorId is Meteor.userId()
-    remove: (userId, doc)-> doc.authorId is Meteor.userId()
+Offers.allow
+    insert: (userId, offer)-> userId
+    update: (userId, offer)-> offer.aid is Meteor.userId()
+    remove: (userId, offer)-> offer.aid is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedtags, editing)->
-    if editing then return Docs.find editing
-    match = {}
-    if selectedtags.length > 0 then match.tags = $all: selectedtags
-    return Docs.find match,
-        sort:
-            time: -1
+Meteor.publishComposite 'offers', (selectedtags)->
+    {
+        find: ->
+            match = {}
+            if selectedtags.length > 0 then match.tags = $all: selectedtags
+            return Offers.find match, sort: time: -1
+        children: [
+            {
+                find: (offer)-> Requests.find oid:offer._id
+                children: [
+                    { find: (request)-> Meteor.users.find request.toId }
+                    { find: (request)-> Meteor.users.find request.fromId }
+                ]
+            }
+        ]
+    }
 
-Meteor.publish 'people', (selectedtags)->
-    match = {}
-    if selectedtags.length > 0 then match.tags = $all: selectedtags
-    return Meteor.users.find match,
+
+Meteor.publishComposite 'offer', (oid)->
+    {
+        find: -> Offers.find oid
+        children: [
+            { find: (offer)-> Requests.find oid: offer._id }
+        ]
+    }
+
+Meteor.publish 'people', ->
+    return Meteor.users.find {},
         fields:
             username: 1
             cloud: 1
             tags: 1
+            number: 1
+            requests: 1
 
 
 
-Meteor.publish 'tags', (selectedtags, mode)->
+Meteor.publish 'tags', (selectedtags)->
     self = @
 
-    if mode is 'mydocs'
-        match = {}
-        if selectedtags.length > 0 then match.tags = $all: selectedtags
-        cloud = Docs.aggregate [
-            { $match: match }
-            { $project: tags: 1 }
-            { $unwind: '$tags' }
-            { $group: _id: '$tags', count: $sum: 1 }
-            { $match: _id: $nin: selectedtags }
-            { $sort: count: -1, _id: 1 }
-            { $limit: 50 }
-            { $project: _id: 0, name: '$_id', count: 1 }
-            ]
-        cloud.forEach (tag) ->
-            self.added 'tags', Random.id(),
-                name: tag.name
-                count: tag.count
-        self.ready()
+    match = {}
+    if selectedtags.length > 0 then match.tags = $all: selectedtags
 
-    else if mode is 'people'
-        match = {}
-        if selectedtags.length > 0 then match.tags = $all: selectedtags
-        cloud = Meteor.users.aggregate [
-            { $match: match }
-            { $project: tags: 1 }
-            { $unwind: '$tags' }
-            { $group: _id: '$tags', count: $sum: 1 }
-            { $match: _id: $nin: selectedtags }
-            { $sort: count: -1, _id: 1 }
-            { $limit: 50 }
-            { $project: _id: 0, name: '$_id', count: 1 }
-            ]
-        cloud.forEach (tag) ->
-            self.added 'tags', Random.id(),
-                name: tag.name
-                count: tag.count
-        self.ready()
+    cloud = Offers.aggregate [
+        { $match: match }
+        { $project: tags: 1 }
+        { $unwind: '$tags' }
+        { $group: _id: '$tags', count: $sum: 1 }
+        { $match: _id: $nin: selectedtags }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id: 0, name: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (tag) ->
+        self.added 'tags', Random.id(),
+            name: tag.name
+            count: tag.count
+
+    self.ready()

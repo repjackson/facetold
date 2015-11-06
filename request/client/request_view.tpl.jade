@@ -1,0 +1,40 @@
+.ui.content From: #{requester.username}
+.ui.content
+    if can_see_message
+        p
+            i.privacy.icon
+            |Message: #{message}
+        p
+            i.privacy.icon
+            |Date/time: #{datetime}
+    |Accepted:
+    if accepted
+        i.check.icon
+    else
+        i.cancel.icon
+.extra.content
+    unless accepted
+        if isRequestAuthor
+            a.editrequest.ui.basic.attached.button
+                i.pencil.icon
+                |Edit Request
+            .delete_request.ui.basic.attached.button
+                i.reply.icon
+                |Withdraw Request
+                small (+1)
+        if isRequestedDocAuthor
+            .accept_request.ui.green.basic.attached.button
+                i.check.icon
+                |Accept Request
+                small (+1)
+    else
+        if isRequestedDocAuthor
+            .unaccept.ui.basic.attached.button
+                i.cancel.icon
+                |Un-Accept Request
+                small (-1)
+        if isRequestAuthor
+            .voteup.ui.basic.icon.button
+                i.thumbs.up.icon(class=thumbsupclass)
+            .votedown.ui.basic.icon.button
+                i.thumbs.down.icon(class=thumbsdownclass)

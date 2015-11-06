@@ -25,6 +25,8 @@ jquery
 babrahams:constellation
 momentjs:moment
 constellation:theme-opaque
-jeremy:geocomplete
 drewy:datetimepicker
-bevanhunt:leaflet
+dburles:collection-helpers
+reywood:publish-composite
+yelongren:constellation-reload
+reactive-var

@@ -1,0 +1,30 @@
+.content
+    .header
+        each tags
+            .ui.basic.large.label #{this}
+    .description
+        h5 #{when}
+        h5 by #{author.username}
+        h5 Points #{points}
+        if currentUser
+            if isAuthor
+                if can_edit
+                    .edit.ui.basic.attached.button
+                        i.pencil.icon
+                        |Edit Offer
+            else
+                if can_request
+                    .ui.basic.request.attached.button
+                        i.forward.mail.icon
+                        |Request
+                        small (-1)
+if requests.count
+    .extra.content
+        .title.ui.header Requests
+        .content
+            each requests
+                .ui.segment
+                    if is_editing
+                        +request_edit
+                    else
+                        +request_view

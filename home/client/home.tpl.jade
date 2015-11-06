@@ -1,0 +1,30 @@
+.ui.center.aligned.segment
+    .ui.basic.label
+        +loginButtons
+    if currentUser
+        .ui.basic.label #{mynumber}
+        #add.ui.basic.compact.button
+            i.plus.icon
+            |Add Offer
+    .ui.left.icon.input
+        i.search.icon
+        input#search(type='text' placeholder="Search offers/'clear'" autofocus='')
+    if selectedtags
+        #cleartags.ui.circular.compact.grey.icon.button
+            i.remove.icon
+    each selectedtags
+        .unselecttag.ui.compact.grey.button
+            i.minus.icon
+            |#{this}
+    each globaltags
+        .selecttag.ui.large.compact.basic.button
+            |#{this.name}
+            small (#{this.count})
+.ui.cards
+    each offerlist
+        if is_editing
+            .card
+                +offer_edit
+        else
+            .card
+                +offer_view
