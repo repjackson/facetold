@@ -2,13 +2,12 @@
     .ui.basic.label
         +loginButtons
     if currentUser
-        .ui.basic.label #{mynumber}
         #add.ui.basic.compact.button
             i.plus.icon
-            |Add Offer
+            |Add Node
     .ui.left.icon.input
         i.search.icon
-        input#search(type='text' placeholder="Search offers/'clear'" autofocus='')
+        input#search(type='text' placeholder="Search nodes/'clear'" autofocus='')
     if selectedtags
         #cleartags.ui.circular.compact.grey.icon.button
             i.remove.icon
@@ -21,10 +20,9 @@
             |#{this.name}
             small (#{this.count})
 .ui.cards
-    each offerlist
-        if is_editing
-            .card
-                +offer_edit
-        else
-            .card
-                +offer_view
+    each nodelist
+        .card
+            if is_editing
+                +node_edit
+            else
+                +node_view

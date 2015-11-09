@@ -1,0 +1,16 @@
+.content
+    .header
+        each tags
+            .ui.basic.large.label #{this}
+    .description
+        .ui.button.view_descendents View Descendents
+        h5 #{when}
+        h5 by #{author.username}
+        h5 Points #{points}
+        h5 Parent Tags: #{parent.tags}
+        if currentUser
+            .ui.basic.add_child_node.attached.button Add Child Node
+            if isAuthor
+                .edit.ui.basic.attached.button
+                    i.pencil.icon
+                    |Edit Node

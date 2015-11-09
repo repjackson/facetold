@@ -1,16 +1,17 @@
 @selectedtags = new ReactiveArray []
+@selected_descendents = new ReactiveArray []
 
 Template.home.onCreated ->
     @autorun -> Meteor.subscribe 'tags', selectedtags.array()
     @autorun -> Meteor.subscribe 'people'
     @autorun -> Meteor.subscribe 'person', Meteor.userId()
-    @autorun -> Meteor.subscribe 'offers', selectedtags.array()
+    @autorun -> Meteor.subscribe 'nodes', selectedtags.array(), selected_descendents.array()
 
 Template.home.helpers
     globaltags: ->
-        offerCount = Offers.find().count()
-        #console.log offerCount
-        if 0 < offerCount < 5 then Tags.find { count: $lt: offerCount } else Tags.find()
+        nodeCount = Nodes.find().count()
+        #console.log nodeCount
+        if 0 < nodeCount < 5 then Tags.find { count: $lt: nodeCount } else Tags.find()
         Tags.find()
 
     selectedtags: -> selectedtags.list()
@@ -19,14 +20,12 @@ Template.home.helpers
 
     user: -> Meteor.user()
 
-    offerlist: -> Offers.find {}, sort: time: -1
-
-    mynumber: -> Meteor.user().number
+    nodelist: -> Nodes.find {}, sort: time: -1
 
 
 Template.home.events
     'click #add': ->
-        Meteor.call 'add_offer', (err,oid)->
+        Meteor.call 'add_node', (err,oid)->
             if err then console.log err
             Session.set 'editing', oid
             Meteor.setTimeout (->
@@ -44,12 +43,12 @@ Template.home.events
                         $('#search').val ''
                     when 'add'
                         if Meteor.userId()
-                            oid = Offersinsert
+                            oid = Nodesinsert
                                 aid: Meteor.userId()
                                 time: Date.now()
                                 tags: []
                                 , ->
-                            offer_edit.set(oid)
+                            node_edit.set(oid)
                             Meteor.setTimeout (->
                                 $('#addtag').focus()
                                 ),200

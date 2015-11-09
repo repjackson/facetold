@@ -25,8 +25,8 @@ jquery
 babrahams:constellation
 momentjs:moment
 constellation:theme-opaque
-drewy:datetimepicker
 dburles:collection-helpers
 reywood:publish-composite
 yelongren:constellation-reload
 reactive-var
+clarencel:highcharts-drilldown

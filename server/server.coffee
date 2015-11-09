@@ -1,13 +1,11 @@
-Accounts.onCreateUser (options, user)->
-    user.number = 10
-    user.requests = 0
-    user
+#Accounts.onCreateUser (options, user)->
+    #user
 
 
 Meteor.methods
     calcusercloud: ->
-        cloud = Offersaggregate [
-            { $match: aid: Meteor.userId() }
+        cloud = Nodes.aggregate [
+            { $match: authorId: Meteor.userId() }
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
@@ -24,35 +22,32 @@ Meteor.methods
                 tags: list
 
 
-Offers.allow
-    insert: (userId, offer)-> userId
-    update: (userId, offer)-> offer.aid is Meteor.userId()
-    remove: (userId, offer)-> offer.aid is Meteor.userId()
+Nodes.allow
+    insert: (userId, node)-> userId
+    update: (userId, node)-> node.authorId is Meteor.userId()
+    remove: (userId, node)-> node.authorId is Meteor.userId()
 
 
-Meteor.publishComposite 'offers', (selectedtags)->
+Meteor.publishComposite 'nodes', (selectedtags, selected_descendents)->
     {
         find: ->
             match = {}
+            if selected_descendents? then match.ancestory= $in: selected_descendents
             if selectedtags.length > 0 then match.tags = $all: selectedtags
-            return Offers.find match, sort: time: -1
+            return Nodes.find match, sort: time: -1
         children: [
             {
-                find: (offer)-> Requests.find oid:offer._id
-                children: [
-                    { find: (request)-> Meteor.users.find request.toId }
-                    { find: (request)-> Meteor.users.find request.fromId }
-                ]
+                find: (node)-> Nodes.find parentId:node._id
             }
         ]
     }
 
 
-Meteor.publishComposite 'offer', (oid)->
+Meteor.publishComposite 'node', (nodeId)->
     {
-        find: -> Offers.find oid
+        find: -> Nodes.find nodeId
         children: [
-            { find: (offer)-> Requests.find oid: offer._id }
+            { find: (node)-> Nodes.find parentId: node._id }
         ]
     }
 
@@ -62,8 +57,6 @@ Meteor.publish 'people', ->
             username: 1
             cloud: 1
             tags: 1
-            number: 1
-            requests: 1
 
 
 
@@ -73,7 +66,7 @@ Meteor.publish 'tags', (selectedtags)->
     match = {}
     if selectedtags.length > 0 then match.tags = $all: selectedtags
 
-    cloud = Offers.aggregate [
+    cloud = Nodes.aggregate [
         { $match: match }
         { $project: tags: 1 }
         { $unwind: '$tags' }
