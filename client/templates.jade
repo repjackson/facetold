@@ -27,6 +27,66 @@ head
     meta(name='theme-color', content='#ffffff')
 
 body
-    // +nav
-    // +Template.dynamic template=main
     +home
+
+
+template(name='home')
+    .ui.center.aligned.segment
+        .ui.large.basic.label
+            +loginButtons
+        if currentUser
+            #add.ui.basic.icon.button: i.plus.icon
+        // .ui.left.icon.input
+        //     i.search.icon
+        //     input#search(type='text' placeholder="Search/'clear'" autofocus='')
+        if selectedtags
+            #cleartags.ui.circular.grey.icon.button
+                i.remove.icon
+        each selectedtags
+            .unselecttag.ui.large.compact.grey.button
+                i.minus.icon
+                |#{this}
+        each globaltags
+            .selecttag.ui.large.compact.basic.button
+                |#{this.name}
+                small (#{this.count})
+    each docs
+        .ui.segment
+            if is_editing
+                +edit
+            else
+                +view
+
+
+template(name='view')
+    .header
+        each tags
+            .ui.basic.large.label #{this}
+    .ui.basic.segment
+        |{{nl2br body}}
+    .footer
+        .ui.basic.label #{when}
+        .ui.basic.label by #{author.username}
+        if currentUser
+            if isAuthor
+                .edit.ui.basic.attached.button Edit
+
+
+template(name='edit')
+    each tags
+        .ui.large.basic.label
+            i.remove.link.removetag.icon
+            |#{this}
+    .ui.left.icon.input
+        i.plus.icon
+        input#addtag(type='text' autofocus='')
+    .ui.form
+        .field
+            textarea#body(rows='5') #{body}
+    .actions
+        #save.ui.basic.attached.button
+            i.check.icon
+            |Save
+        // #delete.ui.circular.basic.button
+        //     i.trash.icon
+        //     |Delete

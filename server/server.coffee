@@ -4,7 +4,7 @@
 
 Meteor.methods
     calcusercloud: ->
-        cloud = Nodes.aggregate [
+        cloud = Docs.aggregate [
             { $match: authorId: Meteor.userId() }
             { $project: tags: 1 }
             { $unwind: '$tags' }
@@ -22,41 +22,25 @@ Meteor.methods
                 tags: list
 
 
-Nodes.allow
-    insert: (userId, node)-> userId
-    update: (userId, node)-> node.authorId is Meteor.userId()
-    remove: (userId, node)-> node.authorId is Meteor.userId()
+Docs.allow
+    insert: (userId, doc)-> userId
+    update: (userId, doc)-> doc.authorId is Meteor.userId()
+    remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publishComposite 'nodes', (selectedtags, selected_descendents)->
-    {
-        find: ->
-            match = {}
-            if selected_descendents? then match.ancestory= $in: selected_descendents
-            if selectedtags.length > 0 then match.tags = $all: selectedtags
-            return Nodes.find match, sort: time: -1
-        children: [
-            {
-                find: (node)-> Nodes.find parentId:node._id
-            }
-        ]
-    }
+Meteor.publish 'docs', (selectedtags)->
+    match = {}
+    if selectedtags.length > 0 then match.tags = $all: selectedtags
+    return Docs.find match, sort: time: -1
 
 
-Meteor.publishComposite 'node', (nodeId)->
-    {
-        find: -> Nodes.find nodeId
-        children: [
-            { find: (node)-> Nodes.find parentId: node._id }
-        ]
-    }
+
+Meteor.publish 'node', (nodeId)-> Docs.find nodeId
 
 Meteor.publish 'people', ->
     return Meteor.users.find {},
         fields:
             username: 1
-            cloud: 1
-            tags: 1
 
 
 
@@ -66,7 +50,7 @@ Meteor.publish 'tags', (selectedtags)->
     match = {}
     if selectedtags.length > 0 then match.tags = $all: selectedtags
 
-    cloud = Nodes.aggregate [
+    cloud = Docs.aggregate [
         { $match: match }
         { $project: tags: 1 }
         { $unwind: '$tags' }
