@@ -31,25 +31,26 @@ body
 
 
 template(name='home')
-    .ui.center.aligned.segment
-        .ui.large.basic.label
-            +loginButtons
-        if currentUser
-            #add.ui.basic.icon.button: i.plus.icon
-        // .ui.left.icon.input
-        //     i.search.icon
-        //     input#search(type='text' placeholder="Search/'clear'" autofocus='')
-        if selectedtags
-            #cleartags.ui.circular.grey.icon.button
-                i.remove.icon
-        each selectedtags
-            .unselecttag.ui.large.compact.grey.button
-                i.minus.icon
-                |#{this}
-        each globaltags
-            .selecttag.ui.large.compact.basic.button
-                |#{this.name}
-                small (#{this.count})
+    unless $.Session.get 'editing'
+        .ui.center.aligned.segment
+            .ui.large.label
+                +loginButtons
+            if currentUser
+                #add.ui.icon.button: i.plus.icon
+            .ui.left.icon.input
+                i.search.icon
+                input#search(type='text' placeholder="Search/'clear'" autofocus='')
+            if selectedtags
+                #cleartags.ui.circular.grey.icon.button
+                    i.remove.icon
+            each selectedtags
+                .unselecttag.ui.large.compact.grey.button
+                    i.minus.icon
+                    |#{this}
+            each globaltags
+                .selecttag.ui.large.compact.button
+                    |#{this.name}
+                    small (#{this.count})
     each docs
         .ui.segment
             if is_editing
@@ -61,34 +62,38 @@ template(name='home')
 template(name='view')
     .header
         each tags
-            .ui.basic.large.label #{this}
-    .ui.basic.segment
+            .ui.large.label #{this}
+    .ui.segment
         |{{nl2br body}}
     .footer
-        .ui.basic.label #{when}
-        .ui.basic.label by #{author.username}
+        .ui.label #{when}
+        .ui.label by #{author.username}
         if currentUser
             if isAuthor
-                .edit.ui.basic.attached.button Edit
+                .edit.ui.button Edit
 
 
 template(name='edit')
-    each tags
-        .ui.big.basic.label
-            i.remove.link.removetag.icon
-            |#{this}
-    .ui.left.icon.small.input
-        i.plus.icon
-        input#addtag(type='text' autofocus='')
     .ui.segment
-        h4.ui.header Suggested Tags
-        each unique_suggested_tags
-            .ui.compact.button.add_suggested_tag
-                i.plus.icon
+        .ui.header Document Tags
+        each tags
+            .ui.button.large.compact.removetag
+                i.minus.icon
                 |#{this}
+        .ui.left.icon.small.input
+            i.plus.icon
+            input#addtag(type='text' autofocus='')
+    // .ui.segment
+    //     .ui.header
+    //         |Suggested Tags
+    //         #suggest_tags.ui.compact.button Suggest Tags from Body
+    //     each unique_suggested_tags
+    //         .ui.compact.button.add_suggested_tag
+    //             i.plus.icon
+    //             |#{this}
     .ui.form
         .field
-            #suggest_tags.ui.button Suggest Tags from Body
+            label Body
             textarea#body(rows='5') #{body}
     .actions
         #save.ui.button

@@ -34,13 +34,17 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedtags)->
-    match = {}
-    if selectedtags.length > 0 then match.tags = $all: selectedtags
-    return Docs.find match, sort: time: -1
+Meteor.publish 'docs', (selectedtags, editing)->
+    if editing? then return Docs.find editing
+    else
+        match = {}
+        if selectedtags.length > 0 then match.tags = $all: selectedtags
+        Docs.find match,
+            limit: 10
+            sort: time: -1
 
 
-Meteor.publish 'node', (nodeId)-> Docs.find nodeId
+Meteor.publish 'doc', (id)-> Docs.find id
 
 Meteor.publish 'people', ->
     return Meteor.users.find {},
