@@ -74,6 +74,7 @@ mousetrap:mousetrap@1.4.6_1
 mquandalle:jade@0.4.5
 mquandalle:jade-compiler@0.4.5
 mquandalle:stylus@1.1.1
+nefiltari:yaki@0.1.81
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.39_1
 observe-sequence@1.0.7

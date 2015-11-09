@@ -102,15 +102,23 @@ Template.edit.events
                     Docs.update @_id, { $addToSet: tags: val }, ->
                     $('#addtag').val('')
             when 8
-                if val.length is 0
-                    if @tags.length is 0
-                        Docs.remove @_id
-                    else
-                        last =  @tags.slice(-1)
-                        $('#addtag').val(last)
-                        Docs.update @_id, { $pop: tags: 1 }, ->
-
+                last =  @tags.slice(-1)
+                $('#addtag').val(last)
+                Docs.update @_id, { $pop: tags: 1 }, ->
 
     'click .removetag': ->
         tag = @valueOf()
         Docs.update Template.instance().data._id, $pull: tags: tag
+
+    'click .add_suggested_tag': ->
+        tag = @valueOf()
+        Docs.update Template.instance().data._id, $addToSet: tags: tag
+
+    'click #suggest_tags': ->
+        body = $('textarea').val()
+
+        Meteor.call 'suggest_tags', @_id, body
+
+
+Template.edit.helpers
+    unique_suggested_tags: -> _.difference(@suggested_tags, @tags)

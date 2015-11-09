@@ -11,5 +11,6 @@ Meteor.methods
             authorId: Meteor.userId()
             time: Date.now()
             tags: []
+            suggested_tags: []
             body: ''
         id

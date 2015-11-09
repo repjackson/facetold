@@ -21,6 +21,12 @@ Meteor.methods
                 cloud: cloud
                 tags: list
 
+    suggest_tags: (id, body)->
+        doc = Docs.findOne id
+        suggested_tags = Yaki(body).extract()
+        Docs.update id,
+            $set: suggested_tags: suggested_tags
+
 
 Docs.allow
     insert: (userId, doc)-> userId
@@ -32,7 +38,6 @@ Meteor.publish 'docs', (selectedtags)->
     match = {}
     if selectedtags.length > 0 then match.tags = $all: selectedtags
     return Docs.find match, sort: time: -1
-
 
 
 Meteor.publish 'node', (nodeId)-> Docs.find nodeId

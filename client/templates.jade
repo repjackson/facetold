@@ -74,19 +74,24 @@ template(name='view')
 
 template(name='edit')
     each tags
-        .ui.large.basic.label
+        .ui.big.basic.label
             i.remove.link.removetag.icon
             |#{this}
-    .ui.left.icon.input
+    .ui.left.icon.small.input
         i.plus.icon
         input#addtag(type='text' autofocus='')
+    .ui.segment
+        h4.ui.header Suggested Tags
+        each unique_suggested_tags
+            .ui.compact.button.add_suggested_tag
+                i.plus.icon
+                |#{this}
     .ui.form
         .field
+            #suggest_tags.ui.button Suggest Tags from Body
             textarea#body(rows='5') #{body}
     .actions
-        #save.ui.basic.attached.button
+        #save.ui.button
             i.check.icon
             |Save
-        // #delete.ui.circular.basic.button
-        //     i.trash.icon
-        //     |Delete
+        #delete.ui.icon.button: i.trash.icon
