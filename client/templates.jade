@@ -50,7 +50,7 @@ template(name='home')
             each globaltags
                 .selecttag.ui.large.compact.button
                     |#{this.name}
-                    // small #{this.count}
+                    small   #{this.count}
     each docs
         .ui.segment
             if is_editing
@@ -60,11 +60,11 @@ template(name='home')
 
 
 template(name='view')
-    // .header
-    //     each tags
-    //         .ui.large.label #{this}
-    .ui.segment
+    .body
         |{{nl2br body}}
+    .ui.basic.segment
+        each tags
+            .ui.large.label #{this}
     .footer
         |#{when} by #{author.username}
         if currentUser
@@ -73,30 +73,28 @@ template(name='view')
 
 
 template(name='edit')
-    // .ui.segment
-        // .ui.header Document Tags
-        // each tags
-        //     .ui.button.large.compact.removetag
-        //         i.minus.icon
-        //         |#{this}
-        // .ui.left.icon.small.input
-        //     i.plus.icon
-        //     input#addtag(type='text' autofocus='')
-    // .ui.segment
-    //     .ui.header
-    //         |Suggested Tags
-    //         #suggest_tags.ui.compact.button Suggest Tags from Body
-    //     each unique_suggested_tags
-    //         .ui.compact.button.add_suggested_tag
-    //             i.plus.icon
-    //             |#{this}
+    .ui.segment
+        .ui.header Document Tags
+        each tags
+            .ui.button.large.compact.removetag
+                i.minus.icon
+                |#{this}
+        .ui.left.icon.small.input
+            i.plus.icon
+            input#addtag(type='text' autofocus='')
+    .ui.segment
+        .ui.header
+            |Suggested Tags
+            #suggest_tags.ui.compact.button Suggest Tags from Body
+        each unique_suggested_tags
+            .ui.compact.button.add_suggested_tag
+                i.plus.icon
+                |#{this}
     // .ui.form
-        // .field
-        //     textarea#body(rows='5') #{body}
-        // #toolbar
-        //     button Bold
-        //     button Italic
-    #editor !{body}
+    //     .field
+    //         textarea#body #{body}
+    +CodeMirror id="body" name="someName" options=editorOptions code=body
+
     .actions
         #save.ui.button
             i.check.icon

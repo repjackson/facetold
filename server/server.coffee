@@ -29,11 +29,11 @@ Meteor.methods
 
     save: (id, body)->
         doc = Docs.findOne id
-        tags = Yaki(body).extract()
+        #tags = Yaki(body).extract()
         Docs.update id,
             $set:
-                tags: tags
                 body: body
+                #tags: tags
 
 
 Docs.allow
@@ -48,7 +48,7 @@ Meteor.publish 'docs', (selectedtags, editing)->
         match = {}
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
-            limit: 10
+            limit: 3
             sort: time: -1
 
 
@@ -74,7 +74,7 @@ Meteor.publish 'tags', (selectedtags)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
+        { $limit: 100 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

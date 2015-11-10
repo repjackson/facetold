@@ -27,7 +27,7 @@ Template.view.events
 Template.home.helpers
     globaltags: ->
         doccount = Docs.find().count()
-        if 0 < doccount < 5 then Tags.find { count: $lt: doccount } else Tags.find()
+        if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
     selectedtags: -> selectedtags.list()
     is_editing: -> Session.equals 'editing',@_id
     user: -> Meteor.user()
@@ -62,15 +62,12 @@ Template.home.events
 
     'click #cleartags': -> selectedtags.clear()
 
-Template.edit.onRendered ->
-    #$("textarea").autosize()
-
-    @quill = new Quill('#editor')
-    #quill.addModule 'toolbar', container: '#toolbar'
+#Template.edit.onRendered ->
+    #$("#body").autosize()
 
 Template.edit.events
     'click #save': (e,t)->
-        body = Template.instance().quill.getHTML()
+        body = t.$('#body').val()
         Meteor.call 'save', @_id, body
         Session.set 'editing', null
 
@@ -101,9 +98,13 @@ Template.edit.events
 
     'click #suggest_tags': ->
         body = $('textarea').val()
-
         Meteor.call 'suggest_tags', @_id, body
 
 
 Template.edit.helpers
     unique_suggested_tags: -> _.difference(@suggested_tags, @tags)
+    editorOptions: ->
+        return {
+            lineNumbers: true
+            mode: "javascript"
+        }
