@@ -27,6 +27,14 @@ Meteor.methods
         Docs.update id,
             $set: suggested_tags: suggested_tags
 
+    save: (id, body)->
+        doc = Docs.findOne id
+        tags = Yaki(body).extract()
+        Docs.update id,
+            $set:
+                tags: tags
+                body: body
+
 
 Docs.allow
     insert: (userId, doc)-> userId
@@ -66,7 +74,7 @@ Meteor.publish 'tags', (selectedtags)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 50 }
+        { $limit: 20 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

@@ -36,15 +36,15 @@ Template.home.helpers
 
 Template.home.events
     'click #add': ->
-        selectedtags.clear()
         Meteor.call 'add', (err,oid)->
             Session.set 'editing', oid
+        selectedtags.clear()
 
     'keyup #search': (e,t)->
         e.preventDefault()
+        val = $('#search').val()
         switch e.which
             when 13 #enter
-                val = $('#search').val()
                 switch val
                     when 'clear'
                         selectedtags.clear()
@@ -53,7 +53,9 @@ Template.home.events
                         unless val.length is 0
                             selectedtags.push val.toString()
                             $('#search').val ''
-
+            when 8
+                if val.length is 0
+                    selectedtags.pop()
     'click .selecttag': -> selectedtags.push @name.toString()
 
     'click .unselecttag': -> selectedtags.remove @toString()
@@ -61,19 +63,21 @@ Template.home.events
     'click #cleartags': -> selectedtags.clear()
 
 Template.edit.onRendered ->
-    $("textarea").autosize()
+    #$("textarea").autosize()
+
+    @quill = new Quill('#editor')
+    #quill.addModule 'toolbar', container: '#toolbar'
 
 Template.edit.events
     'click #save': (e,t)->
-        body = t.$('#body').val()
-        Docs.update @_id,
-            $set: body: body
+        body = Template.instance().quill.getHTML()
+        Meteor.call 'save', @_id, body
         Session.set 'editing', null
 
     'click #delete': ->
-        Docs.remove @_id
-        #Meteor.call 'calcusercloud', ->
-        Session.set 'editing', null
+        if confirm 'Confirm delete?'
+            Docs.remove @_id
+            Session.set 'editing', null
 
     'keyup #addtag': (e,t)->
         e.preventDefault
