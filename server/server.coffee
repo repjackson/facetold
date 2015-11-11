@@ -42,10 +42,11 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedtags, editing)->
+Meteor.publish 'docs', (selectedtags, editing, selected_user)->
     if editing? then return Docs.find editing
     else
         match = {}
+        if selected_user then match.authorId = selected_user
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
             limit: 3
@@ -61,10 +62,11 @@ Meteor.publish 'people', ->
 
 
 
-Meteor.publish 'tags', (selectedtags)->
+Meteor.publish 'tags', (selectedtags, selected_user)->
     self = @
 
     match = {}
+    if selected_user then match.authorId = selected_user
     if selectedtags.length > 0 then match.tags = $all: selectedtags
 
     cloud = Docs.aggregate [

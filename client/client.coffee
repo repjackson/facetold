@@ -1,20 +1,24 @@
 @selectedtags = new ReactiveArray []
 
+
 Template.home.onCreated ->
-    @autorun -> Meteor.subscribe 'tags', selectedtags.array()
     @autorun -> Meteor.subscribe 'people'
     @autorun -> Meteor.subscribe 'person', Meteor.userId()
-    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get 'editing'
+    @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get 'selected_user'
+    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing'), Session.get 'selected_user'
 
 Accounts.ui.config passwordSignupFields: 'USERNAME_ONLY'
 
 
 Meteor.startup ->
     Session.setDefault 'editing', null
+    Session.setDefault 'selected_user', null
 
 Template.view.helpers
     is_editing: -> Session.equals 'editing',@_id
+
     isAuthor: -> Meteor.userId() is @authorId
+
     when:-> moment(@time).fromNow()
 
     vote_up_button_class: -> if not Meteor.userId() then 'disabled' else ''
@@ -25,6 +29,9 @@ Template.view.helpers
 
     vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
 
+    doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
+
+
 Template.view.events
     'click .edit': -> Session.set 'editing', @_id
 
@@ -32,8 +39,13 @@ Template.view.events
 
     'click .vote_down': -> Meteor.call 'vote_down', @_id
 
+    'click .doc_tag': -> if @valueOf() in selectedtags.array() then selectedtags.remove @valueOf() else selectedtags.push @valueOf()
 
-
+    'click .select_user': ->
+        if Session.equals 'selected_user', @authorId
+            Session.set 'selected_user', null
+        else
+            Session.set 'selected_user', @authorId
 
 Template.home.helpers
     globaltags: ->
@@ -43,6 +55,10 @@ Template.home.helpers
     is_editing: -> Session.equals 'editing',@_id
     user: -> Meteor.user()
     docs: -> Docs.find {}, sort: time: -1
+    selected_user: ->
+        if Session.get 'selected_user'
+            user = Meteor.users.findOne(Session.get('selected_user'))?.username
+            user
 
 
 Template.home.events
@@ -72,6 +88,8 @@ Template.home.events
     'click .unselecttag': -> selectedtags.remove @toString()
 
     'click #cleartags': -> selectedtags.clear()
+
+    'click .selected_user_button': -> Session.set 'selected_user', null
 
 #Template.edit.onRendered ->
     #$("#body").autosize()
