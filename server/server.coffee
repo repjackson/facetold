@@ -3,23 +3,54 @@
 
 
 Meteor.methods
-    calcusercloud: ->
-        cloud = Docs.aggregate [
+    calc_user_cloud: ->
+        authored_cloud = Docs.aggregate [
             { $match: authorId: Meteor.userId() }
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
             { $sort: count: -1, _id: 1 }
-            #{ $limit: 50 }
+            { $limit: 10 }
             { $project: _id: 0, name: '$_id', count: 1 }
             ]
-
-        list = (tag.name for tag in cloud)
-
+        authored_list = (tag.name for tag in authored_cloud)
         Meteor.users.update Meteor.userId(),
             $set:
-                cloud: cloud
-                tags: list
+                authored_cloud: authored_cloud
+                authored_list: authored_list
+
+
+        upvoted_cloud = Docs.aggregate [
+            { $match: up_voters: $in: [Meteor.userId()] }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 10 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+        upvoted_list = (tag.name for tag in upvoted_cloud)
+        Meteor.users.update Meteor.userId(),
+            $set:
+                upvoted_cloud: upvoted_cloud
+                upvoted_list: upvoted_list
+
+
+        downvoted_cloud = Docs.aggregate [
+            { $match: down_voters: $in: [Meteor.userId()] }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 10 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+        downvoted_list = (tag.name for tag in downvoted_cloud)
+        Meteor.users.update Meteor.userId(),
+            $set:
+                downvoted_cloud: downvoted_cloud
+                downvoted_list: downvoted_list
+
 
     suggest_tags: (id, body)->
         doc = Docs.findOne id
@@ -29,11 +60,9 @@ Meteor.methods
 
     save: (id, body)->
         doc = Docs.findOne id
-        #tags = Yaki(body).extract()
         Docs.update id,
             $set:
                 body: body
-                #tags: tags
 
 
 Docs.allow
@@ -60,10 +89,26 @@ Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user
 Meteor.publish 'doc', (id)-> Docs.find id
 
 Meteor.publish 'people', ->
-    return Meteor.users.find {},
+    Meteor.users.find {},
         fields:
             username: 1
+            downvoted_cloud: 1
+            downvoted_list: 1
+            upvoted_cloud: 1
+            upvoted_list: 1
+            authored_cloud: 1
+            authored_list: 1
 
+Meteor.publish 'person', (id)->
+    Meteor.users.find id,
+        fields:
+            username: 1
+            downvoted_cloud: 1
+            downvoted_list: 1
+            upvoted_cloud: 1
+            upvoted_list: 1
+            authored_cloud: 1
+            authored_list: 1
 
 
 Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvotes)->

@@ -29,7 +29,6 @@ constellation:session@0.3.5
 constellation:subscriptions@0.3.4
 constellation:theme-opaque@0.1.0
 constellation:tiny@0.3.4
-copleykj:jquery-autosize@1.17.8
 datariot:ganalytics@0.2.1
 dburles:collection-helpers@1.0.4
 dburles:mongo-collection-instances@0.3.4
@@ -65,8 +64,6 @@ meteor@1.1.10
 meteor-base@1.0.1
 meteorhacks:aggregate@1.3.0
 meteorhacks:collection-utils@1.2.0
-meteorhacks:kadira@2.26.3
-meteorhacks:meteorx@1.4.1
 minifiers@1.1.7
 minimongo@1.0.10
 momentjs:moment@2.10.6

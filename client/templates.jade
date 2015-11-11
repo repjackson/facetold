@@ -33,7 +33,7 @@ body
 
 template(name='nav')
     unless $.Session.get 'editing'
-        .ui.menu
+        .ui.borderless.menu
             a#home.ui.item
                 |Facet
             .ui.item
@@ -52,7 +52,8 @@ template(name='nav')
                     i.thumbs.down.icon
                     |My Downvoted
             .right.menu
-                .ui.item Total docs: #{doc_counter}
+                .ui.item Users: #{user_counter}
+                .ui.item Docs: #{doc_counter}
 
 
 
@@ -65,15 +66,15 @@ template(name='home')
             if $.Session.get 'selected_user'
                 .ui.button.active.selected_user_button
                     i.user.icon
-                    |#{selected_user}
+                    |by #{selected_user}
             if $.Session.get 'upvoted_cloud'
                 .ui.button.active.upvoted_cloud_button
                     i.thumbs.up.icon
-                    |#{upvoted_cloud}
+                    |by #{upvoted_cloud}
             if $.Session.get 'downvoted_cloud'
                 .ui.button.active.downvoted_cloud_button
                     i.thumbs.down.icon
-                    |#{downvoted_cloud}
+                    |by #{downvoted_cloud}
             if selectedtags
                 #cleartags.ui.circular.grey.icon.button
                     i.remove.icon
@@ -101,15 +102,43 @@ template(name='view')
             .doc_tag.ui.compact.small.button(class=doc_tag_class) #{this}
     .footer
         |#{when}
-        .select_user.ui.button(class=select_user_button_class)
-            i.user.icon
-            |by #{author.username}
+        unless isAuthor
+            .ui.segment
+                .ui.segment
+                    .select_user.ui.button(class=select_user_button_class)
+                        i.user.icon
+                        |by #{author.username}
+                    |Authored Tags
+                    each author.authored_cloud
+                        .ui.small.label
+                            |#{this.name}
+                            small #{this.count}
+                .ui.segment
+                    .author_upvotes.ui.button(class=author_upvotes_button_class)
+                        i.thumbs.up.icon
+                        |by #{author.username}
+                    |Upvoted Tags
+                    each author.upvoted_cloud
+                        .ui.small.label
+                            |#{this.name}
+                            small #{this.count}
+                .ui.segment
+                    .author_downvotes.ui.button(class=author_downvotes_button_class)
+                        i.thumbs.down.icon
+                        |by #{author.username}
+                    |Downvoted Tags
+                    each author.downvoted_cloud
+                        .ui.small.label
+                            |#{this.name}
+                            small #{this.count}
         if currentUser
             if isAuthor
-                .edit.ui.button Edit
+                .edit.ui.button
+                    i.pencil.icon
+                    |Edit
         .vote_up.ui.icon.button(class=vote_up_button_class)
             i.thumbs.up.icon(class=vote_up_icon_class)
-        .ui.basic.label Points: #{points}
+        .ui.basic.label Doc Points: #{points}
         .vote_down.ui.icon.button(class=vote_down_button_class)
             i.thumbs.down.icon(class=vote_down_icon_class)
 
@@ -131,9 +160,6 @@ template(name='edit')
             .ui.compact.button.add_suggested_tag
                 i.plus.icon
                 |#{this}
-    // .ui.form
-    //     .field
-    //         textarea#body #{body}
     .ui.segment
         +CodeMirror id="body" name="someName" options=editorOptions code=body
     .actions

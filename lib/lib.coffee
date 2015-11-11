@@ -15,6 +15,7 @@ Meteor.methods
             points: 1
             suggested_tags: []
             body: ''
+        Meteor.call 'calc_user_cloud', ->
         id
 
     vote_up: (id)->
@@ -32,6 +33,8 @@ Meteor.methods
             Docs.update id,
                 $addToSet: up_voters: Meteor.userId()
                 $inc: points: 1
+        Meteor.call 'calc_user_cloud', ->
+        return
 
 
     vote_down: (id)->
@@ -49,5 +52,6 @@ Meteor.methods
             Docs.update id,
                 $addToSet: down_voters: Meteor.userId()
                 $inc: points: -1
-
+        Meteor.call 'calc_user_cloud', ->
+        return
 

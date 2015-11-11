@@ -1,12 +1,15 @@
 @selectedtags = new ReactiveArray []
 
 Template.nav.onCreated ->
-    Meteor.subscribe 'people'
     Meteor.subscribe 'person', Meteor.userId()
 
 Template.home.onCreated ->
+    Meteor.subscribe 'people'
     @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
     @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing'), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
+
+Template.view.onCreated ->
+    Meteor.subscribe 'person', @authorId
 
 Accounts.ui.config
     passwordSignupFields: 'USERNAME_ONLY'
@@ -26,32 +29,28 @@ Template.view.helpers
     when:-> moment(@time).fromNow()
 
     vote_up_button_class: -> if not Meteor.userId() then 'disabled' else ''
-
     vote_up_icon_class: -> if Meteor.userId() and @up_voters and Meteor.userId() in @up_voters then '' else 'outline'
-
     vote_down_button_class: -> if not Meteor.userId() then 'disabled' else ''
-
     vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
 
     doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
 
     select_user_button_class: -> if Session.equals 'selected_user', @authorId then 'active' else ''
+    author_downvotes_button_class: -> if Session.equals 'downvoted_cloud', @authorId then 'active' else ''
+    author_upvotes_button_class: -> if Session.equals 'upvoted_cloud', @authorId then 'active' else ''
 
 
 Template.view.events
     'click .edit': -> Session.set 'editing', @_id
 
     'click .vote_up': -> Meteor.call 'vote_up', @_id
-
     'click .vote_down': -> Meteor.call 'vote_down', @_id
 
     'click .doc_tag': -> if @valueOf() in selectedtags.array() then selectedtags.remove @valueOf() else selectedtags.push @valueOf()
 
-    'click .select_user': ->
-        if Session.equals 'selected_user', @authorId
-            Session.set 'selected_user', null
-        else
-            Session.set 'selected_user', @authorId
+    'click .select_user': -> if Session.equals('selected_user', @authorId) then Session.set('selected_user', null) else Session.set('selected_user', @authorId)
+    'click .author_upvotes': -> if Session.equals('upvoted_cloud', @authorId) then Session.set('upvoted_cloud', null) else Session.set('upvoted_cloud', @authorId)
+    'click .author_downvotes': -> if Session.equals('downvoted_cloud', @authorId) then Session.set('downvoted_cloud', null) else Session.set('downvoted_cloud', @authorId)
 
 
 Template.nav.events
@@ -83,6 +82,8 @@ Template.nav.events
 
 Template.nav.helpers
     doc_counter: -> Counts.get('doc_counter')
+
+    user_counter: -> Meteor.users.find().count()
 
 Template.home.helpers
     globaltags: ->
