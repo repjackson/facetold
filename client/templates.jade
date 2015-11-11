@@ -33,8 +33,9 @@ body
 
 template(name='nav')
     unless $.Session.get 'editing'
-        .ui.borderless.menu
+        #facetnav.ui.inverted.menu
             a#home.ui.item
+                i.home.icon
                 |Facet
             .ui.item
                 +loginButtons
@@ -51,6 +52,10 @@ template(name='nav')
                 a#my_downvoted.ui.item
                     i.thumbs.down.icon
                     |My Downvoted
+            .ui.item
+                .ui.left.icon.input
+                    i.search.icon
+                    input#search(type='text' placeholder="Search/'clear'" autofocus='')
             .right.menu
                 .ui.item Users: #{user_counter}
                 .ui.item Docs: #{doc_counter}
@@ -59,53 +64,57 @@ template(name='nav')
 
 template(name='home')
     unless $.Session.get 'editing'
-        .ui.center.aligned.segment
-            .ui.left.icon.input
-                i.search.icon
-                input#search(type='text' placeholder="Search/'clear'" autofocus='')
+        .ui.secondary.center.aligned.segment.globalcloud
             if $.Session.get 'selected_user'
-                .ui.button.active.selected_user_button
+                .ui.button.secondary.selected_user_button
                     i.user.icon
                     |by #{selected_user}
             if $.Session.get 'upvoted_cloud'
-                .ui.button.active.upvoted_cloud_button
+                .ui.button.secondary.upvoted_cloud_button
                     i.thumbs.up.icon
                     |by #{upvoted_cloud}
             if $.Session.get 'downvoted_cloud'
-                .ui.button.active.downvoted_cloud_button
+                .ui.button.secondary.downvoted_cloud_button
                     i.thumbs.down.icon
                     |by #{downvoted_cloud}
             if selectedtags
-                #cleartags.ui.circular.grey.icon.button
+                #cleartags.ui.circular.secondary.icon.button
                     i.remove.icon
             each selectedtags
-                .unselecttag.ui.large.compact.grey.button
+                .unselecttag.ui.large.compact.secondary.button
                     i.minus.icon
                     |#{this}
             each globaltags
-                .selecttag.ui.large.compact.button
+                .selecttag.ui.compact.button
                     |#{this.name}
                     small #{this.count}
-    each docs
-        .ui.segment
-            if is_editing
-                +edit
-            else
-                +view
+    .ui.container
+        each docs
+            .ui.segment
+                if is_editing
+                    +edit
+                else
+                    +view
 
 
 template(name='view')
-    .body
-        |{{nl2br body}}
-    .ui.basic.segment
+    .tags
         each tags
-            .doc_tag.ui.compact.small.button(class=doc_tag_class) #{this}
+            .doc_tag.ui.compact.button(class=doc_tag_class)
+                i.tag.icon
+                |#{this}
+    if body.length
+        .ui.horizontal.divider
+        +markdown
+            #{body}
+    .ui.horizontal.divider
     .footer
-        |#{when}
+        |#{when} by #{author.username}
         unless isAuthor
             .ui.segment
                 .ui.segment
-                    .select_user.ui.button(class=select_user_button_class)
+                    .select_user.ui.compact.button(class=select_user_button_class)
+                        i.filter.icon
                         i.user.icon
                         |by #{author.username}
                     |Authored Tags
@@ -113,8 +122,14 @@ template(name='view')
                         .ui.small.label
                             |#{this.name}
                             small #{this.count}
+                    |My Authored Tag Cloud Intersection
+                    each authored_cloud_intersection
+                        .ui.small.label
+                            |#{this.name}
+                            small #{this.count}
                 .ui.segment
-                    .author_upvotes.ui.button(class=author_upvotes_button_class)
+                    .author_upvotes.ui.compact.button(class=author_upvotes_button_class)
+                        i.filter.icon
                         i.thumbs.up.icon
                         |by #{author.username}
                     |Upvoted Tags
@@ -123,7 +138,8 @@ template(name='view')
                             |#{this.name}
                             small #{this.count}
                 .ui.segment
-                    .author_downvotes.ui.button(class=author_downvotes_button_class)
+                    .author_downvotes.ui.compact.button(class=author_downvotes_button_class)
+                        i.filter.icon
                         i.thumbs.down.icon
                         |by #{author.username}
                     |Downvoted Tags
@@ -133,18 +149,23 @@ template(name='view')
                             small #{this.count}
         if currentUser
             if isAuthor
-                .edit.ui.button
+                .edit.ui.circular.compact.button
                     i.pencil.icon
                     |Edit
-        .vote_up.ui.icon.button(class=vote_up_button_class)
+        .vote_up.ui.icon.circular.button(class=vote_up_button_class)
             i.thumbs.up.icon(class=vote_up_icon_class)
         .ui.basic.label Doc Points: #{points}
-        .vote_down.ui.icon.button(class=vote_down_button_class)
+        .vote_down.ui.icon.circular.button(class=vote_down_button_class)
             i.thumbs.down.icon(class=vote_down_icon_class)
 
 template(name='edit')
     .ui.segment
-        .ui.header Document Tags
+        .ui.header
+            |Document Tags
+            if tags
+                #clear_doc_tags.ui.compact.button
+                    i.remove.icon
+                    |Clear All Tags
         each tags
             .ui.button.large.compact.removetag
                 i.minus.icon
@@ -155,15 +176,29 @@ template(name='edit')
     .ui.segment
         .ui.header
             |Suggested Tags
-            #suggest_tags.ui.compact.button Suggest Tags from Body
+            #suggest_tags.ui.compact.button
+                i.wizard.icon
+                |Suggest Tags from Body
+            if unique_suggested_tags
+                #add_all_suggested_tags.ui.compact.button
+                    i.up.arrow.icon
+                    |Add All Suggested Tags
+                #clear_suggested_tags.ui.compact.button
+                    i.remove.icon
+                    |Clear Suggested Tags
         each unique_suggested_tags
             .ui.compact.button.add_suggested_tag
                 i.plus.icon
                 |#{this}
     .ui.segment
+        h3.ui.header Body
+            small
+                |(
+                a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank') Markdown
+                |is interpreted)
         +CodeMirror id="body" name="someName" options=editorOptions code=body
     .actions
-        #save.ui.button
+        #save.ui.big.button
             i.check.icon
             |Save
         #delete.ui.icon.button: i.trash.icon

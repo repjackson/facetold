@@ -1,5 +1,8 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
+#@AuthoredIntersectionTags = new Meteor.Collection 'authored_intersection_tags'
+#@UpvotedIntersectionTags = new Meteor.Collection 'upvoted_intersection_tags'
+#@DownvotedIntersectionTags = new Meteor.Collection 'downvoted_intersection_tags'
 
 Docs.helpers
     author: -> Meteor.users.findOne @authorId

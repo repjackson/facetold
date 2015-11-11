@@ -55,8 +55,12 @@ Meteor.methods
     suggest_tags: (id, body)->
         doc = Docs.findOne id
         suggested_tags = Yaki(body).extract()
+        cleaned_suggested_tags = Yaki(suggested_tags).clean()
+        uniqued = _.uniq(cleaned_suggested_tags)
+        lowered = uniqued.map (tag)-> tag.toLowerCase()
+
         Docs.update id,
-            $set: suggested_tags: suggested_tags
+            $set: suggested_tags: lowered
 
     save: (id, body)->
         doc = Docs.findOne id
@@ -83,7 +87,7 @@ Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user
         if selected_user then match.authorId = selected_user
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
-            limit: 5
+            limit: 1
             sort: time: -1
 
 Meteor.publish 'doc', (id)-> Docs.find id
@@ -127,7 +131,7 @@ Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvote
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
@@ -137,3 +141,30 @@ Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvote
             count: tag.count
 
     self.ready()
+
+
+#Meteor.publish 'authored_intersection_tags', (authorId)->
+    #author_list = Meteor.users.findOne(authorId).authored_list
+    #author_tags = Meteor.users.findOne(authorId).authored_cloud
+#
+    #your_list = Meteor.user().authored_list
+    #your_tags = Meteor.user().authored_cloud
+#
+    #list_intersection = _.intersection(author_list, your_list)
+#
+    #intersection_tags = []
+    #for tag in list_intersection
+        #author_count = author_tags.tag.count
+        #your_count = your_tags.tag.count
+        #lower_value = Meth.min(author_count, your_count)
+        #cloud_object = name: tag, count: lower_value
+        #intersection_tags.push cloud_object
+#
+    #console.log intersection_tags
+#
+    #intersection_tags.forEach (tag) ->
+        #self.added 'authored_intersection_tags', Random.id(),
+            #name: tag.name
+            #count: tag.count
+#
+    #self.ready()
