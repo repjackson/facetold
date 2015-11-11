@@ -27,16 +27,38 @@ head
     meta(name='theme-color', content='#ffffff')
 
 body
+    +nav
     +home
+
+
+template(name='nav')
+    unless $.Session.get 'editing'
+        .ui.menu
+            a#home.ui.item
+                |Facet
+            .ui.item
+                +loginButtons
+            if currentUser
+                a#add.ui.item
+                    i.plus.icon
+                    |Add
+                a#mine.ui.item
+                    i.user.icon
+                    |Mine
+                a#my_upvoted.ui.item
+                    i.thumbs.up.icon
+                    |My Upvoted
+                a#my_downvoted.ui.item
+                    i.thumbs.down.icon
+                    |My Downvoted
+            .right.menu
+                .ui.item Total docs: #{doc_counter}
+
 
 
 template(name='home')
     unless $.Session.get 'editing'
         .ui.center.aligned.segment
-            .ui.large.label
-                +loginButtons
-            if currentUser
-                #add.ui.icon.button: i.plus.icon
             .ui.left.icon.input
                 i.search.icon
                 input#search(type='text' placeholder="Search/'clear'" autofocus='')
@@ -44,6 +66,14 @@ template(name='home')
                 .ui.button.active.selected_user_button
                     i.user.icon
                     |#{selected_user}
+            if $.Session.get 'upvoted_cloud'
+                .ui.button.active.upvoted_cloud_button
+                    i.thumbs.up.icon
+                    |#{upvoted_cloud}
+            if $.Session.get 'downvoted_cloud'
+                .ui.button.active.downvoted_cloud_button
+                    i.thumbs.down.icon
+                    |#{downvoted_cloud}
             if selectedtags
                 #cleartags.ui.circular.grey.icon.button
                     i.remove.icon
@@ -71,7 +101,7 @@ template(name='view')
             .doc_tag.ui.compact.small.button(class=doc_tag_class) #{this}
     .footer
         |#{when}
-        .select_user.ui.button
+        .select_user.ui.button(class=select_user_button_class)
             i.user.icon
             |by #{author.username}
         if currentUser
@@ -104,8 +134,8 @@ template(name='edit')
     // .ui.form
     //     .field
     //         textarea#body #{body}
-    +CodeMirror id="body" name="someName" options=editorOptions code=body
-
+    .ui.segment
+        +CodeMirror id="body" name="someName" options=editorOptions code=body
     .actions
         #save.ui.button
             i.check.icon

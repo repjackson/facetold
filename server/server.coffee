@@ -42,16 +42,20 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedtags, editing, selected_user)->
+
+
+Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user_downvotes)->
+    Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
     if editing? then return Docs.find editing
     else
         match = {}
+        if user_upvotes then match.up_voters = $in: [user_upvotes]
+        if user_downvotes then match.down_voters = $in: [user_downvotes]
         if selected_user then match.authorId = selected_user
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
-            limit: 3
+            limit: 5
             sort: time: -1
-
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
@@ -62,10 +66,12 @@ Meteor.publish 'people', ->
 
 
 
-Meteor.publish 'tags', (selectedtags, selected_user)->
+Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvotes)->
     self = @
 
     match = {}
+    if user_upvotes then match.up_voters = $in: [user_upvotes]
+    if user_downvotes then match.down_voters = $in: [user_downvotes]
     if selected_user then match.authorId = selected_user
     if selectedtags.length > 0 then match.tags = $all: selectedtags
 

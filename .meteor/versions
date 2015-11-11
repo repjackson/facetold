@@ -103,6 +103,7 @@ spacebars-compiler@1.0.7
 srp@1.0.4
 templating@1.1.5
 templating-tools@1.0.0
+tmeasday:publish-counts@0.7.2
 tracker@1.0.9
 u2622:persistent-session@0.4.4
 ui@1.0.8

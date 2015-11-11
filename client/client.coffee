@@ -1,18 +1,22 @@
 @selectedtags = new ReactiveArray []
 
+Template.nav.onCreated ->
+    Meteor.subscribe 'people'
+    Meteor.subscribe 'person', Meteor.userId()
 
 Template.home.onCreated ->
-    @autorun -> Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe 'person', Meteor.userId()
-    @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get 'selected_user'
-    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing'), Session.get 'selected_user'
+    @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
+    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing'), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
 
-Accounts.ui.config passwordSignupFields: 'USERNAME_ONLY'
+Accounts.ui.config
+    passwordSignupFields: 'USERNAME_ONLY'
 
 
 Meteor.startup ->
     Session.setDefault 'editing', null
     Session.setDefault 'selected_user', null
+    Session.setDefault 'upvoted_cloud', null
+    Session.setDefault 'downvoted_cloud', null
 
 Template.view.helpers
     is_editing: -> Session.equals 'editing',@_id
@@ -31,6 +35,8 @@ Template.view.helpers
 
     doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
 
+    select_user_button_class: -> if Session.equals 'selected_user', @authorId then 'active' else ''
+
 
 Template.view.events
     'click .edit': -> Session.set 'editing', @_id
@@ -47,26 +53,58 @@ Template.view.events
         else
             Session.set 'selected_user', @authorId
 
-Template.home.helpers
-    globaltags: ->
-        doccount = Docs.find().count()
-        if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
-    selectedtags: -> selectedtags.list()
-    is_editing: -> Session.equals 'editing',@_id
-    user: -> Meteor.user()
-    docs: -> Docs.find {}, sort: time: -1
-    selected_user: ->
-        if Session.get 'selected_user'
-            user = Meteor.users.findOne(Session.get('selected_user'))?.username
-            user
+
+Template.nav.events
+    'click #home': ->
+        Session.set 'downvoted_cloud', null
+        Session.set 'selected_user', null
+        Session.set 'upvoted_cloud', null
 
 
-Template.home.events
     'click #add': ->
         Meteor.call 'add', (err,oid)->
             Session.set 'editing', oid
         selectedtags.clear()
 
+    'click #mine': ->
+        Session.set 'downvoted_cloud', null
+        Session.set 'upvoted_cloud', null
+        Session.set 'selected_user', Meteor.userId()
+
+    'click #my_upvoted': ->
+        Session.set 'selected_user', null
+        Session.set 'downvoted_cloud', null
+        Session.set 'upvoted_cloud', Meteor.userId()
+
+    'click #my_downvoted': ->
+        Session.set 'selected_user', null
+        Session.set 'upvoted_cloud', null
+        Session.set 'downvoted_cloud', Meteor.userId()
+
+Template.nav.helpers
+    doc_counter: -> Counts.get('doc_counter')
+
+Template.home.helpers
+    globaltags: ->
+        doccount = Docs.find().count()
+        if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
+
+    selectedtags: -> selectedtags.list()
+
+    is_editing: -> Session.equals 'editing',@_id
+
+    user: -> Meteor.user()
+
+    docs: -> Docs.find {}, sort: time: -1
+
+    selected_user: -> if Session.get 'selected_user' then Meteor.users.findOne(Session.get('selected_user'))?.username
+
+    upvoted_cloud: -> if Session.get 'upvoted_cloud' then Meteor.users.findOne(Session.get('upvoted_cloud'))?.username
+
+    downvoted_cloud: -> if Session.get 'downvoted_cloud' then Meteor.users.findOne(Session.get('downvoted_cloud'))?.username
+
+
+Template.home.events
     'keyup #search': (e,t)->
         e.preventDefault()
         val = $('#search').val()
@@ -83,16 +121,16 @@ Template.home.events
             when 8
                 if val.length is 0
                     selectedtags.pop()
-    'click .selecttag': -> selectedtags.push @name.toString()
 
+    'click .selecttag': -> selectedtags.push @name.toString()
     'click .unselecttag': -> selectedtags.remove @toString()
 
     'click #cleartags': -> selectedtags.clear()
 
     'click .selected_user_button': -> Session.set 'selected_user', null
+    'click .upvoted_cloud_button': -> Session.set 'upvoted_cloud', null
+    'click .downvoted_cloud_button': -> Session.set 'downvoted_cloud', null
 
-#Template.edit.onRendered ->
-    #$("#body").autosize()
 
 Template.edit.events
     'click #save': (e,t)->
@@ -101,7 +139,7 @@ Template.edit.events
         Session.set 'editing', null
 
     'click #delete': ->
-        if confirm 'Confirm delete?'
+        if confirm 'Confirm delete'
             Docs.remove @_id
             Session.set 'editing', null
 
@@ -132,8 +170,10 @@ Template.edit.events
 
 Template.edit.helpers
     unique_suggested_tags: -> _.difference(@suggested_tags, @tags)
+
     editorOptions: ->
         return {
             lineNumbers: true
             mode: "markdown"
+            lineWrapping: true
         }
