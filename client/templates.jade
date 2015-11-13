@@ -33,10 +33,10 @@ body
 
 template(name='nav')
     unless $.Session.get 'editing'
-        #facetnav.ui.inverted.menu
-            a#home.ui.item
-                i.home.icon
-                |Facet
+        #facetnav.ui.menu
+            // a#home.ui.item
+                // i.home.icon
+                // |Facet
             .ui.item
                 +loginButtons
             if currentUser
@@ -45,49 +45,49 @@ template(name='nav')
                     |Add
                 a#mine.ui.item
                     i.user.icon
-                    |Mine
+                    // |Mine
                 a#my_upvoted.ui.item
                     i.thumbs.up.icon
-                    |My Upvoted
+                    // |My Upvoted
                 a#my_downvoted.ui.item
                     i.thumbs.down.icon
-                    |My Downvoted
+                    // |My Downvoted
             .ui.item
                 .ui.left.icon.input
                     i.search.icon
-                    input#search(type='text' placeholder="Search/'clear'" autofocus='')
+                    input#search(type='text' autofocus='')
             .right.menu
-                .ui.item Users: #{user_counter}
-                .ui.item Docs: #{doc_counter}
+                .ui.item #{user_counter} users
+                .ui.item #{doc_counter} docs
 
 
 
 template(name='home')
     unless $.Session.get 'editing'
-        .ui.secondary.center.aligned.segment.globalcloud
+        .ui.grey.center.aligned.segment.globalcloud
             if $.Session.get 'selected_user'
-                .ui.button.secondary.selected_user_button
+                .ui.button.grey.selected_user_button
                     i.user.icon
                     |by #{selected_user}
             if $.Session.get 'upvoted_cloud'
-                .ui.button.secondary.upvoted_cloud_button
+                .ui.button.grey.upvoted_cloud_button
                     i.thumbs.up.icon
                     |by #{upvoted_cloud}
             if $.Session.get 'downvoted_cloud'
-                .ui.button.secondary.downvoted_cloud_button
+                .ui.button.grey.downvoted_cloud_button
                     i.thumbs.down.icon
                     |by #{downvoted_cloud}
             if selectedtags
-                #cleartags.ui.circular.secondary.icon.button
+                #cleartags.ui.circular.grey.icon.button
                     i.remove.icon
             each selectedtags
-                .unselecttag.ui.large.compact.secondary.button
+                .unselecttag.ui.big.compact.grey.button
                     i.minus.icon
                     |#{this}
             each globaltags
-                .selecttag.ui.compact.button
+                .selecttag.ui.big.compact.button
                     |#{this.name}
-                    small #{this.count}
+                    // small #{this.count}
     .ui.container
         each docs
             .ui.segment
@@ -100,72 +100,72 @@ template(name='home')
 template(name='view')
     .tags
         each tags
-            .doc_tag.ui.compact.button(class=doc_tag_class)
-                i.tag.icon
+            .doc_tag.ui.small.compact.button(class=doc_tag_class)
+                // i.tag.icon
                 |#{this}
     if body.length
-        .ui.horizontal.divider
         +markdown
             #{body}
     .ui.horizontal.divider
     .footer
         |#{when} by #{author.username}
-        unless isAuthor
-            .ui.segment
-                .ui.segment
-                    .select_user.ui.compact.button(class=select_user_button_class)
-                        i.filter.icon
-                        i.user.icon
-                        |by #{author.username}
-                    |Authored Tags
-                    each author.authored_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
-                    |My Authored Tag Cloud Intersection
-                    each authored_cloud_intersection
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
-                .ui.segment
-                    .author_upvotes.ui.compact.button(class=author_upvotes_button_class)
-                        i.filter.icon
-                        i.thumbs.up.icon
-                        |by #{author.username}
-                    |Upvoted Tags
-                    each author.upvoted_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
-                .ui.segment
-                    .author_downvotes.ui.compact.button(class=author_downvotes_button_class)
-                        i.filter.icon
-                        i.thumbs.down.icon
-                        |by #{author.username}
-                    |Downvoted Tags
-                    each author.downvoted_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
+        // unless isAuthor
+        //     .ui.segment
+        //         .ui.segment
+        //             .select_user.ui.compact.button(class=select_user_button_class)
+        //                 i.filter.icon
+        //                 i.user.icon
+        //                 |by #{author.username}
+        //             |Authored Tags
+        //             each author.authored_cloud
+        //                 .ui.small.label
+        //                     |#{this.name}
+        //                     small #{this.count}
+        //             // |My Authored Tag Cloud Intersection
+        //             // each authored_cloud_intersection
+        //             //     .ui.small.label
+        //             //         |#{this.name}
+        //             //         small #{this.count}
+        //         .ui.segment
+        //             .author_upvotes.ui.compact.button(class=author_upvotes_button_class)
+        //                 i.filter.icon
+        //                 i.thumbs.up.icon
+        //                 |by #{author.username}
+        //             |Upvoted Tags
+        //             each author.upvoted_cloud
+        //                 .ui.small.label
+        //                     |#{this.name}
+        //                     small #{this.count}
+        //         .ui.segment
+        //             .author_downvotes.ui.compact.button(class=author_downvotes_button_class)
+        //                 i.filter.icon
+        //                 i.thumbs.down.icon
+        //                 |by #{author.username}
+        //             |Downvoted Tags
+        //             each author.downvoted_cloud
+        //                 .ui.small.label
+        //                     |#{this.name}
+        //                     small #{this.count}
         if currentUser
             if isAuthor
                 .edit.ui.circular.compact.button
-                    i.pencil.icon
+                    // i.pencil.icon
                     |Edit
         .vote_up.ui.icon.circular.button(class=vote_up_button_class)
             i.thumbs.up.icon(class=vote_up_icon_class)
-        .ui.basic.label Doc Points: #{points}
+        // .ui.basic.label #{points}
         .vote_down.ui.icon.circular.button(class=vote_down_button_class)
             i.thumbs.down.icon(class=vote_down_icon_class)
 
 template(name='edit')
     .ui.segment
-        .ui.header
+        h3.ui.header
             |Document Tags
             if tags
-                #clear_doc_tags.ui.compact.button
+                #clear_doc_tags.ui.basic.compact.button
                     i.remove.icon
                     |Clear All Tags
+        .ui.divider
         each tags
             .ui.button.large.compact.removetag
                 i.minus.icon
@@ -174,20 +174,21 @@ template(name='edit')
             i.plus.icon
             input#addtag(type='text' autofocus='')
     .ui.segment
-        .ui.header
+        h3.ui.header
             |Suggested Tags
-            #suggest_tags.ui.compact.button
+            #suggest_tags.ui.basic.compact.button
                 i.wizard.icon
                 |Suggest Tags from Body
             if unique_suggested_tags
                 #add_all_suggested_tags.ui.compact.button
                     i.up.arrow.icon
                     |Add All Suggested Tags
-                #clear_suggested_tags.ui.compact.button
+                #clear_suggested_tags.ui.basic.compact.button
                     i.remove.icon
                     |Clear Suggested Tags
+        .ui.divider
         each unique_suggested_tags
-            .ui.compact.button.add_suggested_tag
+            .ui.compact.basic.large.button.add_suggested_tag
                 i.plus.icon
                 |#{this}
     .ui.segment
@@ -196,7 +197,7 @@ template(name='edit')
                 |(
                 a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank') Markdown
                 |is interpreted)
-        +CodeMirror id="body" name="someName" options=editorOptions code=body
+        +CodeMirror id="codebody" name="someName" options=editorOptions code=body
     .actions
         #save.ui.big.button
             i.check.icon

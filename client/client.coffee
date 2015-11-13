@@ -14,25 +14,36 @@ Template.view.onCreated ->
 Accounts.ui.config
     passwordSignupFields: 'USERNAME_ONLY'
 
+marked.setOptions
+    renderer: new (marked.Renderer)
+    gfm: true
+    tables: true
+    breaks: true
+    pedantic: false
+    sanitize: true
+    smartLists: true
+    smartypants: false
+
 Meteor.startup ->
     Session.setDefault 'editing', null
     Session.setDefault 'selected_user', null
     Session.setDefault 'upvoted_cloud', null
     Session.setDefault 'downvoted_cloud', null
-
-
+    GAnalytics.pageview("/")
 
 Template.nav.events
     'click #home': ->
         Session.set 'downvoted_cloud', null
         Session.set 'selected_user', null
         Session.set 'upvoted_cloud', null
+        selectedtags.clear()
 
 
     'click #add': ->
         Meteor.call 'add', (err,oid)->
             Session.set 'editing', oid
         selectedtags.clear()
+        GAnalytics.pageview("/add")
 
     'click #mine': ->
         Session.set 'downvoted_cloud', null
@@ -73,10 +84,10 @@ Template.nav.helpers
 
 Template.home.helpers
     globaltags: ->
-        #doccount = Docs.find().count()
-        #if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
+        doccount = Docs.find().count()
+        if doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
         #Tags.find { count: $gt: 1 }
-        Tags.find()
+        #Tags.find()
 
     selectedtags: -> selectedtags.list()
 
@@ -94,7 +105,10 @@ Template.home.helpers
 
 
 Template.home.events
-    'click .selecttag': -> selectedtags.push @name.toString()
+    'click .selecttag': ->
+        selectedtags.push @name.toString()
+        GAnalytics.pageview(@name)
+
     'click .unselecttag': -> selectedtags.remove @toString()
 
     'click #cleartags': -> selectedtags.clear()
@@ -106,7 +120,7 @@ Template.home.events
 
 Template.edit.events
     'click #save': (e,t)->
-        body = t.$('#body').val()
+        body = t.$('#codebody').val()
         Meteor.call 'save', @_id, body, ->
         Session.set 'editing', null
 
@@ -122,6 +136,10 @@ Template.edit.events
             if val.length > 0
                 Docs.update @_id, { $addToSet: tags: val }, ->
                 $('#addtag').val('')
+            else
+                body = t.$('#codebody').val()
+                Meteor.call 'save', @_id, body, ->
+                Session.set 'editing', null
 
     'click .removetag': ->
         tag = @valueOf()
@@ -140,13 +158,13 @@ Template.edit.events
         Meteor.call 'suggest_tags', @_id, body
 
     'click #add_all_suggested_tags': ->
-        if confirm 'Add all suggested tags?' then Docs.update @_id, $addToSet: tags: $each: @suggested_tags
+        Docs.update @_id, $addToSet: tags: $each: @suggested_tags
 
     'click #clear_doc_tags': ->
-        if confirm 'Clear all tags?' then Docs.update @_id, $set: tags: []
+        Docs.update @_id, $set: tags: []
 
     'click #clear_suggested_tags': ->
-        if confirm 'Clear all suggested tags?' then Docs.update @_id, $set: suggested_tags: []
+        Docs.update @_id, $set: suggested_tags: []
 
 
 Template.edit.helpers
@@ -154,9 +172,10 @@ Template.edit.helpers
 
     editorOptions: ->
         return {
-            lineNumbers: true
+            lineNumbers: false
             mode: "markdown"
             lineWrapping: true
+            viewportMargin: Infinity
         }
 
 Template.view.helpers
@@ -171,11 +190,11 @@ Template.view.helpers
     vote_down_button_class: -> if not Meteor.userId() then 'disabled' else ''
     vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
 
-    doc_tag_class: -> if @valueOf() in selectedtags.array() then 'secondary' else ''
+    doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
 
-    select_user_button_class: -> if Session.equals 'selected_user', @authorId then 'secondary' else ''
-    author_downvotes_button_class: -> if Session.equals 'downvoted_cloud', @authorId then 'secondary' else ''
-    author_upvotes_button_class: -> if Session.equals 'upvoted_cloud', @authorId then 'secondary' else ''
+    select_user_button_class: -> if Session.equals 'selected_user', @authorId then 'grey' else ''
+    author_downvotes_button_class: -> if Session.equals 'downvoted_cloud', @authorId then 'grey' else ''
+    author_upvotes_button_class: -> if Session.equals 'upvoted_cloud', @authorId then 'grey' else ''
 
     authored_cloud_intersection: ->
         author_list = Meteor.users.findOne(@authorId).authored_list

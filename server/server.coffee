@@ -59,6 +59,8 @@ Meteor.methods
         uniqued = _.uniq(cleaned_suggested_tags)
         lowered = uniqued.map (tag)-> tag.toLowerCase()
 
+        #lowered = tag.toLowerCase() for tag in uniqued
+
         Docs.update id,
             $set: suggested_tags: lowered
 
@@ -87,7 +89,7 @@ Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user
         if selected_user then match.authorId = selected_user
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
-            limit: 1
+            limit: 3
             sort: time: -1
 
 Meteor.publish 'doc', (id)-> Docs.find id
@@ -131,7 +133,7 @@ Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvote
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 50 }
+        { $limit: 20 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
