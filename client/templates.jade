@@ -81,13 +81,13 @@ template(name='home')
                 #cleartags.ui.circular.grey.icon.button
                     i.remove.icon
             each selectedtags
-                .unselecttag.ui.big.compact.grey.button
+                .unselecttag.ui.large.compact.grey.button
                     i.minus.icon
                     |#{this}
             each globaltags
-                .selecttag.ui.big.compact.button
+                .selecttag.ui.large.compact.button
                     |#{this.name}
-                    // small #{this.count}
+                    small #{this.count}
     .ui.container
         each docs
             .ui.segment
@@ -98,14 +98,14 @@ template(name='home')
 
 
 template(name='view')
+    if body.length
+        +markdown
+            #{body}
     .tags
         each tags
             .doc_tag.ui.small.compact.button(class=doc_tag_class)
                 // i.tag.icon
                 |#{this}
-    if body.length
-        +markdown
-            #{body}
     .ui.horizontal.divider
     .footer
         |#{when} by #{author.username}

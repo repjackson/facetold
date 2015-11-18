@@ -51,7 +51,6 @@ Meteor.methods
                 downvoted_cloud: downvoted_cloud
                 downvoted_list: downvoted_list
 
-
     suggest_tags: (id, body)->
         doc = Docs.findOne id
         suggested_tags = Yaki(body).extract()
@@ -66,17 +65,16 @@ Meteor.methods
 
     save: (id, body)->
         doc = Docs.findOne id
+        tagcount = doc.tags.length
         Docs.update id,
             $set:
                 body: body
-
+                tag_count: tagcount
 
 Docs.allow
     insert: (userId, doc)-> userId
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
-
-
 
 
 Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user_downvotes)->
@@ -90,7 +88,9 @@ Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user
         if selectedtags.length > 0 then match.tags = $all: selectedtags
         Docs.find match,
             limit: 3
-            sort: time: -1
+            sort:
+                tag_count: 1
+                points: -1
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
@@ -133,7 +133,7 @@ Meteor.publish 'tags', (selectedtags, selected_user, user_upvotes, user_downvote
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedtags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
+        { $limit: 30 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

@@ -123,6 +123,7 @@ Template.edit.events
         body = t.$('#codebody').val()
         Meteor.call 'save', @_id, body, ->
         Session.set 'editing', null
+        selectedtags.push(tag) for tag in @tags
 
     'click #delete': ->
         if confirm 'Confirm delete'
@@ -219,7 +220,9 @@ Template.view.helpers
 
 
 Template.view.events
-    'click .edit': -> Session.set 'editing', @_id
+    'click .edit': ->
+        Session.set 'editing', @_id
+        selectedtags.clear()
 
     'click .vote_up': -> Meteor.call 'vote_up', @_id
     'click .vote_down': -> Meteor.call 'vote_down', @_id
@@ -228,4 +231,4 @@ Template.view.events
 
     'click .select_user': -> if Session.equals('selected_user', @authorId) then Session.set('selected_user', null) else Session.set('selected_user', @authorId)
     'click .author_upvotes': -> if Session.equals('upvoted_cloud', @authorId) then Session.set('upvoted_cloud', null) else Session.set('upvoted_cloud', @authorId)
-    'click .author_downvotes': -> if Session.equals('downvoted_cloud', @authorId) then Session.set('downvoted_cloud', null) else Session.set('downvoted_cloud', @authorId)
+    'click .author_down votes': -> if Session.equals('downvoted_cloud', @authorId) then Session.set('downvoted_cloud', null) else Session.set('downvoted_cloud', @authorId)
