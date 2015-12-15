@@ -19,18 +19,40 @@
             user_counter: Meteor.users.find().count()
         }
 
-    clickAdd: ->
-        self = @
-        Meteor.call 'add', (err,postId)->
-            self.setState editing: postId
-        selectedtags.clear()
-        GAnalytics.pageview("/add")
+    clickMine: ->
+        @setState downvoted_cloud: null
+        @setState upvoted_cloud: null
+        @setState selected_user: Meteor.userId()
+
+    clickMyDownvoted: ->
+        @setState selected_user: null
+        @setState upvoted_cloud: null
+        console.log Meteor.userId()
+        @setState downvoted_cloud: Meteor.userId()
+
 
     clickHome: ->
         @setState downvoted_cloud: null
         @setState selected_user: null
         @setState upvoted_cloud: null
         selectedtags.clear()
+
+    keyupSearch: (e,t)->
+        e.preventDefault()
+        val = $('#search').val()
+        switch e.which
+            when 13 #enter
+                switch val
+                    when 'clear'
+                        selectedtags.clear()
+                        $('#search').val ''
+                    else
+                        unless val.length is 0
+                            selectedtags.push val.toString()
+                            $('#search').val ''
+            when 8
+                if val.length is 0
+                    selectedtags.pop()
 
 
     renderDocs: ->
@@ -51,25 +73,21 @@
                     i className:'home icon'
                     'Facet'
                 div className:'ui item', <AccountsUIWrapper />
+                    <AddButton />
+                    <MyUpvotedButton />
                 if @data.currentUser
                     [
-                        a id:'add', className:'ui item', onClick:@clickAdd,
-                            i className:'plus icon'
-                            'Add'
-                        a id:'mine', className:'ui item',
+                        a id:'mine', className:'ui item', onclick:@clickMine,
                             i className:'user icon'
                             'Mine'
-                        a id:'my_upvoted', className:'ui item',
-                            i className:'thumbs up icon'
-                            'My Upvoted'
-                        a id:'my_downvoted', className:'ui item',
+                        a id:'my_downvoted', className:'ui item', onclick:@clickMyDownvoted,
                             i className:'thumbs down icon'
                             'My Downvoted'
                     ]
                 div className:'ui item',
                     div className:'ui left icon input',
                         i className:'search icon'
-                        input id:'search', type:'text', autofocus:''
+                        input id:'search', type:'text', autofocus:'', onKeyUp: @keyupSearch
                 div className:'right menu',
                     div className:'ui item', "#{@data.user_counter} users"
                     div className:'ui item', "#{@data.doc_counter} docs"

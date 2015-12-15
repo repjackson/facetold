@@ -28,56 +28,11 @@ head
 
 body
     #render-target
-    +nav
     +home
-
-
-template(name='nav')
-    // unless $.Session.get 'editing'
-        // #facetnav.ui.menu
-        //     a#home.ui.item
-        //         i.home.icon
-        //         |Facet
-        //     .ui.item
-        //         +loginButtons
-        //     if currentUser
-        //         a#add.ui.item
-        //             i.plus.icon
-        //             |Add
-        //         a#mine.ui.item
-        //             i.user.icon
-        //             |Mine
-        //         a#my_upvoted.ui.item
-        //             i.thumbs.up.icon
-        //             |My Upvoted
-        //         a#my_downvoted.ui.item
-        //             i.thumbs.down.icon
-        //             |My Downvoted
-            // .ui.item
-            //     .ui.left.icon.input
-            //         i.search.icon
-            //         input#search(type='text' autofocus='')
-            // .right.menu
-            //     .ui.item #{user_counter} users
-            //     .ui.item #{doc_counter} docs
-
-
 
 template(name='home')
     unless $.Session.get 'editing'
         .ui.grey.center.aligned.segment.globalcloud
-            if $.Session.get 'selected_user'
-                .ui.button.grey.selected_user_button
-                    i.user.icon
-                    |by #{selected_user}
-            if $.Session.get 'upvoted_cloud'
-                .ui.button.grey.upvoted_cloud_button
-                    i.thumbs.up.icon
-                    |by #{upvoted_cloud}
-            if $.Session.get 'downvoted_cloud'
-                .ui.button.grey.downvoted_cloud_button
-                    i.thumbs.down.icon
-                    |by #{downvoted_cloud}
             if selectedtags
                 #cleartags.ui.circular.grey.icon.button
                     i.remove.icon
@@ -119,52 +74,10 @@ template(name='view')
     .footer
         |#{when} by #{author.username}
         unless isAuthor
-            .ui.segment
-                .ui.segment
-                    .select_user.ui.compact.button(class=select_user_button_class)
-                        i.filter.icon
-                        i.user.icon
-                        |by #{author.username}
-                    |Authored Tags
-                    each author.authored_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
-                    // |My Authored Tag Cloud Intersection
-                    // each authored_cloud_intersection
-                    //     .ui.small.label
-                    //         |#{this.name}
-                    //         small #{this.count}
-                .ui.segment
-                    .author_upvotes.ui.compact.button(class=author_upvotes_button_class)
-                        i.filter.icon
-                        i.thumbs.up.icon
-                        |by #{author.username}
-                    |Upvoted Tags
-                    each author.upvoted_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
-                .ui.segment
-                    .author_downvotes.ui.compact.button(class=author_downvotes_button_class)
-                        i.filter.icon
-                        i.thumbs.down.icon
-                        |by #{author.username}
-                    |Downvoted Tags
-                    each author.downvoted_cloud
-                        .ui.small.label
-                            |#{this.name}
-                            small #{this.count}
+            .ui.button by #{author.username}
         if currentUser
             if isAuthor
-                .edit.ui.circular.compact.button
-                    i.pencil.icon
-                    |Edit
-        .vote_up.ui.icon.circular.button(class=vote_up_button_class)
-            i.thumbs.up.icon(class=vote_up_icon_class)
-        .ui.basic.label #{points}
-        .vote_down.ui.icon.circular.button(class=vote_down_button_class)
-            i.thumbs.down.icon(class=vote_down_icon_class)
+                .edit.ui.circular.compact.button Edit
 
 template(name='edit')
     .ui.segment

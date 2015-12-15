@@ -5,8 +5,8 @@ Template.nav.onCreated ->
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
-    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing'), Session.get('selected_user'), Session.get('upvoted_cloud'), Session.get('downvoted_cloud')
+    @autorun -> Meteor.subscribe 'tags', selectedtags.array(), Session.get('selected_user')
+    @autorun -> Meteor.subscribe 'docs', selectedtags.array(), Session.get('editing')
 
 Template.view.onCreated ->
     Meteor.subscribe 'person', @authorId
@@ -27,40 +27,8 @@ marked.setOptions
 Meteor.startup ->
     React.render(<App />, document.getElementById('render-target'))
     Session.setDefault 'editing', null
-    Session.setDefault 'selected_user', null
-    Session.setDefault 'upvoted_cloud', null
-    Session.setDefault 'downvoted_cloud', null
-    GAnalytics.pageview("/")
 
 Template.nav.events
-    # 'click #home': ->
-    #     Session.set 'downvoted_cloud', null
-    #     Session.set 'selected_user', null
-    #     Session.set 'upvoted_cloud', null
-    #     selectedtags.clear()
-
-
-    'click #add': ->
-        Meteor.call 'add', (err,oid)->
-            Session.set 'editing', oid
-        selectedtags.clear()
-        GAnalytics.pageview("/add")
-
-    'click #mine': ->
-        Session.set 'downvoted_cloud', null
-        Session.set 'upvoted_cloud', null
-        Session.set 'selected_user', Meteor.userId()
-
-    'click #my_upvoted': ->
-        Session.set 'selected_user', null
-        Session.set 'downvoted_cloud', null
-        Session.set 'upvoted_cloud', Meteor.userId()
-
-    'click #my_downvoted': ->
-        Session.set 'selected_user', null
-        Session.set 'upvoted_cloud', null
-        Session.set 'downvoted_cloud', Meteor.userId()
-
     'keyup #search': (e,t)->
         e.preventDefault()
         val = $('#search').val()
@@ -78,10 +46,6 @@ Template.nav.events
                 if val.length is 0
                     selectedtags.pop()
 
-Template.nav.helpers
-    doc_counter: -> Counts.get('doc_counter')
-
-    user_counter: -> Meteor.users.find().count()
 
 Template.home.helpers
     globaltags: ->
@@ -98,25 +62,15 @@ Template.home.helpers
 
     docs: -> Docs.find()
 
-    selected_user: -> if Session.get 'selected_user' then Meteor.users.findOne(Session.get('selected_user'))?.username
-
-    upvoted_cloud: -> if Session.get 'upvoted_cloud' then Meteor.users.findOne(Session.get('upvoted_cloud'))?.username
-
-    downvoted_cloud: -> if Session.get 'downvoted_cloud' then Meteor.users.findOne(Session.get('downvoted_cloud'))?.username
 
 
 Template.home.events
     'click .selecttag': ->
         selectedtags.push @name.toString()
-        GAnalytics.pageview(@name)
 
     'click .unselecttag': -> selectedtags.remove @toString()
 
     'click #cleartags': -> selectedtags.clear()
-
-    'click .selected_user_button': -> Session.set 'selected_user', null
-    'click .upvoted_cloud_button': -> Session.set 'upvoted_cloud', null
-    'click .downvoted_cloud_button': -> Session.set 'downvoted_cloud', null
 
 
 Template.edit.events
@@ -185,39 +139,8 @@ Template.view.helpers
 
     isAuthor: -> Meteor.userId() is @authorId
 
-    when:-> moment(@time).fromNow()
-
-    vote_up_button_class: -> if not Meteor.userId() then 'disabled' else ''
-    vote_up_icon_class: -> if Meteor.userId() and @up_voters and Meteor.userId() in @up_voters then '' else 'outline'
-    vote_down_button_class: -> if not Meteor.userId() then 'disabled' else ''
-    vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
-
     doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
 
-    select_user_button_class: -> if Session.equals 'selected_user', @authorId then 'grey' else ''
-    author_downvotes_button_class: -> if Session.equals 'downvoted_cloud', @authorId then 'grey' else ''
-    author_upvotes_button_class: -> if Session.equals 'upvoted_cloud', @authorId then 'grey' else ''
-
-    authored_cloud_intersection: ->
-        author_list = Meteor.users.findOne(@authorId).authored_list
-        author_tags = Meteor.users.findOne(@authorId).authored_cloud
-
-        your_list = Meteor.user().authored_list
-        your_tags = Meteor.user().authored_cloud
-
-
-        list_intersection = _.intersection(author_list, your_list)
-        console.log 'list_intersection', list_intersection
-
-        intersection_tags = []
-        for tag in list_intersection
-            author_count = author_tags.tag.count
-            your_count = your_tags.tag.count
-            lower_value = Math.min(author_count, your_count)
-            cloud_object = name: tag, count: lower_value
-            intersection_tags.push cloud_object
-
-        console.log intersection_tags
 
 
 Template.view.events
@@ -225,11 +148,4 @@ Template.view.events
         Session.set 'editing', @_id
         selectedtags.clear()
 
-    'click .vote_up': -> Meteor.call 'vote_up', @_id
-    'click .vote_down': -> Meteor.call 'vote_down', @_id
-
     'click .doc_tag': -> if @valueOf() in selectedtags.array() then selectedtags.remove @valueOf() else selectedtags.push @valueOf()
-
-    'click .select_user': -> if Session.equals('selected_user', @authorId) then Session.set('selected_user', null) else Session.set('selected_user', @authorId)
-    'click .author_upvotes': -> if Session.equals('upvoted_cloud', @authorId) then Session.set('upvoted_cloud', null) else Session.set('upvoted_cloud', @authorId)
-    'click .author_down votes': -> if Session.equals('downvoted_cloud', @authorId) then Session.set('downvoted_cloud', null) else Session.set('downvoted_cloud', @authorId)
