@@ -25,6 +25,7 @@ marked.setOptions
     smartypants: false
 
 Meteor.startup ->
+    React.render(<App />, document.getElementById('render-target'))
     Session.setDefault 'editing', null
     Session.setDefault 'selected_user', null
     Session.setDefault 'upvoted_cloud', null
@@ -32,11 +33,11 @@ Meteor.startup ->
     GAnalytics.pageview("/")
 
 Template.nav.events
-    'click #home': ->
-        Session.set 'downvoted_cloud', null
-        Session.set 'selected_user', null
-        Session.set 'upvoted_cloud', null
-        selectedtags.clear()
+    # 'click #home': ->
+    #     Session.set 'downvoted_cloud', null
+    #     Session.set 'selected_user', null
+    #     Session.set 'upvoted_cloud', null
+    #     selectedtags.clear()
 
 
     'click #add': ->

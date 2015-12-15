@@ -24,7 +24,6 @@ accounts-ui
 jquery
 babrahams:constellation
 momentjs:moment
-constellation:theme-opaque
 dburles:collection-helpers
 yelongren:constellation-reload
 reactive-var
@@ -35,3 +34,6 @@ datariot:ganalytics
 tmeasday:publish-counts
 chuangbo:marked
 simple:highlight.js
+http
+react
+jhartma:cjsx

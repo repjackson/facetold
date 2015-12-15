@@ -53,6 +53,17 @@ Meteor.methods
 
     suggest_tags: (id, body)->
         doc = Docs.findOne id
+        encoded = encodeURIComponent(body)
+
+        # result = HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/text/TextGetCombinedData', { params:
+        result = HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
+            apikey: 'f2381fc1b71a51bb92fd7e15e836851fc02b14f1'
+            # text: encoded
+            html: body
+            outputMode: 'json'
+            extract: 'page-image,image-kw,feed,entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
+
+        console.log result.data.language
         suggested_tags = Yaki(body).extract()
         cleaned_suggested_tags = Yaki(suggested_tags).clean()
         uniqued = _.uniq(cleaned_suggested_tags)
@@ -61,7 +72,12 @@ Meteor.methods
         #lowered = tag.toLowerCase() for tag in uniqued
 
         Docs.update id,
-            $set: suggested_tags: lowered
+            $set:
+                suggested_tags: lowered
+                language: result.data.language
+                docSentiment: result.data.docSentiment.type
+                docSentimentScore: result.data.docSentiment.score
+                keywords: result.data.keywords
 
     save: (id, body)->
         doc = Docs.findOne id
