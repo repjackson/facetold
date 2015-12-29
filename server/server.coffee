@@ -45,7 +45,7 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selectedtags, editing, selected_user, user_upvotes, user_downvotes)->
+Meteor.publish 'docs', (selectedtags, editing, selected_user)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
     if editing? then return Docs.find editing
     else

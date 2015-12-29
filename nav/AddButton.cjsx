@@ -1,19 +1,20 @@
-{ a, i } = React.DOM
+{ button, i } = React.DOM
 
 @AddButton = React.createClass(
     # mixins: [ReactMeteorData]
     displayName: 'Add Button'
 
+    getInitialState: ->
+        selectedTags: []
+
     clickAdd: ->
         self = @
         Meteor.call 'add', (err,postId)->
             self.setState editing: postId
-        selectedtags.clear()
+        @setState.selectedTags = []
 
 
     render: ->
-        a id:'add', className:'ui item', onClick:@clickAdd,
-            i className:'plus icon'
-            'Add'
+        button onClick:@clickAdd, 'Add'
 
   )

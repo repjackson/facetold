@@ -12,10 +12,6 @@ tracker                 # Meteor's client-side reactive programming library
 
 
 coffeescript
-mquandalle:jade
-mquandalle:stylus
-semantic:ui
-flemay:less-autoprefixer
 random
 manuel:reactivearray
 accounts-password
@@ -23,9 +19,7 @@ meteorhacks:aggregate
 accounts-ui
 jquery
 babrahams:constellation
-momentjs:moment
 dburles:collection-helpers
-yelongren:constellation-reload
 raix:handlebar-helpers
 nefiltari:yaki
 tmeasday:publish-counts
