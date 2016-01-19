@@ -1,7 +1,6 @@
-@selectedtags = new ReactiveArray []
+@selected_keywords = new ReactiveArray []
 @dict = new ReactiveDict()
 dict.set('weather', 'cloudy')
-
 
 
 Template.nav.onCreated ->
@@ -9,8 +8,8 @@ Template.nav.onCreated ->
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe 'tags', selectedtags.array()
-    @autorun -> Meteor.subscribe 'docs', selectedtags.array()
+    @autorun -> Meteor.subscribe 'keywords', selected_keywords.array()
+    @autorun -> Meteor.subscribe 'docs', selected_keywords.array(), Session.get('editing')
 
 Template.view.onCreated ->
     Meteor.subscribe 'person', @authorId
@@ -32,30 +31,10 @@ Meteor.startup ->
     Session.setDefault 'editing', null
 
 Template.nav.events
-    'click #home': ->
-        selectedtags.clear()
-
     'click #add': ->
         Meteor.call 'add', (err,postId)->
             Session.set 'editing', postId
-        selectedtags.clear()
-
-    'keyup #search': (e,t)->
-        e.preventDefault()
-        val = $('#search').val()
-        switch e.which
-            when 13 #enter
-                switch val
-                    when 'clear'
-                        selectedtags.clear()
-                        $('#search').val ''
-                    else
-                        unless val.length is 0
-                            selectedtags.push val.toString()
-                            $('#search').val ''
-            when 8
-                if val.length is 0
-                    selectedtags.pop()
+        selected_keywords.clear()
 
 Template.nav.helpers
     doc_counter: -> Counts.get('doc_counter')
@@ -63,13 +42,11 @@ Template.nav.helpers
     user_counter: -> Meteor.users.find().count()
 
 Template.home.helpers
-    globaltags: ->
-        doccount = Docs.find().count()
-        if doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
-        #Tags.find { count: $gt: 1 }
-        #Tags.find()
+    global_keywords: ->
+        doc_count = Docs.find().count()
+        Keywords.find()
 
-    selectedtags: -> selectedtags.list()
+    selected_keywords: -> selected_keywords.list()
 
     is_editing: -> Session.equals 'editing',@_id
 
@@ -79,12 +56,12 @@ Template.home.helpers
 
 
 Template.home.events
-    'click .selecttag': ->
-        selectedtags.push @name.toString()
+    'click .select_keyword': ->
+        selected_keywords.push @name.toString()
 
-    'click .unselecttag': -> selectedtags.remove @toString()
+    'click .unselect_keyword': -> selected_keywords.remove @toString()
 
-    'click #cleartags': -> selectedtags.clear()
+    'click #clear_keywords': -> selected_keywords.clear()
 
 
 Template.edit.events
@@ -92,54 +69,19 @@ Template.edit.events
         body = t.$('#codebody').val()
         Meteor.call 'save', @_id, body, ->
         Session.set 'editing', null
-        selectedtags.push(tag) for tag in @tags
+        selected_keywords.push(keyword) for keyword in @keywords
 
     'click #delete': ->
         if confirm 'Confirm delete'
             Docs.remove @_id, ->
             Session.set 'editing', null
 
-    'keyup #addtag': (e,t)->
-        e.preventDefault
-        val = $('#addtag').val().toLowerCase()
-        if e.which is 13
-            if val.length > 0
-                Docs.update @_id, { $addToSet: tags: val }, ->
-                $('#addtag').val('')
-            else
-                body = t.$('#codebody').val()
-                Meteor.call 'save', @_id, body, ->
-                Session.set 'editing', null
-
-    'click .removetag': ->
-        tag = @valueOf()
-        Docs.update Template.instance().data._id,
-            $pull: tags: tag
-            , ->
-
-    'click .add_suggested_tag': ->
-        tag = @valueOf()
-        Docs.update Template.instance().data._id,
-            $addToSet: tags: tag
-            , ->
-
-    'click #suggest_tags': ->
+    'click #analyze': ->
         body = $('textarea').val()
         Meteor.call 'suggest_tags', @_id, body
 
-    'click #add_all_suggested_tags': ->
-        Docs.update @_id, $addToSet: tags: $each: @suggested_tags
-
-    'click #clear_doc_tags': ->
-        Docs.update @_id, $set: tags: []
-
-    'click #clear_suggested_tags': ->
-        Docs.update @_id, $set: suggested_tags: []
-
 
 Template.edit.helpers
-    unique_suggested_tags: -> _.difference(@suggested_tags, @tags)
-
     editorOptions: ->
         return {
             lineNumbers: false
@@ -155,13 +97,12 @@ Template.view.helpers
 
     when:-> moment(@time).fromNow()
 
-    doc_tag_class: -> if @valueOf() in selectedtags.array() then 'grey' else ''
-
-
+    doc_keyword_class: -> if @valueOf() in selected_keywords.array() then 'grey' else ''
 
 Template.view.events
     'click .edit': ->
         Session.set 'editing', @_id
-        selectedtags.clear()
+        selected_keywords.clear()
 
-    'click .doc_tag': -> if @valueOf() in selectedtags.array() then selectedtags.remove @valueOf() else selectedtags.push @valueOf()
+    'click .doc_keyword': ->
+        if @text in selected_keywords.array() then selected_keywords.remove @text else selected_keywords.push @text

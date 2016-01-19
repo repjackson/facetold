@@ -22,14 +22,13 @@ accounts-password
 meteorhacks:aggregate
 accounts-ui
 jquery
-babrahams:constellation
 momentjs:moment
 dburles:collection-helpers
 reactive-var
 raix:handlebar-helpers
-nefiltari:yaki
 perak:codemirror
 tmeasday:publish-counts
 chuangbo:marked
-simple:highlight.js
 reactive-dict
+babrahams:constellation
+http

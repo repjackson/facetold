@@ -1,43 +1,49 @@
 .ui.segment
     h3.ui.header
-        |Document Tags
-        if tags
-            #clear_doc_tags.ui.basic.compact.button
+        |Document keywords
+        if keywords
+            #clear_doc_keywords.ui.basic.compact.button
                 i.remove.icon
-                |Clear All Tags
+                |Clear All keywords
     .ui.divider
-    each tags
-        .ui.button.large.compact.removetag
+    each keywords
+        .ui.button.large.compact.removekeyword
             i.minus.icon
             |#{this}
     .ui.left.icon.small.input
         i.plus.icon
-        input#addtag(type='text' autofocus='')
+        input#addkeyword(type='text' autofocus='')
 .ui.segment
     h3.ui.header
-        |Suggested Tags
-        #suggest_tags.ui.basic.compact.button
+        |Suggested keywords
+        #suggest_keywords.ui.basic.compact.button
             i.wizard.icon
-            |Suggest Tags from Body
-        if unique_suggested_tags
-            #add_all_suggested_tags.ui.compact.button
+            |Suggest keywords from Body
+        if unique_suggested_keywords
+            #add_all_suggested_keywords.ui.compact.button
                 i.up.arrow.icon
-                |Add All Suggested Tags
-            #clear_suggested_tags.ui.basic.compact.button
+                |Add All Suggested keywords
+            #clear_suggested_keywords.ui.basic.compact.button
                 i.remove.icon
-                |Clear Suggested Tags
+                |Clear Suggested keywords
     .ui.divider
-    each unique_suggested_tags
-        .ui.compact.basic.large.button.add_suggested_tag
+    each unique_suggested_keywords
+        .ui.compact.basic.large.button.add_suggested_keyword
             i.plus.icon
             |#{this}
 .ui.segment
     h3.ui.header Body
         small
-            |(
-            a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank') Markdown
-            |is interpreted)
     +CodeMirror id="codebody" name="someName" options=editorOptions code=body
+    div
+        div
+            |Doc Sentiment: #{docSentiment}
+        div
+            |Doc Sentiment Amount: #{docSentimentScore}
+    div
+        h4.ui.header Keywords
+        each keywords
+            .ui.label #{this.text} #{this.relevance}
 .actions
     #save.ui.big.button
         i.check.icon

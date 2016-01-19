@@ -1,27 +1,15 @@
 unless $.Session.get 'editing'
     .ui.grey.center.aligned.segment.globalcloud
-        if $.Session.get 'selected_user'
-            .ui.button.grey.selected_user_button
-                i.user.icon
-                |by #{selected_user}
-        if $.Session.get 'upvoted_cloud'
-            .ui.button.grey.upvoted_cloud_button
-                i.thumbs.up.icon
-                |by #{upvoted_cloud}
-        if $.Session.get 'downvoted_cloud'
-            .ui.button.grey.downvoted_cloud_button
-                i.thumbs.down.icon
-                |by #{downvoted_cloud}
-        if selectedtags
-            #cleartags.ui.circular.grey.icon.button
+        if selected_keywords
+            #clear_keywords.ui.circular.grey.icon.button
                 i.remove.icon
-        each selectedtags
-            .unselecttag.ui.large.compact.grey.button
+        each selected_keywords
+            .unselect_keyword.ui.large.compact.grey.button
                 i.minus.icon
                 |#{this}
-        each globaltags
-            .selecttag.ui.large.compact.button
-                |#{this.name}
+        each global_keywords
+            .select_keyword.ui.large.compact.button
+                |#{this.text}
                 small #{this.count}
 .ui.container
     each docs
