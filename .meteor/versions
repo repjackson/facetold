@@ -28,7 +28,6 @@ constellation:plugins@0.1.4
 constellation:position@0.3.5
 constellation:session@0.3.5
 constellation:subscriptions@0.3.4
-constellation:theme-opaque@0.1.0
 constellation:tiny@0.3.4
 datariot:ganalytics@0.2.1
 dburles:collection-helpers@1.0.4
