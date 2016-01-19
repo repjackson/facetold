@@ -1,0 +1,45 @@
+.ui.segment
+    h3.ui.header
+        |Document Tags
+        if tags
+            #clear_doc_tags.ui.basic.compact.button
+                i.remove.icon
+                |Clear All Tags
+    .ui.divider
+    each tags
+        .ui.button.large.compact.removetag
+            i.minus.icon
+            |#{this}
+    .ui.left.icon.small.input
+        i.plus.icon
+        input#addtag(type='text' autofocus='')
+.ui.segment
+    h3.ui.header
+        |Suggested Tags
+        #suggest_tags.ui.basic.compact.button
+            i.wizard.icon
+            |Suggest Tags from Body
+        if unique_suggested_tags
+            #add_all_suggested_tags.ui.compact.button
+                i.up.arrow.icon
+                |Add All Suggested Tags
+            #clear_suggested_tags.ui.basic.compact.button
+                i.remove.icon
+                |Clear Suggested Tags
+    .ui.divider
+    each unique_suggested_tags
+        .ui.compact.basic.large.button.add_suggested_tag
+            i.plus.icon
+            |#{this}
+.ui.segment
+    h3.ui.header Body
+        small
+            |(
+            a(href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet' target='_blank') Markdown
+            |is interpreted)
+    +CodeMirror id="codebody" name="someName" options=editorOptions code=body
+.actions
+    #save.ui.big.button
+        i.check.icon
+        |Save
+    #delete.ui.icon.button: i.trash.icon
