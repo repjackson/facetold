@@ -7,9 +7,15 @@ amplify@1.0.0
 autoupdate@1.2.4
 babel-compiler@5.8.24_1
 babel-runtime@0.1.4
+<<<<<<< HEAD
 babrahams:constellation@0.4.1
 babrahams:editable-json@0.6.3
 babrahams:temple@0.4.1
+=======
+babrahams:constellation@0.4.0
+babrahams:editable-json@0.6.3
+babrahams:temple@0.4.0
+>>>>>>> master
 base64@1.0.4
 binary-heap@1.0.4
 blaze@2.1.3
@@ -29,6 +35,10 @@ constellation:position@0.4.0
 constellation:session@0.4.0
 constellation:subscriptions@0.4.0
 constellation:tiny@0.4.0
+<<<<<<< HEAD
+=======
+cosmos:browserify@0.9.2
+>>>>>>> master
 dburles:collection-helpers@1.0.4
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.2
@@ -42,7 +52,6 @@ ecmascript@0.1.6
 ecmascript-runtime@0.2.6
 ejson@1.0.7
 email@1.0.8
-flemay:less-autoprefixer@1.2.0
 geojson-utils@1.0.4
 gwendall:body-events@0.1.6
 gwendall:session-json@0.1.7
@@ -51,7 +60,9 @@ html-tools@1.0.5
 htmljs@1.0.5
 http@1.1.1
 id-map@1.0.4
+jhartma:cjsx@2.4.1
 jquery@1.11.4
+jsx@0.2.3
 lai:collection-extensions@0.1.4
 lai:ddp-inspector@1.1.9
 less@2.5.1
@@ -65,14 +76,21 @@ meteorhacks:aggregate@1.3.0
 meteorhacks:collection-utils@1.2.0
 minifiers@1.1.7
 minimongo@1.0.10
+<<<<<<< HEAD
 momentjs:moment@2.11.1
+=======
+>>>>>>> master
 mongo@1.1.3
 mongo-id@1.0.1
 mongo-livedata@1.0.9
 mousetrap:mousetrap@1.4.6_1
+<<<<<<< HEAD
 mquandalle:jade@0.4.8
 mquandalle:jade-compiler@0.4.5
 mquandalle:stylus@1.1.1
+=======
+nefiltari:yaki@0.1.81
+>>>>>>> master
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.39_1
 observe-sequence@1.0.7
@@ -83,13 +101,21 @@ promise@0.5.1
 raix:handlebar-helpers@0.2.5
 random@1.0.5
 rate-limit@1.0.0
+react@0.14.3
+react-meteor-data@0.2.4
+react-runtime@0.14.3
+react-runtime-dev@0.14.3
+react-runtime-prod@0.14.3
 reactive-dict@1.1.3
 reactive-var@1.0.6
 reload@1.1.4
 retry@1.0.4
 routepolicy@1.0.6
+<<<<<<< HEAD
 semantic:ui@2.1.7
 semantic:ui-data@2.1.7
+=======
+>>>>>>> master
 service-configuration@1.0.5
 session@1.1.1
 sha@1.0.4
