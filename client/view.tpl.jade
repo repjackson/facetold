@@ -1,0 +1,14 @@
+if body.length
+    +markdown
+        #{body}
+.tags
+    each keyword_array
+        .doc_keyword.ui.label(class=doc_keyword_class)
+            // i.tag.icon
+            |#{this}
+.ui.horizontal.divider
+.footer
+    |#{when} by #{author.username}
+    if currentUser
+        if isAuthor
+            .edit.ui.circular.compact.button Edit

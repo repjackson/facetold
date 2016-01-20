@@ -18,13 +18,27 @@ accounts-password
 meteorhacks:aggregate
 accounts-ui
 jquery
+<<<<<<< HEAD
+momentjs:moment
+dburles:collection-helpers
+reactive-var
+raix:handlebar-helpers
+perak:codemirror
+=======
 babrahams:constellation
 dburles:collection-helpers
 raix:handlebar-helpers
 nefiltari:yaki
+>>>>>>> master
 tmeasday:publish-counts
 http
 react
 jhartma:cjsx
 perak:codemirror
 chuangbo:marked
+<<<<<<< HEAD
+reactive-dict
+babrahams:constellation
+http
+=======
+>>>>>>> master
