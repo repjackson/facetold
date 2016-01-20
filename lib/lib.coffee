@@ -9,7 +9,5 @@ Meteor.methods
         id = Docs.insert
             authorId: Meteor.userId()
             time: Date.now()
-            tags: []
-            suggested_tags: []
             body: ''
         id

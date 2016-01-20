@@ -1,49 +1,13 @@
 .ui.segment
-    h3.ui.header
-        |Document keywords
-        if keywords
-            #clear_doc_keywords.ui.basic.compact.button
-                i.remove.icon
-                |Clear All keywords
-    .ui.divider
+    |Document keywords
     each keywords
-        .ui.button.large.compact.removekeyword
-            i.minus.icon
-            |#{this}
-    .ui.left.icon.small.input
-        i.plus.icon
-        input#addkeyword(type='text' autofocus='')
-.ui.segment
-    h3.ui.header
-        |Suggested keywords
-        #suggest_keywords.ui.basic.compact.button
-            i.wizard.icon
-            |Suggest keywords from Body
-        if unique_suggested_keywords
-            #add_all_suggested_keywords.ui.compact.button
-                i.up.arrow.icon
-                |Add All Suggested keywords
-            #clear_suggested_keywords.ui.basic.compact.button
-                i.remove.icon
-                |Clear Suggested keywords
-    .ui.divider
-    each unique_suggested_keywords
-        .ui.compact.basic.large.button.add_suggested_keyword
-            i.plus.icon
-            |#{this}
+        .ui.label #{this.text} #{this.relevance}
+    div Doc Sentiment: #{docSentiment}
+    div Doc Sentiment Amount: #{docSentimentScore}
 .ui.segment
     h3.ui.header Body
-        small
+        #analyze.ui.basic.compact.button Analyze
     +CodeMirror id="codebody" name="someName" options=editorOptions code=body
-    div
-        div
-            |Doc Sentiment: #{docSentiment}
-        div
-            |Doc Sentiment Amount: #{docSentimentScore}
-    div
-        h4.ui.header Keywords
-        each keywords
-            .ui.label #{this.text} #{this.relevance}
 .actions
     #save.ui.big.button
         i.check.icon

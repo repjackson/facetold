@@ -13,22 +13,24 @@ Meteor.methods
 
         console.log result.data
 
+        keyword_array = _.pluck(result.data.keywords, 'text')
+        console.log keyword_array
+
         Docs.update id,
             $set:
-                suggested_keywords: lowered
                 language: result.data.language
-                docSentiment: result.data.docSentiment.type
-                docSentimentScore: result.data.docSentiment.score
+                doc_sentiment: result.data.docSentiment.type
+                doc_sentiment_score: result.data.docSentiment.score
                 keywords: result.data.keywords
-
+                keyword_array: keyword_array
 
     save: (id, body)->
         doc = Docs.findOne id
-        keywordcount = doc.keywords.length
+        keyword_count = doc.keyword_array.length
         Docs.update id,
             $set:
                 body: body
-                keyword_count: keywordcount
+                keyword_count: keyword_count
 
 Docs.allow
     insert: (userId, doc)-> userId
@@ -41,23 +43,14 @@ Meteor.publish 'docs', (selected_keywords, editing)->
     if editing? then return Docs.find editing
     else
         match = {}
-        if selected_keywords.length > 0 then match.keywords = $all: selected_keywords
-        Docs.find match,
-            limit: 3
-            sort:
-                keyword_count: 1
-                points: -1
+        if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+        Docs.find match
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
-Meteor.publish 'people', ->
-    Meteor.users.find {},
-        fields: username: 1
+Meteor.publish 'people', -> Meteor.users.find {}, fields: username: 1
 
-Meteor.publish 'person', (id)->
-    Meteor.users.find id,
-        fields: username: 1
-
+Meteor.publish 'person', (id)-> Meteor.users.find id, fields: username: 1
 
 Meteor.publish 'keywords', (selected_keywords)->
     self = @
@@ -69,16 +62,16 @@ Meteor.publish 'keywords', (selected_keywords)->
         { $match: match }
         { $project: keywords: 1 }
         { $unwind: '$keywords' }
-        { $group: _id: '$keywords', count: $sum: 1 }
+        { $group: _id: '$keywords.text', count: $sum: 1 }
         { $match: _id: $nin: selected_keywords }
         { $sort: count: -1, _id: 1 }
         { $limit: 30 }
-        { $project: _id: 0, name: '$_id', count: 1 }
+        { $project: _id: 0, text: '$_id', count: 1 }
         ]
 
     cloud.forEach (keyword) ->
         self.added 'keywords', Random.id(),
-            name: keyword.name
+            text: keyword.text
             count: keyword.count
 
     self.ready()

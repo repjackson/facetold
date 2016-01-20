@@ -32,35 +32,25 @@ Meteor.startup ->
 
 Template.nav.events
     'click #add': ->
-        Meteor.call 'add', (err,postId)->
-            Session.set 'editing', postId
+        Meteor.call 'add', (err,postId)-> Session.set 'editing', postId
         selected_keywords.clear()
 
 Template.nav.helpers
     doc_counter: -> Counts.get('doc_counter')
-
     user_counter: -> Meteor.users.find().count()
 
 Template.home.helpers
     global_keywords: ->
         doc_count = Docs.find().count()
         Keywords.find()
-
     selected_keywords: -> selected_keywords.list()
-
     is_editing: -> Session.equals 'editing',@_id
-
     user: -> Meteor.user()
-
     docs: -> Docs.find()
 
-
 Template.home.events
-    'click .select_keyword': ->
-        selected_keywords.push @name.toString()
-
-    'click .unselect_keyword': -> selected_keywords.remove @toString()
-
+    'click .select_keyword': -> selected_keywords.push @text
+    'click .unselect_keyword': -> selected_keywords.remove @valueOf()
     'click #clear_keywords': -> selected_keywords.clear()
 
 
@@ -69,7 +59,7 @@ Template.edit.events
         body = t.$('#codebody').val()
         Meteor.call 'save', @_id, body, ->
         Session.set 'editing', null
-        selected_keywords.push(keyword) for keyword in @keywords
+        selected_keywords.push(keyword) for keyword in @keyword_array
 
     'click #delete': ->
         if confirm 'Confirm delete'
@@ -78,7 +68,7 @@ Template.edit.events
 
     'click #analyze': ->
         body = $('textarea').val()
-        Meteor.call 'suggest_tags', @_id, body
+        Meteor.call 'analyze', @_id, body
 
 
 Template.edit.helpers
@@ -104,5 +94,5 @@ Template.view.events
         Session.set 'editing', @_id
         selected_keywords.clear()
 
-    'click .doc_keyword': ->
-        if @text in selected_keywords.array() then selected_keywords.remove @text else selected_keywords.push @text
+    # 'click .doc_keyword': ->
+    #     if(@) in selected_keywords.array() then selected_keywords.remove(@) else selected_keywords.push(@)

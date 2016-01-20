@@ -2,10 +2,10 @@ if body.length
     +markdown
         #{body}
 .tags
-    each keywords
-        .doc_tag.ui.small.compact.button(class=doc_tag_class)
+    each keyword_array
+        .doc_keyword.ui.label(class=doc_keyword_class)
             // i.tag.icon
-            |#{this.text}
+            |#{this}
 .ui.horizontal.divider
 .footer
     |#{when} by #{author.username}
