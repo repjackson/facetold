@@ -1,9 +1,14 @@
 if body.length
     +markdown
         #{body}
-.tags
+div Keywords
     each keyword_array
         .doc_keyword.ui.label(class=doc_keyword_class)
+            // i.tag.icon
+            |#{this}
+div Concepts
+    each concept_array
+        .doc_concept.ui.label(class=doc_concept_class)
             // i.tag.icon
             |#{this}
 .ui.horizontal.divider

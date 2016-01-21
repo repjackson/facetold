@@ -14,7 +14,7 @@ Meteor.methods
         console.log result.data
 
         keyword_array = _.pluck(result.data.keywords, 'text')
-        console.log keyword_array
+        concept_array = _.pluck(result.data.concepts, 'text')
 
         Docs.update id,
             $set:
@@ -23,6 +23,8 @@ Meteor.methods
                 doc_sentiment_score: result.data.docSentiment.score
                 keywords: result.data.keywords
                 keyword_array: keyword_array
+                concept_array: concept_array
+                relations: result.data.relations
 
     save: (id, body)->
         doc = Docs.findOne id
