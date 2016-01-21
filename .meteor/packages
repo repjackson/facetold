@@ -12,6 +12,10 @@ tracker                 # Meteor's client-side reactive programming library
 
 
 coffeescript
+mquandalle:jade
+mquandalle:stylus
+semantic:ui
+flemay:less-autoprefixer
 random
 manuel:reactivearray
 accounts-password
@@ -24,10 +28,6 @@ reactive-var
 raix:handlebar-helpers
 perak:codemirror
 tmeasday:publish-counts
-http
-react
-jhartma:cjsx
-perak:codemirror
 chuangbo:marked
 reactive-dict
 babrahams:constellation
