@@ -1,6 +1,11 @@
 @selected_keywords = new ReactiveArray []
-@dict = new ReactiveDict()
-dict.set('weather', 'cloudy')
+
+
+Meteor.loginWithGoogle
+    requestOfflineToken: true
+    forceApprovalPrompt: false
+    requestPermissions: [ 'https://www.googleapis.com/auth/gmail.readonly' ]
+
 
 
 Template.nav.onCreated ->
@@ -34,6 +39,9 @@ Template.nav.events
     'click #add': ->
         Meteor.call 'add', (err,postId)-> Session.set 'editing', postId
         selected_keywords.clear()
+    'click .get_messages': ->
+        Meteor.call 'get_gmail_messages', (err,response)->
+            console.dir response
 
 Template.nav.helpers
     doc_counter: -> Counts.get('doc_counter')

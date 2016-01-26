@@ -1,3 +1,6 @@
+
+
+
 Meteor.methods
     analyze: (id, body)->
         doc = Docs.findOne id
@@ -11,10 +14,12 @@ Meteor.methods
             outputMode: 'json'
             extract: 'page-image,image-kw,feed,entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
 
-        console.log result.data
+        # console.log result.data
 
         keyword_array = _.pluck(result.data.keywords, 'text')
         concept_array = _.pluck(result.data.concepts, 'text')
+
+        debugger
 
         Docs.update id,
             $set:
@@ -34,6 +39,54 @@ Meteor.methods
                 body: body
                 keyword_count: keyword_count
 
+    get_gmail_messages: ->
+        googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
+        google = Meteor.user().services.google
+
+        # console.log Meteor.user().services
+        client = new (GMail.Client)(
+            clientId: googleConf.clientId
+            clientSecret: googleConf.secret
+            accessToken: google.accessToken
+            expirationDate: google.expiresAt
+            refreshToken: google.refreshToken)
+
+        message_list = client.list({ labelIds: 'INBOX' })
+        last_message = message_list.pop()
+
+        # console.log message_list
+
+        # console.log message.payload.body for message in message_list
+
+
+        rawMessage = client.get last_message.id
+        parsedMessage = new GMail.Message rawMessage
+        # console.log parsedMessage.html
+
+        body = parsedMessage.text
+
+        id = Docs.insert
+            body: parsedMessage.text
+            authorId: Meteor.userId()
+
+
+        Meteor.call 'analyze', id, body
+
+        # for message in message_list
+        #     rawMessage = client.get message.id
+        #     parsedMessage = new GMail.Message rawMessage
+        #     # console.log parsedMessage.html
+
+        #     body = parsedMessage.text
+
+        #     id = Docs.insert
+        #         body: parsedMessage.text
+
+        #     Meteor.call 'analyze', id, body
+        # console.log parsedMessage
+
+
+
 Docs.allow
     insert: (userId, doc)-> userId
     update: (userId, doc)-> doc.authorId is Meteor.userId()
@@ -46,7 +99,8 @@ Meteor.publish 'docs', (selected_keywords, editing)->
     else
         match = {}
         if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
-        Docs.find match
+        Docs.find match,
+            limit: 10
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
