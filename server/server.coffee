@@ -93,20 +93,18 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selected_keywords, editing)->
+Meteor.publish 'docs', (selected_keywords)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
-    if editing? then return Docs.find editing
-    else
-        match = {}
-        if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
-        Docs.find match,
-            limit: 10
+    match = {}
+    if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+    Docs.find match,
+        limit: 10
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
-Meteor.publish 'people', -> Meteor.users.find {}, fields: username: 1
+Meteor.publish 'people', -> Meteor.users.find {}
 
-Meteor.publish 'person', (id)-> Meteor.users.find id, fields: username: 1
+Meteor.publish 'person', (id)-> Meteor.users.find id
 
 Meteor.publish 'keywords', (selected_keywords)->
     self = @

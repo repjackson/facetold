@@ -1,19 +1,13 @@
-unless $.Session.get 'editing'
-    #facetnav.ui.menu
-        #home.ui.item
-            |Facet
-        .ui.item
-            +loginButtons
-        // if currentUser
-        //     a#add.ui.item
-        //         i.plus.icon
-        //         |Add
-        // .ui.item
-        //     .ui.left.icon.input
-        //         i.search.icon
-        //         input#search(type='text' autofocus='')
-        .right.menu
-            .ui.item
-                .ui.button.get_messages Get Messages
-            .ui.item #{user_counter} users
-            .ui.item #{doc_counter} docs
+#facetnav.ui.compact.segment
+    +loginButtons
+    // if currentUser
+    //     a#add.ui
+    //         i.plus.icon
+    //         |Add
+    // .ui
+    //     .ui.left.icon.input
+    //         i.search.icon
+    //         input#search(type='text' autofocus='')
+    .ui.button.get_messages Get Messages
+    |#{user_counter} users
+    |#{doc_counter} docs
