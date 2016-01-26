@@ -1,20 +1,16 @@
-unless $.Session.get 'editing'
-    .ui.grey.center.aligned.segment.globalcloud
-        if selected_keywords
-            #clear_keywords.ui.circular.grey.icon.button
-                i.remove.icon
-        each selected_keywords
-            .unselect_keyword.ui.large.compact.grey.button
-                i.minus.icon
-                |#{this}
-        each global_keywords
-            .select_keyword.ui.large.compact.button
-                |#{this.text}
-                small #{this.count}
-.ui.container
-    each docs
-        .ui.segment
-            if is_editing
-                +edit
-            else
-                +view
+.ui.grey.segment.globalcloud
+    +nav
+    if selected_keywords
+        #clear_keywords.ui.circular.grey.icon.button
+            i.remove.icon
+    each selected_keywords
+        .unselect_keyword.ui.large.compact.grey.button
+            i.minus.icon
+            |#{this}
+    each global_keywords
+        .select_keyword.ui.large.compact.button
+            |#{this.text}
+            small #{this.count}
+each docs
+    .ui.segment
+        +view

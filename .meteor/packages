@@ -21,11 +21,9 @@ manuel:reactivearray
 meteorhacks:aggregate
 accounts-ui
 jquery
-momentjs:moment
 dburles:collection-helpers
 reactive-var
 raix:handlebar-helpers
-perak:codemirror
 tmeasday:publish-counts
 chuangbo:marked
 babrahams:constellation
