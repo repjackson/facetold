@@ -43,9 +43,10 @@ Template.home.events
     'click .clear_docs': -> Meteor.call 'clear_docs'
 
     'click .get_messages': -> Meteor.call 'get_messages'
+    'click .get_tweets': -> Meteor.call 'get_tweets'
 
 
 Template.view.helpers
-    doc_keyword_class: -> if @valueOf() in selected_keywords.array() then 'grey' else ''
-    doc_concept_class: -> if @valueOf() in selected_concepts.array() then 'grey' else ''
+    doc_keyword_class: -> if @text.valueOf() in selected_keywords.array() then 'grey' else ''
+    doc_concept_class: -> if @text.valueOf() in selected_concepts.array() then 'grey' else ''
 
