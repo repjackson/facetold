@@ -7,43 +7,33 @@ Meteor.methods
         encoded = encodeURIComponent(body)
 
         # result = HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/text/TextGetCombinedData', { params:
-        result = HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
-            apikey: 'f2381fc1b71a51bb92fd7e15e836851fc02b14f1'
+        HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
+            apikey: '6656fe7c66295e0a67d85c211066cf31b0a3d0c8'
             # text: encoded
             html: body
             outputMode: 'json'
-            extract: 'page-image,image-kw,feed,entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
+            # extract: 'entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
+            extract: 'entity,keyword,taxonomy,concept,doc-sentiment' }
+            , (err, result)->
+                if err then console.log err
+                else
+                    keyword_array = _.pluck(result.data.keywords, 'text')
+                    concept_array = _.pluck(result.data.concepts, 'text')
+
+                    debugger
+
+                    Docs.update id,
+                        $set:
+                            alchemy_data: result.data
+                            keyword_array: keyword_array
+                            concept_array: concept_array
 
         # console.log result.data
 
-        keyword_array = _.pluck(result.data.keywords, 'text')
-        concept_array = _.pluck(result.data.concepts, 'text')
-
-        debugger
-
-        Docs.update id,
-            $set:
-                language: result.data.language
-                doc_sentiment: result.data.docSentiment.type
-                doc_sentiment_score: result.data.docSentiment.score
-                keywords: result.data.keywords
-                keyword_array: keyword_array
-                concept_array: concept_array
-                relations: result.data.relations
-
-    save: (id, body)->
-        doc = Docs.findOne id
-        keyword_count = doc.keyword_array.length
-        Docs.update id,
-            $set:
-                body: body
-                keyword_count: keyword_count
-
-    get_gmail_messages: ->
+    get_messages: ->
         googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
         google = Meteor.user().services.google
 
-        # console.log Meteor.user().services
         client = new (GMail.Client)(
             clientId: googleConf.clientId
             clientSecret: googleConf.secret
@@ -51,41 +41,32 @@ Meteor.methods
             expirationDate: google.expiresAt
             refreshToken: google.refreshToken)
 
-        message_list = client.list({ labelIds: 'INBOX' })
-        last_message = message_list.pop()
+        # console.log client.list('is:sent  after:2015/12/26 before:2016/3/27').map((m) ->
+        #     m.snippet
+        #     )
 
-        # console.log message_list
+        message_list = client.list('is:sent  after:2015/12/26 before:2016/3/27')
 
-        # console.log message.payload.body for message in message_list
+        # last_message = message_list.pop()
+        # rawMessage = client.get last_message.id
+        # parsedMessage = new GMail.Message rawMessage
+        # # console.log parsedMessage.html
+        # body = parsedMessage.text
+        # id = Docs.insert
+        #     body: parsedMessage.text
+        #     authorId: Meteor.userId()
+        # Meteor.call 'analyze', id, body
 
+        for message in message_list
+            rawMessage = client.get message.id
+            parsedMessage = new GMail.Message rawMessage
+            body = parsedMessage.text
+            id = Docs.insert
+                body: parsedMessage.text
+                authorId: Meteor.userId()
+            Meteor.call 'analyze', id, body
 
-        rawMessage = client.get last_message.id
-        parsedMessage = new GMail.Message rawMessage
-        # console.log parsedMessage.html
-
-        body = parsedMessage.text
-
-        id = Docs.insert
-            body: parsedMessage.text
-            authorId: Meteor.userId()
-
-
-        Meteor.call 'analyze', id, body
-
-        # for message in message_list
-        #     rawMessage = client.get message.id
-        #     parsedMessage = new GMail.Message rawMessage
-        #     # console.log parsedMessage.html
-
-        #     body = parsedMessage.text
-
-        #     id = Docs.insert
-        #         body: parsedMessage.text
-
-        #     Meteor.call 'analyze', id, body
-        # console.log parsedMessage
-
-
+    clear_docs: -> Docs.remove({})
 
 Docs.allow
     insert: (userId, doc)-> userId
@@ -93,12 +74,13 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selected_keywords)->
+Meteor.publish 'docs', (selected_keywords, selected_concepts)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+    if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
     Docs.find match,
-        limit: 10
+        limit: 20
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
@@ -116,10 +98,10 @@ Meteor.publish 'keywords', (selected_keywords)->
         { $match: match }
         { $project: keywords: 1 }
         { $unwind: '$keywords' }
-        { $group: _id: '$keywords.text', count: $sum: 1 }
+        { $group: _id: '$alchemy_data.keywords.text', count: $sum: 1 }
         { $match: _id: $nin: selected_keywords }
         { $sort: count: -1, _id: 1 }
-        { $limit: 30 }
+        { $limit: 20 }
         { $project: _id: 0, text: '$_id', count: 1 }
         ]
 
@@ -127,5 +109,29 @@ Meteor.publish 'keywords', (selected_keywords)->
         self.added 'keywords', Random.id(),
             text: keyword.text
             count: keyword.count
+
+    self.ready()
+
+Meteor.publish 'concepts', (selected_concepts)->
+    self = @
+
+    match = {}
+    if selected_concepts.length > 0 then match.concepts = $all: selected_concepts
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: concepts: 1 }
+        { $unwind: '$concepts' }
+        { $group: _id: '$alchemy_data.concepts.text', count: $sum: 1 }
+        { $match: _id: $nin: selected_concepts }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 20 }
+        { $project: _id: 0, text: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (concept) ->
+        self.added 'concepts', Random.id(),
+            text: concept.text
+            count: concept.count
 
     self.ready()
