@@ -1,7 +1,17 @@
 
 
-
 Meteor.methods
+    get_tweets: ->
+        twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
+        console.log Meteor.user().services.twitter
+
+        Twit = new TwitMaker(
+            consumer_key: twitterConf.consumerKey
+            consumer_secret: twitterConf.secret
+            access_token: '...'
+            access_token_secret: '...')
+
+
     analyze: (id, body)->
         doc = Docs.findOne id
         encoded = encodeURIComponent(body)
@@ -24,11 +34,23 @@ Meteor.methods
 
                     Docs.update id,
                         $set:
-                            alchemy_data: result.data
+                            docSentiment: result.data.docSentiment
+                            language: result.data.language
+                            keywords: result.data.keywords
+                            concepts: result.data.concepts
+                            entities: result.data.entities
+                            taxonomy: result.data.taxonomy
                             keyword_array: keyword_array
                             concept_array: concept_array
 
         # console.log result.data
+
+    # average_sentiment: ->
+    #     sentiments = []
+    #     arrayAverage = (arr) ->
+    #     _.reduce(arr, ((memo, num) ->
+    #     memo + num
+    #     ), 0) / (if arr.length == 0 then 1 else arr.length)
 
     get_messages: ->
         googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
@@ -66,7 +88,20 @@ Meteor.methods
                 authorId: Meteor.userId()
             Meteor.call 'analyze', id, body
 
+
     clear_docs: -> Docs.remove({})
+
+    calc_sent_avg: ->
+        sentiments = []
+        Docs.find().map((doc)->
+            sentiments.push(doc.docSentiment.score)
+            )
+        avgSentiments = _.reduce(sentiments, ((memo, num) ->
+            memo + num
+            ), 0) / (if sentiments.length == 0 then 1 else sentiments.length)
+
+        console.log avgSentiments
+        debugger
 
 Docs.allow
     insert: (userId, doc)-> userId
@@ -98,10 +133,10 @@ Meteor.publish 'keywords', (selected_keywords)->
         { $match: match }
         { $project: keywords: 1 }
         { $unwind: '$keywords' }
-        { $group: _id: '$alchemy_data.keywords.text', count: $sum: 1 }
+        { $group: _id: '$keywords.text', count: $sum: 1 }
         { $match: _id: $nin: selected_keywords }
         { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
+        { $limit: 50 }
         { $project: _id: 0, text: '$_id', count: 1 }
         ]
 
@@ -122,10 +157,10 @@ Meteor.publish 'concepts', (selected_concepts)->
         { $match: match }
         { $project: concepts: 1 }
         { $unwind: '$concepts' }
-        { $group: _id: '$alchemy_data.concepts.text', count: $sum: 1 }
+        { $group: _id: '$concepts.text', count: $sum: 1 }
         { $match: _id: $nin: selected_concepts }
         { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
+        { $limit: 50 }
         { $project: _id: 0, text: '$_id', count: 1 }
         ]
 

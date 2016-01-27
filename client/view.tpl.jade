@@ -1,24 +1,31 @@
-if body.length
-    +markdown
-        #{body}
++markdown
+    #{body}
 .ui.segment
-    strong Keywords
-    each keyword_array
-        .doc_keyword.ui.label(class=doc_keyword_class) #{this}
+    .ui.blue.top.left.attached.label Keywords
+    each keywords
+        .doc_keyword.ui.label(class=doc_keyword_class)
+            div #{text}
+            div #{relevance}
 .ui.segment
-    strong Concepts
-    each concept_array
-        .doc_concept.ui.label(class=doc_concept_class) #{this}
-with alchemy_data
-    .ui.segment
-        div Sentiment: #{docSentiment.type} #{docSentiment.score}
-        div Language: #{language}
-    .ui.segment Taxonomy
-        each taxonomy
-            .ui.segment
-                div Label: #{label}
-                div Score: #{score}
-                div Confident: #{confident}
+    .ui.blue.top.left.attached.label Concepts
+    each concepts
+        .doc_concept.ui.label(class=doc_concept_class)
+            div #{text}
+            div #{relevance}
+            a(href=dbpedia target="_blank") DBPedia
+            a(href=opencyc target="_blank") opencyc
+            a(href=freebase target="_blank") freebase
+#{this}
+.ui.segment
+    div Sentiment: #{docSentiment.type} #{docSentiment.score}
+    div Language: #{language}
+.ui.segment
+    .ui.blue.top.left.attached.label Taxonomy
+    each taxonomy
+        .ui.label
+            div Label: #{label}
+            div Score: #{score}
+            div Confident: #{confident}
 
 // .ui.segment
 //     Strong Relations
