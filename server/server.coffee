@@ -3,13 +3,32 @@
 Meteor.methods
     get_tweets: ->
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
-        console.log Meteor.user().services.twitter
+        twitter = Meteor.user().services.twitter
 
         Twit = new TwitMaker(
             consumer_key: twitterConf.consumerKey
             consumer_secret: twitterConf.secret
-            access_token: '...'
-            access_token_secret: '...')
+            access_token: twitter.accessToken
+            access_token_secret: twitter.accessTokenSecret
+            app_only_auth:true)
+
+        Twit.get 'search/tweets', {
+            q: 'banana since:2011-11-11'
+            count: 100
+        }, Meteor.bindEnvironment(((err, data, response) ->
+            tweets = []
+            _.map(data, (tweet)->
+                tweets.push(_.pluck(tweet, 'text'))
+            )
+            extracted_tweets = tweets[0]
+
+            for tweet in extracted_tweets
+                id = Docs.insert
+                    body: tweet
+                Meteor.call 'analyze', id, tweet
+            ), ->
+              console.log 'Failed to bind environment'
+            )
 
 
     analyze: (id, body)->
@@ -52,41 +71,41 @@ Meteor.methods
     #     memo + num
     #     ), 0) / (if arr.length == 0 then 1 else arr.length)
 
-    get_messages: ->
-        googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
-        google = Meteor.user().services.google
+    # get_messages: ->
+    #     googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
+    #     google = Meteor.user().services.google
 
-        client = new (GMail.Client)(
-            clientId: googleConf.clientId
-            clientSecret: googleConf.secret
-            accessToken: google.accessToken
-            expirationDate: google.expiresAt
-            refreshToken: google.refreshToken)
+    #     client = new (GMail.Client)(
+    #         clientId: googleConf.clientId
+    #         clientSecret: googleConf.secret
+    #         accessToken: google.accessToken
+    #         expirationDate: google.expiresAt
+    #         refreshToken: google.refreshToken)
 
-        # console.log client.list('is:sent  after:2015/12/26 before:2016/3/27').map((m) ->
-        #     m.snippet
-        #     )
+    #     # console.log client.list('is:sent  after:2015/12/26 before:2016/3/27').map((m) ->
+    #     #     m.snippet
+    #     #     )
 
-        message_list = client.list('is:sent  after:2015/12/26 before:2016/3/27')
+    #     message_list = client.list('is:sent  after:2015/12/26 before:2016/3/27')
 
-        # last_message = message_list.pop()
-        # rawMessage = client.get last_message.id
-        # parsedMessage = new GMail.Message rawMessage
-        # # console.log parsedMessage.html
-        # body = parsedMessage.text
-        # id = Docs.insert
-        #     body: parsedMessage.text
-        #     authorId: Meteor.userId()
-        # Meteor.call 'analyze', id, body
+    #     # last_message = message_list.pop()
+    #     # rawMessage = client.get last_message.id
+    #     # parsedMessage = new GMail.Message rawMessage
+    #     # # console.log parsedMessage.html
+    #     # body = parsedMessage.text
+    #     # id = Docs.insert
+    #     #     body: parsedMessage.text
+    #     #     authorId: Meteor.userId()
+    #     # Meteor.call 'analyze', id, body
 
-        for message in message_list
-            rawMessage = client.get message.id
-            parsedMessage = new GMail.Message rawMessage
-            body = parsedMessage.text
-            id = Docs.insert
-                body: parsedMessage.text
-                authorId: Meteor.userId()
-            Meteor.call 'analyze', id, body
+    #     for message in message_list
+    #         rawMessage = client.get message.id
+    #         parsedMessage = new GMail.Message rawMessage
+    #         body = parsedMessage.text
+    #         id = Docs.insert
+    #             body: parsedMessage.text
+    #             authorId: Meteor.userId()
+    #         Meteor.call 'analyze', id, body
 
 
     clear_docs: -> Docs.remove({})

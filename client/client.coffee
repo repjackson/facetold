@@ -2,10 +2,10 @@
 @selected_concepts = new ReactiveArray []
 
 
-Meteor.loginWithGoogle
-    requestOfflineToken: true
-    forceApprovalPrompt: false
-    requestPermissions: [ 'https://www.googleapis.com/auth/gmail.readonly' ]
+# Meteor.loginWithGoogle
+#     requestOfflineToken: true
+#     forceApprovalPrompt: false
+#     requestPermissions: [ 'https://www.googleapis.com/auth/gmail.readonly' ]
 
 
 
@@ -25,6 +25,7 @@ Template.home.helpers
 
     global_keywords: -> Keywords.find()
     selected_keywords: -> selected_keywords.list()
+
     global_concepts: -> Concepts.find()
     selected_concepts: -> selected_concepts.list()
 
@@ -42,7 +43,7 @@ Template.home.events
 
     'click .clear_docs': -> Meteor.call 'clear_docs'
 
-    'click .get_messages': -> Meteor.call 'get_messages'
+    # 'click .get_messages': -> Meteor.call 'get_messages'
     'click .get_tweets': -> Meteor.call 'get_tweets'
 
 

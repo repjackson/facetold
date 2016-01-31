@@ -1,8 +1,9 @@
 #facetnav.ui.compact.segment
     +loginButtons
     // .ui.button.get_messages Get Messages
-    .ui.button.get_tweets Get Tweets
-    .ui.button.clear_docs Clear Docs
+    if currentUser
+        .ui.button.get_tweets Get Tweets
+        .ui.button.clear_docs Clear Docs
     |#{user_counter} users #{doc_counter} docs
 .ui.grey.segment.globalcloud
     .ui.segment Keywords
