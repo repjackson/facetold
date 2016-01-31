@@ -1,5 +1,4 @@
 accounts-base@1.2.2
-accounts-google@1.0.6
 accounts-oauth@1.1.8
 accounts-twitter@1.0.6
 accounts-ui@1.1.6
@@ -22,7 +21,6 @@ caching-compiler@1.0.0
 caching-html-compiler@1.0.2
 callback-hook@1.0.4
 check@1.1.0
-chuangbo:marked@0.3.5_1
 coffeescript@1.0.11
 constellation:autopublish@0.4.0
 constellation:console@1.4.0
@@ -44,7 +42,6 @@ ecmascript-runtime@0.2.6
 ejson@1.0.7
 flemay:less-autoprefixer@1.2.0
 geojson-utils@1.0.4
-google@1.1.7
 gwendall:body-events@0.1.6
 gwendall:session-json@0.1.7
 hot-code-push@1.0.0
@@ -77,7 +74,6 @@ mrt:twit@0.2.0
 npm-mongo@1.4.39_1
 oauth@1.1.6
 oauth1@1.1.5
-oauth2@1.1.5
 observe-sequence@1.0.7
 ordered-dict@1.0.4
 promise@0.5.1
@@ -92,8 +88,6 @@ semantic:ui@2.1.7
 semantic:ui-data@2.1.7
 service-configuration@1.0.5
 session@1.1.1
-slava:gmail@0.1.0
-slava:gmail-query-parser@1.1.0
 spacebars@1.0.7
 spacebars-compiler@1.0.7
 templating@1.1.5
