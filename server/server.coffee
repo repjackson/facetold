@@ -5,6 +5,8 @@ Meteor.methods
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
         twitter = Meteor.user().services.twitter
 
+        # console.log twit
+
         Twit = new TwitMaker(
             consumer_key: twitterConf.consumerKey
             consumer_secret: twitterConf.secret
@@ -12,22 +14,24 @@ Meteor.methods
             access_token_secret: twitter.accessTokenSecret
             app_only_auth:true)
 
-        Twit.get 'search/tweets', {
-            q: 'banana since:2011-11-11'
+        Twit.get 'statuses/user_timeline', {
+            screen_name: 'repjackson'
             count: 100
-        }, Meteor.bindEnvironment(((err, data, response) ->
-            tweets = []
-            _.map(data, (tweet)->
-                tweets.push(_.pluck(tweet, 'text'))
-            )
-            extracted_tweets = tweets[0]
+        }, ((err, data, response) ->
+            # console.log data
+            for tweet in data
+                console.log tweet.text
 
-            for tweet in extracted_tweets
-                id = Docs.insert
-                    body: tweet
-                Meteor.call 'analyze', id, tweet
-            ), ->
-              console.log 'Failed to bind environment'
+            # tweets = []
+            # _.map(data, (tweet)->
+            #     tweets.push(_.pluck(tweet, 'text'))
+            # )
+            # extracted_tweets = tweets[0]
+
+            # for tweet in extracted_tweets
+            #     id = Docs.insert
+            #         body: tweet
+            #     Meteor.call 'analyze', id, tweet
             )
 
 
