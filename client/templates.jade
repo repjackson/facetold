@@ -1,0 +1,77 @@
+head
+    title Facet
+
+body
+    +home
+
+template(name=home)
+    #facetnav.ui.compact.segment
+        +loginButtons
+        if currentUser
+            .ui.button.get_tweets Get My Tweets
+            .ui.button.view_my_tweets(class=viewMyTweetsClass) My Tweets
+            .ui.button.clear_docs Delete My Tweets
+        |#{user_counter} users #{doc_counter} docs
+    .ui.grey.segment.globalcloud
+        .ui.segment Keywords
+            if selected_keywords
+                #clear_keywords.ui.circular.grey.icon.button
+                    i.remove.icon
+            each selected_keywords
+                .unselect_keyword.ui.large.compact.grey.button
+                    i.minus.icon
+                    |#{this}
+            each global_keywords
+                .select_keyword.ui.large.compact.button
+                    |#{this.text}
+                    small #{this.count}
+    .ui.grey.segment.globalcloud
+        .ui.segment Concepts
+            if selected_concepts
+                #clear_concepts.ui.circular.grey.icon.button
+                    i.remove.icon
+            each selected_concepts
+                .unselect_concept.ui.large.compact.grey.button
+                    i.minus.icon
+                    |#{this}
+            each global_concepts
+                .select_concept.ui.large.compact.button
+                    |#{this.text} #{this.relevance}
+                    small #{this.count}
+    each docs
+        .ui.segment
+            +view
+
+
+template(name=view)
+    +markdown
+        #{body}
+    .ui.segment
+        .ui.blue.top.left.attached.label Keywords
+        each keywords
+            .doc_keyword.ui.label(class=doc_keyword_class)
+                div #{text}
+                div #{relevance}
+    .ui.segment
+        .ui.blue.top.left.attached.label Concepts
+        each concepts
+            .doc_concept.ui.label(class=doc_concept_class)
+                div #{text}
+                div #{relevance}
+                if dbpedia
+                    a(href=dbpedia target="_blank") DBPedia
+                if opencyc
+                    a(href=opencyc target="_blank") Opencyc
+                if freebase
+                    a(href=freebase target="_blank") Freebase
+    .ui.segment
+        div Sentiment: #{docSentiment.type} #{docSentiment.score}
+        div Language: #{language}
+        .ui.button.author(class=authorButtonClass) Author: #{screen_name}
+    .ui.segment
+        .ui.blue.top.left.attached.label Taxonomy
+        each taxonomy
+            .ui.label
+                div Label: #{label}
+                div Score: #{score}
+                div Confident: #{confident}

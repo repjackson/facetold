@@ -5,7 +5,6 @@ Meteor.methods
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
         twitter = Meteor.user().services.twitter
 
-        # console.log twit
 
         Twit = new TwitMaker(
             consumer_key: twitterConf.consumerKey
@@ -15,24 +14,16 @@ Meteor.methods
             app_only_auth:true)
 
         Twit.get 'statuses/user_timeline', {
-            screen_name: 'repjackson'
-            count: 100
-        }, ((err, data, response) ->
-            # console.log data
+            screen_name: twitter.screenName
+            count: 200
+        }, Meteor.bindEnvironment(((err, data, response) ->
             for tweet in data
-                console.log tweet.text
-
-            # tweets = []
-            # _.map(data, (tweet)->
-            #     tweets.push(_.pluck(tweet, 'text'))
-            # )
-            # extracted_tweets = tweets[0]
-
-            # for tweet in extracted_tweets
-            #     id = Docs.insert
-            #         body: tweet
-            #     Meteor.call 'analyze', id, tweet
-            )
+                id = Docs.insert
+                    body: tweet.text
+                    authorId: Meteor.userId()
+                    screen_name: Meteor.user().profile.name
+                Meteor.call 'analyze', id, tweet.text
+            ))
 
 
     analyze: (id, body)->
@@ -46,14 +37,12 @@ Meteor.methods
             html: body
             outputMode: 'json'
             # extract: 'entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
-            extract: 'entity,keyword,taxonomy,concept,doc-sentiment' }
+            extract: 'keyword,taxonomy,concept,doc-sentiment' }
             , (err, result)->
                 if err then console.log err
                 else
                     keyword_array = _.pluck(result.data.keywords, 'text')
                     concept_array = _.pluck(result.data.concepts, 'text')
-
-                    debugger
 
                     Docs.update id,
                         $set:
@@ -75,44 +64,8 @@ Meteor.methods
     #     memo + num
     #     ), 0) / (if arr.length == 0 then 1 else arr.length)
 
-    # get_messages: ->
-    #     googleConf = ServiceConfiguration.configurations.findOne(service: 'google')
-    #     google = Meteor.user().services.google
 
-    #     client = new (GMail.Client)(
-    #         clientId: googleConf.clientId
-    #         clientSecret: googleConf.secret
-    #         accessToken: google.accessToken
-    #         expirationDate: google.expiresAt
-    #         refreshToken: google.refreshToken)
-
-    #     # console.log client.list('is:sent  after:2015/12/26 before:2016/3/27').map((m) ->
-    #     #     m.snippet
-    #     #     )
-
-    #     message_list = client.list('is:sent  after:2015/12/26 before:2016/3/27')
-
-    #     # last_message = message_list.pop()
-    #     # rawMessage = client.get last_message.id
-    #     # parsedMessage = new GMail.Message rawMessage
-    #     # # console.log parsedMessage.html
-    #     # body = parsedMessage.text
-    #     # id = Docs.insert
-    #     #     body: parsedMessage.text
-    #     #     authorId: Meteor.userId()
-    #     # Meteor.call 'analyze', id, body
-
-    #     for message in message_list
-    #         rawMessage = client.get message.id
-    #         parsedMessage = new GMail.Message rawMessage
-    #         body = parsedMessage.text
-    #         id = Docs.insert
-    #             body: parsedMessage.text
-    #             authorId: Meteor.userId()
-    #         Meteor.call 'analyze', id, body
-
-
-    clear_docs: -> Docs.remove({})
+    clear_my_docs: -> Docs.remove({authorId: Meteor.userId()})
 
     calc_sent_avg: ->
         sentiments = []
@@ -126,17 +79,23 @@ Meteor.methods
         console.log avgSentiments
         debugger
 
+
+
+    view_my_tweets: ->
+
+
 Docs.allow
     insert: (userId, doc)-> userId
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selected_keywords, selected_concepts)->
+Meteor.publish 'docs', (selected_keywords, selected_concepts, author_filter)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
+    if author_filter then match.authorId = author_filter
     Docs.find match,
         limit: 20
 
@@ -146,11 +105,13 @@ Meteor.publish 'people', -> Meteor.users.find {}
 
 Meteor.publish 'person', (id)-> Meteor.users.find id
 
-Meteor.publish 'keywords', (selected_keywords)->
+Meteor.publish 'keywords', (selected_keywords, selected_concepts, author_filter)->
     self = @
 
     match = {}
-    if selected_keywords.length > 0 then match.keywords = $all: selected_keywords
+    if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+    if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
+    if author_filter then match.authorId = author_filter
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -170,11 +131,13 @@ Meteor.publish 'keywords', (selected_keywords)->
 
     self.ready()
 
-Meteor.publish 'concepts', (selected_concepts)->
+Meteor.publish 'concepts', (selected_concepts, selected_keywords, author_filter)->
     self = @
 
     match = {}
-    if selected_concepts.length > 0 then match.concepts = $all: selected_concepts
+    if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+    if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
+    if author_filter then match.authorId = author_filter
 
     cloud = Docs.aggregate [
         { $match: match }
