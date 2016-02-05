@@ -14,41 +14,42 @@ template(name='home')
                     a.item.clear_docs
                         i.remove.red.icon
                         |Delete My Tweets
+                    a.item.view_my_tweets(class=viewMyTweetsClass)
+                        i.user.icon
+                        |My Tweets
                 else
                     a.item.get_tweets
                         i.cloud.green.download.icon
                         |Get My Tweets
-                a.item.view_my_tweets(class=viewMyTweetsClass)
-                    i.user.icon
-                    |My Tweets
             .ui.item
                 +loginButtons
-    .ui.grey.segment.globalcloud
-        .ui.segment Keywords
-            if selected_keywords
-                #clear_keywords.ui.circular.grey.icon.button
-                    i.remove.icon
-            each selected_keywords
-                .unselect_keyword.ui.large.compact.grey.button
-                    i.minus.icon
-                    |#{this}
-            each global_keywords
-                .select_keyword.ui.large.compact.button
-                    |#{this.text}
-                    small #{this.count}
-    .ui.grey.segment.globalcloud
-        .ui.segment Concepts
-            if selected_concepts
-                #clear_concepts.ui.circular.grey.icon.button
-                    i.remove.icon
-            each selected_concepts
-                .unselect_concept.ui.large.compact.grey.button
-                    i.minus.icon
-                    |#{this}
-            each global_concepts
-                .select_concept.ui.large.compact.button
-                    |#{this.text} #{this.relevance}
-                    small #{this.count}
+    if $.Session.get 'author_filter'
+        .ui.segment Author Filter
+            .ui.blue.button.authorFilterButton= authorFilterUsername
+    .ui.grey.segment.globalcloud Keywords
+        if selected_keywords
+            #clear_keywords.ui.circular.grey.icon.button
+                i.remove.icon
+        each selected_keywords
+            .unselect_keyword.ui.large.compact.grey.button
+                i.minus.icon
+                |#{this}
+        each global_keywords
+            .select_keyword.ui.large.compact.button
+                |#{this.text}
+                small #{this.count}
+    .ui.grey.segment.globalcloud Concepts
+        if selected_concepts
+            #clear_concepts.ui.circular.grey.icon.button
+                i.remove.icon
+        each selected_concepts
+            .unselect_concept.ui.large.compact.grey.button
+                i.minus.icon
+                |#{this}
+        each global_concepts
+            .select_concept.ui.large.compact.button
+                |#{this.text} #{this.relevance}
+                small #{this.count}
     each docs
         .ui.segment
             +view

@@ -31,6 +31,8 @@ Template.home.helpers
 
     hasReceivedTweets: -> Meteor.user().hasReceivedTweets
 
+    authorFilterUsername: -> Meteor.users.findOne(Session.get('author_filter')).profile.name
+
 Template.home.events
     'click .select_keyword': -> selected_keywords.push @text
     'click .unselect_keyword': -> selected_keywords.remove @valueOf()
@@ -43,17 +45,20 @@ Template.home.events
     'click .clear_docs': -> Meteor.call 'clear_my_docs', ->
         Meteor.setTimeout (->
             Session.set 'author_filter', null
-        ), 1000
+        ), 1500
 
     'click .get_tweets': -> Meteor.call 'get_tweets', ->
         Meteor.setTimeout (->
             Session.set 'author_filter', Meteor.userId()
-        ), 1000
+        ), 1500
 
 
     'click .view_my_tweets': -> if Session.equals('author_filter', Meteor.userId()) then Session.set 'author_filter', null else Session.set 'author_filter', Meteor.userId()
 
     'click .author': -> if Session.equals('author_filter', @authorId) then Session.set 'author_filter', null else Session.set 'author_filter', @authorId
+
+
+    'click .authorFilterButton': -> Session.set 'author_filter', null
 
 
 Template.view.helpers
