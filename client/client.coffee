@@ -27,7 +27,9 @@ Template.home.helpers
     user: -> Meteor.user()
     docs: -> Docs.find()
 
-    viewMyTweetsClass: -> if Session.equals 'author_filter', Meteor.userId() then 'blue' else null
+    viewMyTweetsClass: -> if Session.equals 'author_filter', Meteor.userId() then 'active' else null
+
+    hasReceivedTweets: -> Meteor.user().hasReceivedTweets
 
 Template.home.events
     'click .select_keyword': -> selected_keywords.push @text
@@ -38,9 +40,17 @@ Template.home.events
     'click .unselect_concept': -> selected_concepts.remove @valueOf()
     'click #clear_concepts': -> selected_concepts.clear()
 
-    'click .clear_docs': -> Meteor.call 'clear_my_docs'
+    'click .clear_docs': -> Meteor.call 'clear_my_docs', ->
+        Meteor.setTimeout (->
+            Session.set 'author_filter', null
+        ), 1000
 
-    'click .get_tweets': -> Meteor.call 'get_tweets'
+    'click .get_tweets': -> Meteor.call 'get_tweets', ->
+        Meteor.setTimeout (->
+            Session.set 'author_filter', Meteor.userId()
+        ), 1000
+
+
     'click .view_my_tweets': -> if Session.equals('author_filter', Meteor.userId()) then Session.set 'author_filter', null else Session.set 'author_filter', Meteor.userId()
 
     'click .author': -> if Session.equals('author_filter', @authorId) then Session.set 'author_filter', null else Session.set 'author_filter', @authorId
