@@ -25,6 +25,11 @@ Meteor.methods
                 Meteor.call 'analyze', id, tweet.text
             ))
 
+        Meteor.users.update Meteor.userId(),
+            $set: hasReceivedTweets: true
+
+        return true
+
 
     analyze: (id, body)->
         doc = Docs.findOne id
@@ -65,23 +70,25 @@ Meteor.methods
     #     ), 0) / (if arr.length == 0 then 1 else arr.length)
 
 
-    clear_my_docs: -> Docs.remove({authorId: Meteor.userId()})
+    clear_my_docs: ->
+        Docs.remove({authorId: Meteor.userId()})
 
-    calc_sent_avg: ->
-        sentiments = []
-        Docs.find().map((doc)->
-            sentiments.push(doc.docSentiment.score)
-            )
-        avgSentiments = _.reduce(sentiments, ((memo, num) ->
-            memo + num
-            ), 0) / (if sentiments.length == 0 then 1 else sentiments.length)
+        Meteor.users.update Meteor.userId(),
+            $set: hasReceivedTweets: false
 
-        console.log avgSentiments
-        debugger
+        return true
 
 
+    # calc_sent_avg: ->
+    #     sentiments = []
+    #     Docs.find().map((doc)->
+    #         sentiments.push(doc.docSentiment.score)
+    #         )
+    #     avgSentiments = _.reduce(sentiments, ((memo, num) ->
+    #         memo + num
+    #         ), 0) / (if sentiments.length == 0 then 1 else sentiments.length)
 
-    view_my_tweets: ->
+    #     console.log avgSentiments
 
 
 Docs.allow

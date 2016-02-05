@@ -4,14 +4,25 @@ head
 body
     +home
 
-template(name=home)
-    #facetnav.ui.compact.segment
-        +loginButtons
-        if currentUser
-            .ui.button.get_tweets Get My Tweets
-            .ui.button.view_my_tweets(class=viewMyTweetsClass) My Tweets
-            .ui.button.clear_docs Delete My Tweets
-        |#{user_counter} users #{doc_counter} docs
+template(name='home')
+    #facetnav.ui.menu
+        .ui.header.item Facet mothafucka!
+        .ui.item #{user_counter} users #{doc_counter} docs
+        .ui.right.menu
+            if currentUser
+                if hasReceivedTweets
+                    a.item.clear_docs
+                        i.remove.red.icon
+                        |Delete My Tweets
+                else
+                    a.item.get_tweets
+                        i.cloud.green.download.icon
+                        |Get My Tweets
+                a.item.view_my_tweets(class=viewMyTweetsClass)
+                    i.user.icon
+                    |My Tweets
+            .ui.item
+                +loginButtons
     .ui.grey.segment.globalcloud
         .ui.segment Keywords
             if selected_keywords
@@ -43,7 +54,7 @@ template(name=home)
             +view
 
 
-template(name=view)
+template(name='view')
     +markdown
         #{body}
     .ui.segment
