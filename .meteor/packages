@@ -28,3 +28,4 @@ service-configuration
 accounts-twitter
 mrt:twit
 perak:markdown
+raix:handlebar-helpers
