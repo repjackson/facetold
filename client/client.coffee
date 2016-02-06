@@ -27,11 +27,8 @@ Template.home.helpers
     user: -> Meteor.user()
     docs: -> Docs.find()
 
-    viewMyTweetsClass: -> if Session.equals 'author_filter', Meteor.userId() then 'active' else null
-
+    viewMyTweetsClass: -> if Session.equals 'author_filter', Meteor.user().profile.name then 'blue' else null
     hasReceivedTweets: -> Meteor.user().hasReceivedTweets
-
-    authorFilterUsername: -> Meteor.users.findOne(Session.get('author_filter')).profile.name
 
 Template.home.events
     'click .select_keyword': -> selected_keywords.push @text
@@ -42,27 +39,29 @@ Template.home.events
     'click .unselect_concept': -> selected_concepts.remove @valueOf()
     'click #clear_concepts': -> selected_concepts.clear()
 
-    'click .clear_docs': -> Meteor.call 'clear_my_docs', ->
+    'click .clear_my_docs': -> Meteor.call 'clear_my_docs', ->
         Meteor.setTimeout (->
             Session.set 'author_filter', null
-        ), 1500
+            ), 1000
 
-    'click .get_tweets': -> Meteor.call 'get_tweets', ->
+    'click .get_tweets': -> Meteor.call 'get_tweets', Meteor.user().profile.name, ->
         Meteor.setTimeout (->
-            Session.set 'author_filter', Meteor.userId()
-        ), 1500
+            Session.set 'author_filter', Meteor.user().profile.name
+            ), 1000
 
+    'click .view_my_tweets': -> if Session.equals('author_filter', Meteor.user().profile.name) then Session.set 'author_filter', null else Session.set 'author_filter', Meteor.user().profile.name
 
-    'click .view_my_tweets': -> if Session.equals('author_filter', Meteor.userId()) then Session.set 'author_filter', null else Session.set 'author_filter', Meteor.userId()
+    'click .tweetViewAuthorButton': -> if Session.equals('author_filter', @screen_name) then Session.set 'author_filter', null else Session.set 'author_filter', @screen_name
 
-    'click .author': -> if Session.equals('author_filter', @authorId) then Session.set 'author_filter', null else Session.set 'author_filter', @authorId
+    'keyup .authorName': (event)->
+        if event.keyCode is 13
+            Meteor.call 'get_tweets', event.target.value
 
-
-    'click .authorFilterButton': -> Session.set 'author_filter', null
-
+    'click .authorFilterButton': (event)->
+        if Session.equals('author_filter', event.target.innerHTML) then Session.set 'author_filter', null else Session.set 'author_filter', event.target.innerHTML
 
 Template.view.helpers
     doc_keyword_class: -> if @text.valueOf() in selected_keywords.array() then 'grey' else ''
     doc_concept_class: -> if @text.valueOf() in selected_concepts.array() then 'grey' else ''
-    authorButtonClass: -> if Session.equals('author_filter', @authorId) then 'blue' else null
+    authorButtonClass: -> if Session.equals('author_filter', @screen_name) then 'blue' else null
 

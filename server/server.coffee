@@ -1,7 +1,12 @@
 
 
 Meteor.methods
-    get_tweets: ->
+    get_tweets: (screen_name)->
+        if not screen_name
+            console.error 'No screen name provided'
+            return false
+
+
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
         twitter = Meteor.user().services.twitter
 
@@ -14,22 +19,20 @@ Meteor.methods
             app_only_auth:true)
 
         Twit.get 'statuses/user_timeline', {
-            screen_name: twitter.screenName
+            screen_name: screen_name
             count: 200
+            include_rts: false
         }, Meteor.bindEnvironment(((err, data, response) ->
             for tweet in data
                 id = Docs.insert
                     body: tweet.text
-                    authorId: Meteor.userId()
-                    screen_name: Meteor.user().profile.name
+                    screen_name: screen_name
                 Meteor.call 'analyze', id, tweet.text
             ))
 
-        Meteor.users.update Meteor.userId(),
-            $set: hasReceivedTweets: true
-
-        return true
-
+        if screen_name is Meteor.user().profile.name
+            Meteor.users.update Meteor.userId,
+                $set: hasReceivedTweets: true
 
     analyze: (id, body)->
         doc = Docs.findOne id
@@ -60,35 +63,12 @@ Meteor.methods
                             keyword_array: keyword_array
                             concept_array: concept_array
 
-        # console.log result.data
-
-    # average_sentiment: ->
-    #     sentiments = []
-    #     arrayAverage = (arr) ->
-    #     _.reduce(arr, ((memo, num) ->
-    #     memo + num
-    #     ), 0) / (if arr.length == 0 then 1 else arr.length)
-
 
     clear_my_docs: ->
-        Docs.remove({authorId: Meteor.userId()})
+        Docs.remove({screen_name: Meteor.user().profile.name})
 
         Meteor.users.update Meteor.userId(),
             $set: hasReceivedTweets: false
-
-        return true
-
-
-    # calc_sent_avg: ->
-    #     sentiments = []
-    #     Docs.find().map((doc)->
-    #         sentiments.push(doc.docSentiment.score)
-    #         )
-    #     avgSentiments = _.reduce(sentiments, ((memo, num) ->
-    #         memo + num
-    #         ), 0) / (if sentiments.length == 0 then 1 else sentiments.length)
-
-    #     console.log avgSentiments
 
 
 Docs.allow
@@ -99,10 +79,12 @@ Docs.allow
 
 Meteor.publish 'docs', (selected_keywords, selected_concepts, author_filter)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
+
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.authorId = author_filter
+    if author_filter then match.screen_name = author_filter
+
     Docs.find match,
         limit: 20
 
@@ -118,7 +100,7 @@ Meteor.publish 'keywords', (selected_keywords, selected_concepts, author_filter)
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.authorId = author_filter
+    if author_filter then match.screen_name = author_filter
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -144,7 +126,7 @@ Meteor.publish 'concepts', (selected_concepts, selected_keywords, author_filter)
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.authorId = author_filter
+    if author_filter then match.screen_name = author_filter
 
     cloud = Docs.aggregate [
         { $match: match }
