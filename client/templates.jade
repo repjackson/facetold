@@ -49,20 +49,7 @@ template(name='home')
                         |#{this.text}
                         small #{this.count}
             .ui.center.aligned.segment.globalcloud
-                .ui.center.aligned.header Mentioned Keywords
-                if selected_keywords
-                    #clear_keywords.ui.circular.grey.icon.button
-                        i.remove.icon
-                each selected_keywords
-                    .unselect_keyword.ui.large.compact.grey.button
-                        i.minus.icon
-                        |#{this}
-                each global_keywords
-                    .select_keyword.ui.large.compact.button
-                        |#{this.text}
-                        small #{this.count}
-            .ui.center.aligned.segment.globalcloud
-                .ui.center.aligned.header Inferred Concepts
+                .ui.center.aligned.header Inferred Concepts from Tweets
                 if selected_concepts
                     #clear_concepts.ui.circular.grey.icon.button
                         i.remove.icon
@@ -73,6 +60,19 @@ template(name='home')
                 each global_concepts
                     .select_concept.ui.large.compact.button
                         |#{this.text} #{this.relevance}
+                        small #{this.count}
+            .ui.center.aligned.segment.globalcloud
+                .ui.center.aligned.header Mentioned Keywords in Tweets
+                if selected_keywords
+                    #clear_keywords.ui.circular.grey.icon.button
+                        i.remove.icon
+                each selected_keywords
+                    .unselect_keyword.ui.large.compact.grey.button
+                        i.minus.icon
+                        |#{this}
+                each global_keywords
+                    .select_keyword.ui.large.compact.button
+                        |#{this.text}
                         small #{this.count}
     .ui.container
         .ui.secondary.segment
@@ -86,12 +86,13 @@ template(name='view')
         +markdown
             #{body}
     .ui.horizontal.segments
-        .ui.center.aligned.segment
-            p Keywords
-            each keywords
-                .doc_keyword.ui.label(class=doc_keyword_class)
-                    div #{text}
-                    div #{relevance}
+        if keywords
+            .ui.center.aligned.segment
+                p Keywords
+                each keywords
+                    .doc_keyword.ui.label(class=doc_keyword_class)
+                        div #{text}
+                        div #{relevance}
         if concepts
             .ui.center.aligned.segment
                 p Concepts

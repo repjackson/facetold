@@ -63,7 +63,15 @@ Template.home.events
 
     'keyup .authorName': (event)->
         if event.keyCode is 13
-            Meteor.call 'get_tweets', event.target.value
+            test = Docs.findOne screen_name: event.target.value
+            if test
+                alert "Tweets from #{event.target.value} already exist, not importing"
+                event.target.value = ''
+            else Meteor.call 'get_tweets', event.target.value, ->
+                Meteor.setTimeout (->
+                    selected_screen_names.push event.target.value
+                    event.target.value = ''
+                    ), 2000
 
     'click .authorFilterButton': (event)->
         if event.target.innerHTML in selected_screen_names.array() then selected_screen_names.remove event.target.innerHTML else selected_screen_names.push event.target.innerHTML
@@ -71,5 +79,5 @@ Template.home.events
 Template.view.helpers
     doc_keyword_class: -> if @text.valueOf() in selected_keywords.array() then 'grey' else ''
     doc_concept_class: -> if @text.valueOf() in selected_concepts.array() then 'grey' else ''
-    authorButtonClass: -> if @screen_name in selected_screen_names.array() then 'blue' else null
+    authorButtonClass: -> if @screen_name in selected_screen_names.array() then 'active' else ''
 
