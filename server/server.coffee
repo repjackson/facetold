@@ -77,13 +77,14 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Meteor.publish 'docs', (selected_keywords, selected_concepts, author_filter)->
+Meteor.publish 'docs', (selected_keywords, selected_concepts, selected_screen_names)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
 
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.screen_name = author_filter
+    if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
+    if selected_screen_names.length > 0 then match.screen_name = $in: selected_screen_names
 
     Docs.find match,
         limit: 20
@@ -94,13 +95,38 @@ Meteor.publish 'people', -> Meteor.users.find {}
 
 Meteor.publish 'person', (id)-> Meteor.users.find id
 
-Meteor.publish 'keywords', (selected_keywords, selected_concepts, author_filter)->
+Meteor.publish 'screen_names', (selected_keywords, selected_concepts, selected_screen_names)->
     self = @
 
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.screen_name = author_filter
+    if selected_screen_names.length > 0 then match.screen_name = $in: selected_screen_names
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: screen_name: 1 }
+        { $group: _id: '$screen_name', count: $sum: 1 }
+        { $match: _id: $nin: selected_screen_names }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id: 0, text: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (screen_name) ->
+        self.added 'screen_names', Random.id(),
+            text: screen_name.text
+            count: screen_name.count
+    self.ready()
+
+
+Meteor.publish 'keywords', (selected_keywords, selected_concepts, selected_screen_names)->
+    self = @
+
+    match = {}
+    if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
+    if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
+    if selected_screen_names.length > 0 then match.screen_name = $in: selected_screen_names
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -120,13 +146,13 @@ Meteor.publish 'keywords', (selected_keywords, selected_concepts, author_filter)
 
     self.ready()
 
-Meteor.publish 'concepts', (selected_concepts, selected_keywords, author_filter)->
+Meteor.publish 'concepts', (selected_concepts, selected_keywords, selected_screen_names)->
     self = @
 
     match = {}
     if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
     if selected_concepts.length > 0 then match.concept_array = $all: selected_concepts
-    if author_filter then match.screen_name = author_filter
+    if selected_screen_names.length > 0 then match.screen_name = $in: selected_screen_names
 
     cloud = Docs.aggregate [
         { $match: match }
