@@ -8,9 +8,10 @@ template(name='home')
     #facetnav.ui.menu
         .ui.header.item Facet
         .ui.item #{user_counter} users #{doc_counter} docs
-        .ui.item
-            .ui.input.authorName
-                input(type=text placeholder='Search Twitter User')
+        if currentUser
+            .ui.item
+                .ui.input.authorName
+                    input(type=text placeholder='Search Twitter User')
         .ui.right.menu
             if currentUser
                 if hasReceivedTweets
@@ -34,6 +35,19 @@ template(name='home')
                     .ui.center.aligned.header Author
                     .ui.blue.button.authorFilterButton
                         |{{$.Session.get 'author_filter'}}
+            .ui.center.aligned.segment.globalcloud
+                .ui.center.aligned.header Authors
+                if selected_screen_names
+                    #clear_screen_names.ui.circular.grey.icon.button
+                        i.remove.icon
+                each selected_screen_names
+                    .unselect_screen_name.ui.large.compact.grey.button
+                        i.minus.icon
+                        |#{this}
+                each global_screen_names
+                    .select_screen_name.ui.large.compact.button
+                        |#{this.text}
+                        small #{this.count}
             .ui.center.aligned.segment.globalcloud
                 .ui.center.aligned.header Mentioned Keywords
                 if selected_keywords
