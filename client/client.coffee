@@ -52,18 +52,20 @@ Template.view.helpers
 
     isAuthor: -> @authorId is Meteor.userId()
 
-    vote_up_button_class: -> if not Meteor.userId() then 'disabled' else ''
+    vote_up_button_class: -> if Meteor.userId() is @authorId or not Meteor.userId() then 'disabled' else ''
 
     vote_up_icon_class: -> if Meteor.userId() and @up_voters and Meteor.userId() in @up_voters then '' else 'outline'
 
-    vote_down_button_class: -> if not Meteor.userId() then 'disabled' else ''
+    vote_down_button_class: -> if Meteor.userId() is @authorId or not Meteor.userId() then 'disabled' else ''
 
     vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
 
+    when:-> moment(@timestamp).fromNow()
 
 
 Template.view.events
-    'click .deletePost': -> Docs.remove @_id
+    'click .deletePost': ->
+        if confirm 'Delete Post?' then Docs.remove @_id
 
     'click .vote_up': -> Meteor.call 'vote_up', @_id
 

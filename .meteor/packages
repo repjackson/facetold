@@ -28,3 +28,4 @@ service-configuration
 perak:markdown
 raix:handlebar-helpers
 accounts-password
+momentjs:moment

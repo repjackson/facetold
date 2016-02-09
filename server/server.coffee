@@ -7,6 +7,7 @@ Meteor.methods
     save: (tags)->
         id = Docs.insert
             tags: tags
+            timestamp: Date.now()
             authorId: Meteor.userId()
             points: 0
             down_voters: []
