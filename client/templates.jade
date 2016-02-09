@@ -3,3 +3,49 @@ head
 
 body
     +home
+
+template(name='home')
+    #facetnav.ui.menu
+        .ui.header.item Facet
+        .ui.item #{user_counter} users #{doc_counter} docs
+        if currentUser
+            .ui.item
+                each newPostTags
+                    .ui.button #{this}
+                .ui.input
+                    input#addNew(type=text placeholder='Add New Post!')
+        .ui.right.menu
+            .ui.item
+                +loginButtons align='right'
+    .ui.center.aligned.segment
+        if selected_tags
+            #clear_tags.ui.circular.grey.icon.button
+                i.remove.icon
+        each selected_tags
+            .unselect_tag.ui.large.compact.grey.button
+                i.minus.icon
+                |#{this}
+        each global_tags
+            .select_tag.ui.large.compact.button
+                |#{this.name}
+                small #{this.count}
+    .ui.container
+        .ui.secondary.segment
+            each docs
+                .ui.center.aligned.segment
+                    +view
+
+
+
+template(name='view')
+    .ui.header
+        each tags
+            .ui.label= this
+    if isAuthor
+        .ui.button.deletePost Delete
+    .ui.button.authorButton(class=authorButtonClass) Author: #{username}
+    .vote_up.ui.icon.button(class=vote_up_button_class)
+        i.thumbs.up.icon(class=vote_up_icon_class)
+    .ui.basic.label Points: #{points}
+    .vote_down.ui.icon.button(class=vote_down_button_class)
+        i.thumbs.down.icon(class=vote_down_icon_class)

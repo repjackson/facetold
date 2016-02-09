@@ -8,6 +8,9 @@ Meteor.methods
         id = Docs.insert
             tags: tags
             authorId: Meteor.userId()
+            points: 0
+            down_voters: []
+            up_voters: []
             username: Meteor.user().username
 
 
