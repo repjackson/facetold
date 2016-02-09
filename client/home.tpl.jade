@@ -10,27 +10,18 @@
     .ui.right.menu
         .ui.item
             +loginButtons align='right'
-.ui.secondary.segment
-    .ui.center.aligned.header Filters
-    .ui.segments
-        if $.Session.get 'author_filter'
-            .ui.center.aligned.segment
-                .ui.center.aligned.header Author
-                .ui.blue.button.authorFilterButton
-                    |{{$.Session.get 'author_filter'}}
-        .ui.center.aligned.segment.globalcloud
-            .ui.center.aligned.header Tags
-            if selected_tags
-                #clear_tags.ui.circular.grey.icon.button
-                    i.remove.icon
-            each selected_tags
-                .unselect_tag.ui.large.compact.grey.button
-                    i.minus.icon
-                    |#{this}
-            each global_tags
-                .select_tag.ui.large.compact.button
-                    |#{this.name}
-                    small #{this.count}
+.ui.center.aligned.segment
+    if selected_tags
+        #clear_tags.ui.circular.grey.icon.button
+            i.remove.icon
+    each selected_tags
+        .unselect_tag.ui.large.compact.grey.button
+            i.minus.icon
+            |#{this}
+    each global_tags
+        .select_tag.ui.large.compact.button
+            |#{this.name}
+            small #{this.count}
 .ui.container
     .ui.secondary.segment
         each docs
