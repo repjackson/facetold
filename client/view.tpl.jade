@@ -1,6 +1,8 @@
 .ui.header
-    +markdown
-        #{body}
+    each tags
+        .ui.label= this
+if isAuthor
+    .ui.button.deletePost Delete
 .ui.horizontal.segments
     if keywords
         .ui.center.aligned.segment
@@ -25,7 +27,7 @@
     .ui.center.aligned.segment
         div Sentiment: #{docSentiment.type} #{docSentiment.score}
         div Language: #{language}
-        .ui.button.tweetViewAuthorButton(class=authorButtonClass) Author: #{screen_name}
+        .ui.button.authorButton(class=authorButtonClass) Author: #{username}
     if taxonomy
         .ui.center.aligned.segment
             p Taxonomy

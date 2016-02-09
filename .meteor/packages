@@ -25,7 +25,6 @@ tmeasday:publish-counts
 babrahams:constellation
 http
 service-configuration
-accounts-twitter
-mrt:twit
 perak:markdown
 raix:handlebar-helpers
+accounts-password
