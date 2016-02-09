@@ -44,12 +44,10 @@ Template.home.events
                     Meteor.call 'save', newPost.array()
                     newPost.clear()
             when 8
-                newPost.pop()
+                if val.length is 0 then newPost.pop()
 
 
 Template.view.helpers
-    doc_tag_class: -> if @valueOf() in selected_tags.array() then 'grey' else ''
-
     isAuthor: -> @authorId is Meteor.userId()
 
     vote_up_button_class: -> if Meteor.userId() is @authorId or not Meteor.userId() then 'disabled' else ''
@@ -60,8 +58,9 @@ Template.view.helpers
 
     vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
 
-    when:-> moment(@timestamp).fromNow()
+    when: -> moment(@timestamp).fromNow()
 
+    doc_tag_class: -> if @valueOf() in selected_tags.array() then 'grey' else ''
 
 Template.view.events
     'click .deletePost': ->
