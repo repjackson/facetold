@@ -12,7 +12,6 @@ Template.view.onCreated ->
 Template.home.onCreated ->
     Meteor.subscribe 'people'
 
-    @autorun -> Meteor.subscribe('usernames', selected_tags.array())
     @autorun -> Meteor.subscribe('tags', selected_tags.array())
     @autorun -> Meteor.subscribe('docs', selected_tags.array())
 
@@ -23,20 +22,13 @@ Template.home.helpers
     global_tags: -> Tags.find()
     selected_tags: -> selected_tags.list()
 
-    global_usernames: -> Screennames.find()
-    selected_usernames: -> selected_usernames.list()
-
     newPostTags: -> newPost.list()
 
     user: -> Meteor.user()
     docs: -> Docs.find()
 
 Template.home.events
-    'click .select_username': -> selected_usernames.push @text
-    'click .unselect_username': -> selected_usernames.remove @valueOf()
-    'click #clear_usernames': -> selected_usernames.clear()
-
-    'click .select_tag': -> selected_tags.push @text
+    'click .select_tag': -> selected_tags.push @name
     'click .unselect_tag': -> selected_tags.remove @valueOf()
     'click #clear_tags': -> selected_tags.clear()
 

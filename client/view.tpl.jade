@@ -3,36 +3,10 @@
         .ui.label= this
 if isAuthor
     .ui.button.deletePost Delete
-.ui.horizontal.segments
-    if keywords
-        .ui.center.aligned.segment
-            p Keywords
-            each keywords
-                .doc_keyword.ui.label(class=doc_keyword_class)
-                    div #{text}
-                    div #{relevance}
-    if concepts
-        .ui.center.aligned.segment
-            p Concepts
-            each concepts
-                .doc_concept.ui.label(class=doc_concept_class)
-                    div #{text}
-                    div #{relevance}
-                    if dbpedia
-                        a(href=dbpedia target="_blank") DBPedia
-                    if opencyc
-                        a(href=opencyc target="_blank") Opencyc
-                    if freebase
-                        a(href=freebase target="_blank") Freebase
-    .ui.center.aligned.segment
-        div Sentiment: #{docSentiment.type} #{docSentiment.score}
-        div Language: #{language}
-        .ui.button.authorButton(class=authorButtonClass) Author: #{username}
-    if taxonomy
-        .ui.center.aligned.segment
-            p Taxonomy
-            each taxonomy
-                .ui.label
-                    div Label: #{label}
-                    div Score: #{score}
-                    div Confident: #{confident}
+.ui.button.authorButton(class=authorButtonClass) Author: #{username}
+|Points #{points}
+.ui.icon.button
+    i.thumbs.up.icon
+
+.ui.icon.button
+    i.thumbs.down.icon

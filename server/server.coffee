@@ -10,36 +10,6 @@ Meteor.methods
             authorId: Meteor.userId()
             username: Meteor.user().username
 
-        # Meteor.call 'analyze', id
-
-    # analyze: (id)->
-    #     doc = Docs.findOne id
-    #     encoded = encodeURIComponent(doc.tags)
-
-    #     console.log 'should be looking up ', doc.tags
-    #     HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/text/TextGetCombinedData', { params:
-    #         apikey: '6656fe7c66295e0a67d85c211066cf31b0a3d0c8'
-    #         text: doc.tags.toString()
-    #         outputMode: 'json'
-    #         # extract: 'entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
-    #         extract: 'keyword,taxonomy,concept,doc-sentiment' }
-    #         , (err, result)->
-    #             if err then console.log err
-    #             else
-    #                 keyword_array = _.pluck(result.data.keywords, 'text')
-    #                 concept_array = _.pluck(result.data.concepts, 'text')
-
-    #                 Docs.update id,
-    #                     $set:
-    #                         docSentiment: result.data.docSentiment
-    #                         language: result.data.language
-    #                         keywords: result.data.keywords
-    #                         concepts: result.data.concepts
-    #                         entities: result.data.entities
-    #                         taxonomy: result.data.taxonomy
-    #                         keyword_array: keyword_array
-    #                         concept_array: concept_array
-
 
 Meteor.publish 'docs', (selected_tags)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
