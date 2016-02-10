@@ -24,11 +24,6 @@ Template.edit.events
                     Docs.update FlowRouter.getParam('docId'),
                         $push: tags: tag
                     $('#addTag').val('')
-            when 8
-                if tag.length is 0
-                    Docs.update FlowRouter.getParam('docId'),
-                        $pop: tags: 1
-                    $('#addTag').val(lastTag)
 
     'click .docTag': ->
         tag = @valueOf()
