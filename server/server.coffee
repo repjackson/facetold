@@ -4,7 +4,7 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Meteor.methods
-    save: (tags)->
+    create: (tags)->
         id = Docs.insert
             tags: tags
             timestamp: Date.now()
@@ -13,7 +13,7 @@ Meteor.methods
             down_voters: []
             up_voters: []
             username: Meteor.user().username
-
+        return id
 
 Meteor.publish 'docs', (selected_tags)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })

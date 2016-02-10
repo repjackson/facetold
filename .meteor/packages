@@ -30,3 +30,7 @@ raix:handlebar-helpers
 accounts-password
 momentjs:moment
 yogiben:helpers
+drewy:datetimepicker
+kadira:flow-router
+kadira:blaze-layout
+perak:codemirror
