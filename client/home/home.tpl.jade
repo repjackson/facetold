@@ -11,7 +11,6 @@
             |#{this.name}
             small #{this.count}
 .ui.container
-    .ui.cards
-        each docs
-            .ui.card
-                +view
+    each docs
+        .ui.segment
+            +view

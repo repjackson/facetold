@@ -4,9 +4,9 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Meteor.methods
-    create: (tags)->
+    create: ->
         id = Docs.insert
-            tags: tags
+            tags: []
             timestamp: Date.now()
             authorId: Meteor.userId()
             points: 0
@@ -21,7 +21,9 @@ Meteor.publish 'docs', (selected_tags)->
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     match.authorId = @userId
-    Docs.find match, limit: 20
+    Docs.find match,
+        limit: 20
+        sort: timestamp: -1
 
 
 Meteor.publish 'doc', (id)-> Docs.find id

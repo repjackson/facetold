@@ -6,3 +6,8 @@ Template.nav.events
     'click #addDoc': ->
         Meteor.call 'create', (err, response)->
             FlowRouter.go "/edit/#{response}"
+
+    'keyup #search': (e)->
+        if e.which is 13
+            selected_tags.push e.target.value
+            $('#search').val('')
