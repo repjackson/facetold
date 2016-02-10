@@ -36,3 +36,16 @@ Meteor.methods
             Docs.update id,
                 $addToSet: down_voters: Meteor.userId()
                 $inc: points: -1
+
+
+FlowRouter.route '/',
+    action: (params) ->
+        BlazeLayout.render 'layout',
+            top: 'nav'
+            main: 'home'
+
+FlowRouter.route '/edit/:docId',
+    action: (params) ->
+        BlazeLayout.render 'layout',
+            top: 'nav'
+            main: 'edit'

@@ -1,0 +1,15 @@
+template(name='edit')
+    with doc
+        .ui.segment
+            .ui.center.aligned.header Edit Doc
+            .ui.item
+                each tags
+                    .ui.labeled.icon.button.docTag
+                        i.remove.icon
+                        |#{this}
+                .ui.left.icon.input
+                    i.plus.icon
+                    input#addTag(type=text placeholder='Add tag')
+            .ui.basic.segment
+                +CodeMirror id="body" options=editorOptions code=body
+            #saveDoc.ui.basic.green.button Save

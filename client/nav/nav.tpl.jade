@@ -1,0 +1,11 @@
+#facetnav.ui.menu
+    if currentUser
+        .ui.header.item
+            a(href='/') Facet
+        .ui.item #{user_counter} users #{doc_counter} docs
+        // .ui.item My Points: #{user.points}
+    .right.menu
+        .ui.item
+            a#addDoc(href='#') Add
+        .ui.item
+            +loginButtons align='right'
