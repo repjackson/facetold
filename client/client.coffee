@@ -44,7 +44,9 @@ Template.home.events
                     Meteor.call 'save', newPost.array()
                     newPost.clear()
             when 8
-                if val.length is 0 then newPost.pop()
+                if val.length is 0
+                    lastTag = newPost.pop()
+                    $('#addNew').val(lastTag)
 
 
 Template.view.helpers

@@ -1,23 +1,25 @@
 head
     title Facet
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+
 
 body
     +home
 
 template(name='home')
     #facetnav.ui.menu
-        .ui.header.item Facet
-        .ui.item #{user_counter} users #{doc_counter} docs
-        .ui.right.menu
-            if currentUser
-                .ui.item
-                    each newPostTags
-                        .ui.button #{this}
-                    .ui.left.icon.input
-                        i.plus.icon
-                        input#addNew(type=text placeholder='Add Post')
+        if currentUser
+            .ui.header.item Facet
+            .ui.item #{user_counter} users #{doc_counter} docs
+            .ui.item My Points: #{user.points}
             .ui.item
-                +loginButtons align='right'
+                each newPostTags
+                    .ui.button #{this}
+                .ui.left.icon.input
+                    i.plus.icon
+                    input#addNew(type=text placeholder='Add Post')
+        .ui.item
+            +loginButtons
     .ui.center.aligned.segment
         if selected_tags
             #clear_tags.ui.circular.grey.icon.button
