@@ -2,7 +2,9 @@
     each tags
         .ui.button.doc_tag(class=doc_tag_class)= this
 .meta by #{username} #{when}
-.ui.segment #{body}
+.ui.segment
+    +markdown
+        #{body}
 if isAuthor
     .ui.basic.icon.button.deletePost: i.remove.icon
     .ui.basic.icon.button.editDoc: i.pencil.icon
