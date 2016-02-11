@@ -19,7 +19,6 @@ flemay:less-autoprefixer
 random
 manuel:reactivearray
 meteorhacks:aggregate
-accounts-ui
 jquery
 tmeasday:publish-counts
 babrahams:constellation
@@ -34,3 +33,4 @@ drewy:datetimepicker
 kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
+iandouglas:accounts-ui-semantic-ui

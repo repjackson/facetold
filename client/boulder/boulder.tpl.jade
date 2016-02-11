@@ -1,0 +1,18 @@
+.ui.center.aligned.segment
+    #loadData.ui.button Load Boulder GeoJson
+    #clearPermits.ui.button Clear All Permits
+    if selected_permittags
+        #clear_tags.ui.circular.grey.icon.button
+            i.remove.icon
+    each selected_permittags
+        .unselect_tag.ui.large.compact.grey.button
+            i.minus.icon
+            |#{this}
+    each global_tags
+        .select_tag.ui.large.compact.button
+            |#{this.name}
+            small #{this.count}
+.ui.container
+    each permits
+        .ui.segment
+            +permitView
