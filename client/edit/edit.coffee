@@ -5,19 +5,19 @@ Template.edit.onCreated ->
         self.subscribe 'doc', docId
 
 Template.edit.helpers
-    newPostTags: -> newPost.list()
     doc: ->
         docId = FlowRouter.getParam('docId')
         Docs.findOne docId
+
     editorOptions: ->
         lineNumbers: true
-        mode: "markdown"
+        mode: 'markdown'
         lineWrapping: true
 
     docKeywordClass: ->
         docId = FlowRouter.getParam('docId')
         doc = Docs.findOne docId
-        if @text in doc.tags then 'grey' else ''
+        if @text.toLowerCase() in doc.tags then 'grey' else ''
 
 Template.edit.events
     'keyup #addTag': (e,t)->
@@ -51,7 +51,8 @@ Template.edit.events
     'click .docKeyword': ->
         docId = FlowRouter.getParam('docId')
         doc = Docs.findOne docId
+        loweredTag = @text.toLowerCase()
         if @text in doc.tags
-            Docs.update FlowRouter.getParam('docId'), $pull: tags: @text
+            Docs.update FlowRouter.getParam('docId'), $pull: tags: loweredTag
         else
-            Docs.update FlowRouter.getParam('docId'), $push: tags: @text
+            Docs.update FlowRouter.getParam('docId'), $push: tags: loweredTag
