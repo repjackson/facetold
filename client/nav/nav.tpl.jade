@@ -2,12 +2,14 @@
     if currentUser
         a.ui.header.item(href='/') Facet
         .ui.item #{user_counter} users #{doc_counter} docs
-        .ui.item
-            .ui.left.icon.input
+        .ui.category.search.item
+            .ui.transparent.icon.input
                 i.search.icon
-                input#search(type='text' placeholder='Search Tags')
+                input#search(type='text' placeholder='Search')
         // .ui.item My Points: #{user.points}
     .right.menu
         a.item(href='/boulder') Boulder
-        a.ui.item#addDoc(href='#') Add
+        a.ui.item#addDoc(href='#')
+            i.plus.icon
+            |Add
         +loginButtons align='right'
