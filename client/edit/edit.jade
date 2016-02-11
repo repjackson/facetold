@@ -11,5 +11,38 @@ template(name='edit')
                     i.plus.icon
                     input#addTag(type=text placeholder='Add tag')
             .ui.basic.segment
+                #analyzeBody.ui.button Analyze Body
                 +CodeMirror id="body" options=editorOptions code=body
+                .ui.horizontal.segments
+            if keywords
+                .ui.center.aligned.segment
+                    p Keywords
+                    each keywords
+                        .docKeyword.ui.button(class=docKeywordClass)
+                            div #{text}
+                            // div #{relevance}
+            if concepts
+                .ui.center.aligned.segment
+                    p Concepts
+                    each concepts
+                        .docKeyword.ui.button(class=docKeywordClass)
+                            div #{text}
+                            // div #{relevance}
+                            // if dbpedia
+                            //     a(href=dbpedia target="_blank") DBPedia
+                            // if opencyc
+                            //     a(href=opencyc target="_blank") Opencyc
+                            // if freebase
+                            //     a(href=freebase target="_blank") Freebase
+            .ui.center.aligned.segment
+                div Sentiment: #{docSentiment.type} #{docSentiment.score}
+                div Language: #{language}
+            if taxonomy
+                .ui.center.aligned.segment
+                    p Taxonomy
+                    each taxonomy
+                        .ui.label
+                            div #{label}
+                            // div Score: #{score}
+                            // div Confident: #{confident}
             #saveDoc.ui.basic.green.button Save

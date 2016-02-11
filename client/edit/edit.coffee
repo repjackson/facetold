@@ -12,7 +12,12 @@ Template.edit.helpers
     editorOptions: ->
         lineNumbers: true
         mode: "markdown"
+        lineWrapping: true
 
+    docKeywordClass: ->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+        if @text in doc.tags then 'grey' else ''
 
 Template.edit.events
     'keyup #addTag': (e,t)->
@@ -31,6 +36,10 @@ Template.edit.events
             $pull: tags: @valueOf()
         $('#addTag').val(tag)
 
+    'click #analyzeBody': ->
+        Docs.update FlowRouter.getParam('docId'), $set: body: $('#body').val()
+        Meteor.call 'analyze', FlowRouter.getParam('docId')
+
     'click #saveDoc': ->
         Docs.update FlowRouter.getParam('docId'),
             $set: body: $('#body').val()
@@ -38,3 +47,11 @@ Template.edit.events
         thisDocTags = @tags
         FlowRouter.go '/'
         selectedTags = thisDocTags
+
+    'click .docKeyword': ->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+        if @text in doc.tags
+            Docs.update FlowRouter.getParam('docId'), $pull: tags: @text
+        else
+            Docs.update FlowRouter.getParam('docId'), $push: tags: @text

@@ -8,6 +8,14 @@ Template.nav.events
             FlowRouter.go "/edit/#{response}"
 
     'keyup #search': (e)->
-        if e.which is 13
-            selected_tags.push e.target.value
-            $('#search').val('')
+        switch e.which
+            when 13
+                if e.target.value is 'clear'
+                    selected_tags.clear()
+                    $('#search').val('')
+                else
+                    selected_tags.push e.target.value
+                    $('#search').val('')
+            when 8
+                if e.target.value is ''
+                    selected_tags.pop()
