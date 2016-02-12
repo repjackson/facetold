@@ -22,27 +22,19 @@ Meteor.methods
         # result = HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/text/TextGetCombinedData', { params:
         HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
             apikey: '6656fe7c66295e0a67d85c211066cf31b0a3d0c8'
-            # text: encoded
             html: doc.body
             outputMode: 'json'
-            # extract: 'entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
-            extract: 'keyword,taxonomy,concept,doc-sentiment' }
+            extract: 'keyword' }
             , (err, result)->
                 if err then console.log err
                 else
                     keyword_array = _.pluck(result.data.keywords, 'text')
-                    concept_array = _.pluck(result.data.concepts, 'text')
+
+                    lowered_keywords = keyword_array.map (keyword)-> keyword.toLowerCase()
 
                     Docs.update id,
-                        $set:
-                            docSentiment: result.data.docSentiment
-                            language: result.data.language
-                            keywords: result.data.keywords
-                            concepts: result.data.concepts
-                            entities: result.data.entities
-                            taxonomy: result.data.taxonomy
-                            keyword_array: keyword_array
-                            concept_array: concept_array
+                        $addToSet:
+                            tags: $each: lowered_keywords
 
 
 Meteor.publish 'docs', (selected_tags)->

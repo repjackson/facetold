@@ -8,8 +8,9 @@
                 input#search(type='text' placeholder='search...')
         // .ui.item My Points: #{user.points}
     .right.menu
-        a.item(href='/boulder') Boulder
-        a.ui.item#addDoc(href='#')
-            i.plus.icon
-            |Add
+        if currentUser
+            a.item(href='/boulder') Boulder
+            a.ui.item#addDoc(href='#')
+                i.plus.icon
+                |Add
         +loginButtons align='right'
