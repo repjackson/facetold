@@ -1,39 +1,44 @@
 template(name='edit')
     with doc
-        .ui.segment
-            .ui.center.aligned.header Edit Doc
-            .ui.item
-                each tags
-                    .ui.labeled.icon.button.docTag
-                        i.remove.icon
-                        |#{this}
-                .ui.left.icon.input
-                    i.plus.icon
-                    input#addTag(type=text placeholder='Add tag')
-            if keywords
-                div Keywords
-                    each keywords
-                        .docKeyword.ui.compact.button(class=docKeywordClass)
-                            div #{text}
-            if concepts
-                div Concepts
-                    each concepts
-                        .docKeyword.ui.compact.button(class=docKeywordClass)
-                            div #{text}
-            div Sentiment: #{docSentiment.type} #{docSentiment.score}
-            div Language: #{language}
-            if taxonomy
-                p Taxonomy
-                each taxonomy
-                    .ui.label
-                        div #{label}
-                        // div Score: #{score}
-                        // div Confident: #{confident}
-            .ui.basic.segment
-                #analyzeBody.ui.basic.labeled.icon.button
-                    |Analyze Body
-                    i.wizard.icon
-                +CodeMirror id="body" options=editorOptions code=body
-            #saveDoc.ui.basic.green.labeled.icon.button
-                |Save
-                i.save.icon
+        .ui.container
+            .ui.segment
+                .ui.center.aligned.header Edit Doc
+                .ui.segment
+                    .ui.header Document Tags
+                    each tags
+                        .ui.labeled.icon.button.docTag
+                            i.remove.icon
+                            |#{this}
+                    .ui.left.icon.input
+                        i.plus.icon
+                        input#addTag(type=text placeholder='Manual add...' autofocus='')
+                .ui.input
+                    input#place(type='text' placeholder='Add Address')
+                .ui.input
+                    input#datetimepicker(type="text" placeholder='Add Date/Time')
+                if keywords
+                    .ui.segment
+                        .ui.header Suggestions
+                        if keywords
+                            div Keywords
+                                each keywords
+                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
+                        if concepts
+                            div Concepts
+                                each concepts
+                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
+                if sentiment
+                    |Sentiment: #{docSentiment.type} #{docSentiment.score}
+                if language
+                    |Language: #{language}
+                if taxonomy
+                    p Taxonomy
+                    each taxonomy
+                        .ui.label
+                            div #{label}
+                            // div Score: #{score}
+                            // div Confident: #{confident}
+                .ui.basic.segment
+                    #analyzeBody.ui.basic.button Analyze Body
+                    +CodeMirror id="body" options=editorOptions code=body
+                #saveDoc.ui.button save
