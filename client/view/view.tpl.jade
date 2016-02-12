@@ -1,9 +1,8 @@
-.content
-    .header
-        each tags
-            .ui.compact.button.doc_tag(class=doc_tag_class)= this
-    .meta by #{username} #{when}
-.content
+.header
+    each tags
+        .ui.compact.button.doc_tag(class=doc_tag_class)= this
+.meta by #{username} #{when}
+.ui.basic.segment
     +markdown
         #{body}
 .extra.content
