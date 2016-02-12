@@ -1,16 +1,9 @@
 #facetnav.ui.menu
-    if currentUser
-        a.ui.header.item(href='/') facet
-        .ui.item #{user_counter} users #{doc_counter} docs
-        .ui.category.search.item
-            .ui.transparent.icon.input
-                i.search.icon
-                input#search(type='text' placeholder='search...')
+    a.ui.item(href='/') Facet
+    .ui.item #{user_counter} users #{doc_counter} docs
         // .ui.item My Points: #{user.points}
     .right.menu
         if currentUser
-            a.item(href='/boulder') Boulder
-            a.ui.item#addDoc(href='#')
-                i.plus.icon
-                |Add
+            // a.item(href='/boulder') Boulder
+            a.ui.item#addDoc(href='#') Add
         +loginButtons align='right'

@@ -42,7 +42,7 @@ Meteor.publish 'docs', (selected_tags)->
 
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    match.authorId = @userId
+    # match.authorId = @userId
     Docs.find match,
         limit: 20
         sort: timestamp: -1
@@ -60,7 +60,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
     match = {}
     if selected_user then match.authorId = selected_user
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    match.authorId = @userId
+    # match.authorId = @userId
 
     cloud = Docs.aggregate [
         { $match: match }

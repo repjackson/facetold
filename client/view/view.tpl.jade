@@ -7,15 +7,10 @@
         #{body}
 .extra.content
     if isAuthor
-        .ui.button.compact.deletePost
-            i.remove.icon
-            |Delete
-        .ui.button.compact.editDoc
-            i.pencil.icon
-            |Edit
-    .ui.button.compact.cloneDoc
-        i.fork.icon
-        |Clone
+        .ui.button.compact.deletePost Delete
+        .ui.button.compact.editDoc Edit
+    if currentUser
+        .ui.button.compact.cloneDoc Clone
     .ui.disabled.button.authorButton(class=authorButtonClass) Author: #{username}
     .vote_up.ui.icon.button(class=vote_up_button_class)
         i.thumbs.up.icon(class=vote_up_icon_class)
