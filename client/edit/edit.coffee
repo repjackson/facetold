@@ -49,24 +49,10 @@ Template.edit.helpers
         Docs.findOne docId
 
     editorOptions: ->
-        lineNumbers: true
+        lineNumbers: false
         mode: 'markdown'
         lineWrapping: true
 
-    # unpickedConcepts: ->
-    #     diff = _.map @tags, (tag)->
-    #         tag.toLowerCase() in @concept_array
-    # unpickedKeywords: ->
-    #     keywordNames = keyword.text for keyword in @keywords
-    #     console.log keywordNames
-    #     _.difference @tags, @keywords
-
-
-
-    docKeywordClass: ->
-        docId = FlowRouter.getParam('docId')
-        doc = Docs.findOne docId
-        if @text.toLowerCase() in doc.tags then 'disabled' else ''
 
 Template.edit.events
     'keyup #addTag': (e,t)->
@@ -109,10 +95,8 @@ Template.edit.events
     'click #saveDoc': ->
         Docs.update FlowRouter.getParam('docId'),
             $set: body: $('#body').val()
-
-        thisDocTags = @tags
+        Meteor.call 'analyze', FlowRouter.getParam('docId')
         FlowRouter.go '/'
-        selectedTags = thisDocTags
 
     'click #deleteDoc': ->
         if confirm 'Delete this doc?'

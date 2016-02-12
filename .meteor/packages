@@ -33,5 +33,5 @@ drewy:datetimepicker
 kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
-iandouglas:accounts-ui-semantic-ui
 jeremy:geocomplete
+accounts-ui
