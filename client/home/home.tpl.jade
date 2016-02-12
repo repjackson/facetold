@@ -16,7 +16,6 @@
         .select_tag.ui.large.compact.button
             |#{this.name}
             small #{this.count}
-.ui.container
-    each docs
-        .ui.secondary.segment
-            +view
+each docs
+    .ui.secondary.segment
+        +view

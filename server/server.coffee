@@ -33,7 +33,7 @@ Meteor.methods
                     lowered_keywords = keyword_array.map (keyword)-> keyword.toLowerCase()
 
                     Docs.update id,
-                        $addToSet:
+                        $set:
                             tags: $each: lowered_keywords
 
 
@@ -44,7 +44,7 @@ Meteor.publish 'docs', (selected_tags)->
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     # match.authorId = @userId
     Docs.find match,
-        limit: 5
+        limit: 1
         sort: timestamp: -1
 
 
@@ -69,7 +69,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selected_tags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
+        { $limit: 10 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
