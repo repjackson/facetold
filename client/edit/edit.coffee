@@ -15,27 +15,27 @@ Template.edit.onRendered ->
                 minute = moment(val).minute()
                 hour = moment(val).format('h')
                 date = moment(val).format('Do')
-                daySection = moment(val).format('a')
+                ampm = moment(val).format('a')
                 weekdaynum = moment(val).isoWeekday()
                 weekday = moment().isoWeekday(weekdaynum).format('dddd')
 
                 month = moment(val).format('MMMM')
                 year = moment(val).format('YYYY')
 
-                datearray = [hour, minute, date, weekday, month, daySection, year]
-                console.log datearray
+                datearray = [hour, minute, ampm, weekday, month, date, year]
 
-                # docid = FlowRouter.getParam 'docId'
+                docid = FlowRouter.getParam 'docId'
 
-                # doc = Docs.findOne docid
-                # tagswithoutdate = _.difference(doc.tags, doc.datearray)
-                # tagswithnew = _.union(tagswithoutdate, datearray)
+                doc = Docs.findOne docid
+                tagsWithoutDate = _.difference(doc.tags, doc.datearray)
+                tagsWithNew = _.union(tagsWithoutDate, datearray)
 
-                # Docs.update docid,
-                #     $set:
-                #         tags: tagswithnew
-                #         datearray: datearray
-            )), 3000
+                Docs.update docid,
+                    $set:
+                        tags: tagsWithNew
+                        datearray: datearray
+                        dateTime: val
+            )), 2000
 
     @autorun ->
         if GoogleMaps.loaded()
@@ -86,6 +86,14 @@ Template.edit.events
                     FlowRouter.go '/'
                     selectedTags = thisDocTags
 
+    'click .clearDT': ->
+        tagsWithoutDate = _.difference(@tags, @datearray)
+        Docs.update FlowRouter.getParam('docId'),
+            $set:
+                tags: tagsWithoutDate
+                datearray: []
+                dateTime: null
+        $('#datetimepicker').val('')
 
     'click .docTag': ->
         tag = @valueOf()
@@ -94,7 +102,8 @@ Template.edit.events
         $('#addTag').val(tag)
 
     'click #analyzeBody': ->
-        Docs.update FlowRouter.getParam('docId'), $set: body: $('#body').val()
+        Docs.update FlowRouter.getParam('docId'),
+            $set: body: $('#body').val()
         Meteor.call 'analyze', FlowRouter.getParam('docId')
 
     'click #saveDoc': ->
@@ -104,6 +113,12 @@ Template.edit.events
         thisDocTags = @tags
         FlowRouter.go '/'
         selectedTags = thisDocTags
+
+    'click #deleteDoc': ->
+        if confirm 'Delete this doc?'
+            Docs.remove @_id
+            FlowRouter.go '/'
+
 
     'click .docKeyword': ->
         docId = FlowRouter.getParam('docId')

@@ -15,7 +15,8 @@ template(name='edit')
                 .ui.input
                     input#place(type='text' placeholder='Add Address')
                 .ui.input
-                    input#datetimepicker(type="text" placeholder='Add Date/Time')
+                    input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
+                    .ui.button.clearDT Clear Date/Time
                 if keywords
                     .ui.segment
                         .ui.header Suggestions
@@ -41,4 +42,5 @@ template(name='edit')
                 .ui.basic.segment
                     #analyzeBody.ui.basic.button Analyze Body
                     +CodeMirror id="body" options=editorOptions code=body
-                #saveDoc.ui.button save
+                #saveDoc.ui.button Save
+                #deleteDoc.ui.button Delete
