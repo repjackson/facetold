@@ -1,9 +1,8 @@
-#facetnav.ui.menu
-    a.ui.item(href='/') Facet
-    .ui.item #{user_counter} users #{doc_counter} docs
+.ui.segment
+    // a.ui.item(href='/') Facet
+    // .ui.item #{user_counter} users #{doc_counter} docs
         // .ui.item My Points: #{user.points}
-    .right.menu
-        if currentUser
-            // a.item(href='/boulder') Boulder
-            a.ui.item#addDoc(href='#') Add
-        +loginButtons align='right'
+    if currentUser
+        // a.item(href='/boulder') Boulder
+        a.ui.item#addDoc(href='#') Add
+    +loginButtons

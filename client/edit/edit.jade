@@ -1,33 +1,21 @@
 template(name='edit')
     with doc
-        .ui.container
-            .ui.segment
-                each tags
-                    .ui.labeled.icon.compact.basic.button.docTag
-                        i.remove.icon
-                        |#{this}
-                .ui.left.icon.input
-                    i.plus.icon
-                    input#addTag(type=text placeholder='tag' autofocus='')
-                .ui.segment
-                    // .ui.input
-                    //     input#place(type='text' placeholder='Add Address')
-                    .ui.input
-                        input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
-                        .ui.button.clearDT Clear Date/Time
-                if keywords
-                    .ui.segment
-                        .ui.header Suggestions
-                        if keywords
-                            div Keywords
-                                each keywords
-                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
-                        if concepts
-                            div Concepts
-                                each concepts
-                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
-                .ui.basic.segment
-                    #analyzeBody.ui.basic.button Analyze Body
-                    +CodeMirror id="body" options=editorOptions code=body
-                #saveDoc.ui.button Save
-                #deleteDoc.ui.button Delete
+        .ui.segment
+            each tags
+                .ui.labeled.icon.compact.button.docTag
+                    i.remove.icon
+                    |#{this}
+            .ui.left.icon.input
+                i.plus.icon
+                input#addTag(type=text placeholder='Add tag' autofocus='')
+            // .ui.segment
+            //     // .ui.input
+            //     //     input#place(type='text' placeholder='Add Address')
+            //     .ui.input
+            //         input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
+            //         .ui.button.clearDT Clear Date/Time
+            .ui.basic.segment
+                +CodeMirror id="body" options=editorOptions code=body
+                // #analyzeBody.ui.button Autotag
+            #saveDoc.ui.button Save
+            #deleteDoc.ui.circular.icon.button: i.remove.icon

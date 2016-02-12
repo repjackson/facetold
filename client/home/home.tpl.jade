@@ -1,6 +1,10 @@
 .ui.attached.segment.globalcloud
+    if currentUser
+        .ui.circular.icon.button#addDoc(href='#'): i.plus.icon
+    .ui.basic.button
+        +loginButtons
     .ui.input
-        input#search(type='text' placeholder='Search...')
+        input#search(type='text' placeholder='Search')
     if selected_tags
         #clear_tags.ui.circular.grey.icon.button
             i.remove.icon

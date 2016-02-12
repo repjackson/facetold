@@ -5,6 +5,9 @@ Template.home.events
     'click .select_tag': -> selected_tags.push @name
     'click .unselect_tag': -> selected_tags.remove @valueOf()
     'click #clear_tags': -> selected_tags.clear()
+    'click #addDoc': ->
+        Meteor.call 'create', (err, response)->
+            FlowRouter.go "/edit/#{response}"
     'keyup #search': (e)->
         switch e.which
             when 13

@@ -41,17 +41,17 @@ Meteor.methods
 FlowRouter.route '/',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
+            # top: 'nav'
             main: 'home'
 
 FlowRouter.route '/edit/:docId',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
+            # top: 'nav'
             main: 'edit'
 
 FlowRouter.route '/boulder',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
+            # top: 'nav'
             main: 'boulder'
