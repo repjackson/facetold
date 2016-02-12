@@ -1,10 +1,10 @@
-.ui.attached.segment.globalcloud
+.ui.attached.secondary.segment.globalcloud
     if currentUser
         .ui.circular.icon.button#addDoc(href='#'): i.plus.icon
-    .ui.basic.button
+    .ui.label
         +loginButtons
-    .ui.input
-        input#search(type='text' placeholder='Search')
+    // .ui.input
+    //     input#search(type='text' placeholder='Search')
     if selected_tags
         #clear_tags.ui.circular.grey.icon.button
             i.remove.icon
@@ -18,5 +18,5 @@
             small #{this.count}
 .ui.container
     each docs
-        .ui.segment
+        .ui.secondary.segment
             +view
