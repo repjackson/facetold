@@ -1,13 +1,13 @@
 each tags
     .ui.compact.button.doc_tag(class=doc_tag_class)= this
+if isAuthor
+    .ui.icon.circular.button.editDoc: i.pencil.icon
+    .ui.icon.circular.button.deletePost: i.remove.icon
 .ui.basic.segment
     +markdown
         #{body}
 .content
     // | by #{username} #{when}
-    if isAuthor
-        .ui.icon.circular.button.editDoc: i.pencil.icon
-        .ui.icon.circular.button.deletePost: i.remove.icon
     // if currentUser
     //     .ui.button.compact.cloneDoc Clone
     unless isAuthor

@@ -34,4 +34,4 @@ kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
 jeremy:geocomplete
-accounts-ui
+iandouglas:accounts-ui-semantic-ui
