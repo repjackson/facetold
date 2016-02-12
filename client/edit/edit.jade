@@ -1,21 +1,21 @@
 template(name='edit')
     with doc
         .ui.secondary.segment
-            each tags
-                .ui.labeled.icon.compact.button.docTag
-                    i.remove.icon
-                    |#{this}
-            .ui.left.icon.input
-                i.plus.icon
-                input#addTag(type=text placeholder='Add tag' autofocus='')
+            // each tags
+            //     .ui.labeled.icon.compact.button.docTag
+            //         i.remove.icon
+            //         |#{this}
+            // .ui.left.icon.input
+            //     i.plus.icon
+            //     input#addTag(type=text placeholder='Add tag' autofocus='')
             // .ui.segment
             //     // .ui.input
             //     //     input#place(type='text' placeholder='Add Address')
             //     .ui.input
             //         input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
             //         .ui.button.clearDT Clear Date/Time
-            .ui.basic.segment
-                +CodeMirror id="body" options=editorOptions code=body
-                // #analyzeBody.ui.button Autotag
-            #saveDoc.ui.button Save
-            #deleteDoc.ui.circular.icon.button: i.remove.icon
+            +CodeMirror id="body" options=editorOptions code=body
+            // #analyzeBody.ui.button Autotag
+            .ui.basic.center.aligned.segment
+                #saveDoc.ui.huge.circular.icon.button: i.check.icon
+                #deleteDoc.ui.small.circular.icon.button: i.remove.icon
