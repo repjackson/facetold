@@ -1,21 +1,19 @@
-.ui.attached.secondary.segment.globalcloud
-    if currentUser
-        .ui.circular.icon.button#addDoc(href='#'): i.plus.icon
-    .ui.label
-        +loginButtons
-    // .ui.input
-    //     input#search(type='text' placeholder='Search')
-    if selected_tags
-        #clear_tags.ui.circular.grey.icon.button
-            i.remove.icon
-    each selected_tags
-        .unselect_tag.ui.large.compact.grey.button
-            i.minus.icon
-            |#{this}
-    each global_tags
-        .select_tag.ui.large.compact.button
-            |#{this.name}
-            small #{this.count}
+// .ui.input
+//     input#search(type='text' placeholder='Search')
+if currentUser
+    .ui.icon.button#addDoc(href='#'): i.plus.icon
+.ui.label
+    +loginButtons align='right'
+if selected_tags
+    #clear_tags.ui.grey.icon.button
+        i.remove.icon
+each selected_tags
+    .unselect_tag.ui.grey.button
+        // i.minus.icon
+        b #{this}
+each global_tags
+    .select_tag.ui.button
+        | #{this.name}
+        // small #{this.count}
 each docs
-    .ui.secondary.segment
-        +view
+    +view

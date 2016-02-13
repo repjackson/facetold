@@ -44,8 +44,8 @@ Meteor.publish 'docs', (selected_tags)->
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     # match.authorId = @userId
     Docs.find match,
-        limit: 1
-        sort: timestamp: -1
+        limit: 3
+        sort: points: -1
 
 
 Meteor.publish 'doc', (id)-> Docs.find id
@@ -69,7 +69,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selected_tags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 10 }
+        { $limit: 7 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
