@@ -38,8 +38,6 @@ Meteor.methods
 
 
 Meteor.publish 'docs', (selected_tags)->
-    Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
-
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     # match.authorId = @userId
@@ -49,10 +47,6 @@ Meteor.publish 'docs', (selected_tags)->
 
 
 Meteor.publish 'doc', (id)-> Docs.find id
-
-Meteor.publish 'people', -> Meteor.users.find {}
-
-Meteor.publish 'person', (id)-> Meteor.users.find id
 
 Meteor.publish 'tags', (selected_tags, selected_user)->
     self = @
@@ -69,7 +63,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selected_tags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 7 }
+        { $limit: 30 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
