@@ -27,5 +27,3 @@ raix:handlebar-helpers
 accounts-password
 perak:codemirror
 iandouglas:accounts-ui-semantic-ui
-kadira:flow-router
-kadira:blaze-layout
