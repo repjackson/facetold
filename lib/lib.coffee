@@ -1,8 +1,5 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
-@Permits = new Meteor.Collection 'permits'
-@Permittags = new Meteor.Collection 'permittags'
-@Screennames = new Meteor.Collection 'screen_names'
 
 Meteor.methods
     vote_up: (id)->
@@ -49,9 +46,3 @@ FlowRouter.route '/edit/:docId',
         BlazeLayout.render 'layout',
             # top: 'nav'
             main: 'edit'
-
-FlowRouter.route '/boulder',
-    action: (params) ->
-        BlazeLayout.render 'layout',
-            # top: 'nav'
-            main: 'boulder'
