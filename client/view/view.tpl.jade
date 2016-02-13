@@ -1,16 +1,16 @@
 // each tags
 //     .ui.compact.button.doc_tag(class=doc_tag_class)= this
-+markdown
-    #{body}
 .ui.basic.center.aligned.segment
+    +markdown
+        #{body}
     if isAuthor
-        .ui.big.icon.circular.button.editDoc: i.pencil.icon
-        // .ui.icon.circular.button.deletePost: i.remove.icon
+        .ui.big.icon.button.editDoc: i.pencil.icon
+        // .ui.icon.button.deletePost: i.remove.icon
     unless isAuthor
         // .ui.disabled.button.authorButton(class=authorButtonClass) Author: #{username}
-        .vote_up.ui.circular.icon.button(class=vote_up_button_class)
+        .vote_up.ui.icon.button(class=vote_up_button_class)
             i.thumbs.up.icon(class=vote_up_icon_class)
         |#{points}
-        .vote_down.ui.circular.icon.button(class=vote_down_button_class)
+        .vote_down.ui.icon.button(class=vote_down_button_class)
             i.thumbs.down.icon(class=vote_down_icon_class)
         // | by #{username} #{when}
