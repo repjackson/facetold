@@ -4,23 +4,17 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Meteor.methods
-    create: ->
-        id = Docs.insert
-            tags: []
-            timestamp: Date.now()
-            authorId: Meteor.userId()
-            points: 0
-            down_voters: []
-            up_voters: []
-            username: Meteor.user().username
-        return id
+    save: (docId, body)->
+        Docs.update docId,
+            $set: body: body
 
-    analyze: (id)->
-        doc = Docs.findOne id
+        doc = Docs.findOne docId
+
+
         encoded = encodeURIComponent(doc.body)
 
         # result = HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/text/TextGetCombinedData', { params:
-        HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
+        returnedDoc = HTTP.call 'POST', 'http://access.alchemyapi.com/calls/html/HTMLGetCombinedData', { params:
             apikey: '6656fe7c66295e0a67d85c211066cf31b0a3d0c8'
             html: doc.body
             outputMode: 'json'
@@ -32,18 +26,19 @@ Meteor.methods
 
                     lowered_keywords = keyword_array.map (keyword)-> keyword.toLowerCase()
 
-                    Docs.update id,
+                    Docs.update docId,
                         $set:
-                            tags: $each: lowered_keywords
+                            tags: lowered_keywords
 
-
-Meteor.publish 'docs', (selected_tags)->
-    match = {}
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
-    # match.authorId = @userId
-    Docs.find match,
-        limit: 3
-        sort: points: -1
+Meteor.publish 'docs', (selected_tags, editing)->
+    if editing then Docs.find editing
+    else
+        match = {}
+        if selected_tags.length > 0 then match.tags = $all: selected_tags
+        # match.authorId = @userId
+        Docs.find match,
+            limit: 3
+            sort: timestamp: -1
 
 
 Meteor.publish 'doc', (id)-> Docs.find id
@@ -63,7 +58,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selected_tags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 10 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
