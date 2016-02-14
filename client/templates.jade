@@ -7,38 +7,53 @@ head
 body
     +home
 
+
+
+template(name='home')
+    .ui.secondary.basic.segment
+        if $.Session.get 'editing'
+            +edit
+        else $.Session.get 'editing'
+            if currentUser
+                .ui.icon.button#addDoc: i.plus.icon
+            .ui.large.label
+                +loginButtons
+            .ui.input
+                input#search(type='text' placeholder='Search')
+            if selected_tags
+                #clear_tags.ui.grey.icon.button
+                    i.remove.icon
+            each selected_tags
+                .unselect_tag.ui.grey.button
+                    b #{this}
+            each global_tags
+                .select_tag.ui.button
+                    |#{this.name}
+                    small #{this.count}
+            each docs
+                .ui.container
+                    .ui.divider
+                    +view
+
 template(name='edit')
     with doc
+        each tags
+            .ui.labeled.icon.compact.button.docTag
+                i.remove.icon
+                |#{this}
+        .ui.left.icon.input
+            i.plus.icon
+            input#addTag(type=text placeholder='Add tag' autofocus='')
         +CodeMirror id="body" options=editorOptions code=body
         .ui.basic.center.aligned.segment
             #saveDoc.ui.huge.circular.icon.button: i.check.icon
             #deleteDoc.ui.small.circular.icon.button: i.remove.icon
 
-
-template(name='home')
-    .ui.secondary.basic.segment
-        if currentUser
-            .ui.icon.button#addDoc: i.plus.icon
-        .ui.large.label
-            +loginButtons
-        if selected_tags
-            #clear_tags.ui.grey.icon.button
-                i.remove.icon
-        each selected_tags
-            .unselect_tag.ui.grey.button
-                b #{this}
-        each global_tags
-            .select_tag.ui.button #{this.name}
-        if $.Session.get 'editing'
-            +edit
-        else
-            each docs
-                +view
-
-
 template(name='view')
     .ui.basic.center.aligned.segment
+        each tags
+            .ui.compact.small.button.doc_tag(class=doc_tag_class)= this
+        if isAuthor
+            .ui.icon.button.editDoc: i.pencil.icon
         +markdown
             #{body}
-        if isAuthor
-            .ui.big.icon.button.editDoc: i.pencil.icon
