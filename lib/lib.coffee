@@ -1,8 +1,6 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
-@Permits = new Meteor.Collection 'permits'
-@Permittags = new Meteor.Collection 'permittags'
-@Screennames = new Meteor.Collection 'screen_names'
+@Importers = new Meteor.Collection 'importers'
 
 Meteor.methods
     vote_up: (id)->
@@ -50,8 +48,14 @@ FlowRouter.route '/edit/:docId',
             top: 'nav'
             main: 'edit'
 
-FlowRouter.route '/boulder',
+FlowRouter.route '/importers',
     action: (params) ->
         BlazeLayout.render 'layout',
             top: 'nav'
-            main: 'boulder'
+            main: 'importerList'
+
+FlowRouter.route '/importers/:iId',
+    action: (params) ->
+        BlazeLayout.render 'layout',
+            top: 'nav'
+            main: 'importerView'

@@ -1,6 +1,6 @@
 #facetnav.ui.menu
     if currentUser
-        a.ui.header.item(href='/') facet
+        a.ui.header.item(href='/') Facet
         .ui.item #{user_counter} users #{doc_counter} docs
         .ui.category.search.item
             .ui.transparent.icon.input
@@ -8,7 +8,7 @@
                 input#search(type='text' placeholder='search...')
         // .ui.item My Points: #{user.points}
     .right.menu
-        a.item(href='/boulder') Boulder
+        a.item(href='/importers') Importer
         a.ui.item#addDoc(href='#')
             i.plus.icon
             |Add

@@ -1,0 +1,20 @@
+template(name='importerList')
+    .ui.segment
+        #addImporter.ui.button Add Importer
+        each importers
+            div #{this.url}
+            .ui.icon.button.editImporter: i.pencil.icon
+            .ui.icon.button.deleteImporter: i.remove.icon
+
+template(name='importerView')
+    .ui.segment
+        with importerDoc
+            #addImporterForm.ui.form
+                .field
+                    label Url
+                    input#urlField(type='text' value=url)
+                .field
+                    label Options
+                    input(type='text')
+                    .ui.button Add Option
+                    .ui.button#saveImporter Save Importer

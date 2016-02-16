@@ -1,5 +1,9 @@
 Docs.allow
-    insert: (userId, doc)-> userId
+    insert: (userId, doc)-> doc.authorId is Meteor.userId()
+    update: (userId, doc)-> doc.authorId is Meteor.userId()
+    remove: (userId, doc)-> doc.authorId is Meteor.userId()
+Importers.allow
+    insert: (userId, doc)-> doc.authorId is Meteor.userId()
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
@@ -15,6 +19,20 @@ Meteor.methods
             username: Meteor.user().username
         return id
 
+    createImporter: ->
+        id = Importers.insert
+            tags: []
+            timestamp: Date.now()
+            authorId: Meteor.userId()
+            username: Meteor.user().username
+        return id
+
+    saveImporter: (id, url)->
+        console.log id, url
+        result = Importers.update id,
+            $set:
+                url: url
+        console.log result
     analyze: (id)->
         doc = Docs.findOne id
         encoded = encodeURIComponent(doc.body)
@@ -55,12 +73,12 @@ Meteor.publish 'docs', (selected_tags)->
         limit: 20
         sort: timestamp: -1
 
-
 Meteor.publish 'doc', (id)-> Docs.find id
 
-Meteor.publish 'people', -> Meteor.users.find {}
+Meteor.publish 'importers', -> Importers.find {}
 
-Meteor.publish 'person', (id)-> Meteor.users.find id
+Meteor.publish 'importer', (id)-> Importers.find id
+
 
 Meteor.publish 'tags', (selected_tags, selected_user)->
     self = @
