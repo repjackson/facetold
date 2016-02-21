@@ -1,25 +1,16 @@
-.content
-    .header
-        each tags
-            .ui.compact.button.doc_tag(class=doc_tag_class)= this
+.card-content
+    each tags
+        .chip.doc_tag(class=doc_tag_class)= this
     .meta by #{username} #{when}
-.content
     +markdown
         #{body}
-.extra.content
+.card-action
     if isAuthor
-        .ui.button.compact.deletePost
-            i.remove.icon
-            |Delete
-        .ui.button.compact.editDoc
-            i.pencil.icon
-            |Edit
-    .ui.button.compact.cloneDoc
-        i.fork.icon
-        |Clone
-    .ui.disabled.button.authorButton(class=authorButtonClass) Author: #{username}
-    .vote_up.ui.icon.button(class=vote_up_button_class)
-        i.thumbs.up.icon(class=vote_up_icon_class)
-    .ui.basic.label Points: #{points}
-    .vote_down.ui.icon.button(class=vote_down_button_class)
-        i.thumbs.down.icon(class=vote_down_icon_class)
+        .btn.deletePost Delete
+        .btn.editDoc Edit
+    .btn.cloneDoc Clone
+    .btn.disabled.authorButton(class=authorButtonClass) Author: #{username}
+    |Points: #{points}
+    unless isAuthor
+        .vote_up.btn(class=vote_up_button_class) Like
+        .vote_down.btn(class=vote_down_button_class) Dislike

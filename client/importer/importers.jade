@@ -11,10 +11,15 @@ template(name='importerView')
         with importerDoc
             #addImporterForm.ui.form
                 .field
+                    label Method (GET or POST)
+                    input#methodField(type='text' value=method)
+                .field
                     label Url
                     input#urlField(type='text' value=url)
                 .field
-                    label Options
-                    input(type='text')
-                    .ui.button Add Option
-                    .ui.button#saveImporter Save Importer
+                    label Data subkey
+                    input#subKey(type='text')
+                .ui.button#saveImporter Save Importer
+                .ui.button#runImporter Run Importer
+            if $.Session.get 'jsonResponse'
+                +jsonView json=jsonData options=options

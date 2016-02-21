@@ -12,7 +12,10 @@ Template.home.onCreated ->
     @autorun -> Meteor.subscribe('docs', selected_tags.array())
 
 Template.home.helpers
-    global_tags: -> Tags.find()
+    global_tags: ->
+        doccount = Docs.find().count()
+        if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
+
     selected_tags: -> selected_tags.list()
 
     user: -> Meteor.user()

@@ -2,6 +2,7 @@ Docs.allow
     insert: (userId, doc)-> doc.authorId is Meteor.userId()
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
+
 Importers.allow
     insert: (userId, doc)-> doc.authorId is Meteor.userId()
     update: (userId, doc)-> doc.authorId is Meteor.userId()
@@ -27,13 +28,31 @@ Meteor.methods
             username: Meteor.user().username
         return id
 
-    saveImporter: (id, url)->
-        console.log id, url
-        result = Importers.update id,
+    saveImporter: (id, url, method)->
+        Importers.update id,
             $set:
                 url: url
-        console.log result
-    analyze: (id)->
+                method: method
+
+    runImporter: (id)->
+        importer = Importers.findOne id
+        HTTP.call importer.method, importer.url, {}, (err, result)->
+            if err then console.error err
+            else
+                parsedContent = JSON.parse result.content
+
+                features = parsedContent.features
+                # console.log features[0].properties
+                newDocs = (feature.properties for feature in features)
+                for doc in newDocs
+                    id = Docs.insert
+                        body: doc.CASE_DESCR
+                        authorId: Meteor.userId()
+                        timestamp: Date.now()
+                        tags: ['boulder permits', doc.STAFF_EMAI?.toLowerCase(), doc.STAFF_PHON?.toLowerCase(), doc.STAFF_CONT?.toLowerCase(), doc.CASE_NUMBE?.toLowerCase(), doc.CASE_TYPE?.toLowerCase(), doc.APPLICANT_?.toLowerCase(), doc.CASE_ADDRE?.toLowerCase()]
+                    Meteor.call 'analyze', id, true
+
+    analyze: (id, auto)->
         doc = Docs.findOne id
         encoded = encodeURIComponent(doc.body)
 
@@ -44,23 +63,33 @@ Meteor.methods
             html: doc.body
             outputMode: 'json'
             # extract: 'entity,keyword,title,author,taxonomy,concept,relation,pub-date,doc-sentiment' }
-            extract: 'keyword,taxonomy,concept,doc-sentiment' }
+            extract: 'keyword, concept' }
             , (err, result)->
                 if err then console.log err
                 else
                     keyword_array = _.pluck(result.data.keywords, 'text')
                     concept_array = _.pluck(result.data.concepts, 'text')
+                    loweredKeywords = keyword.toLowerCase() for keyword in keyword_array
+
 
                     Docs.update id,
                         $set:
-                            docSentiment: result.data.docSentiment
-                            language: result.data.language
                             keywords: result.data.keywords
                             concepts: result.data.concepts
-                            entities: result.data.entities
-                            taxonomy: result.data.taxonomy
                             keyword_array: keyword_array
                             concept_array: concept_array
+                    if auto is true
+                        Docs.update id,
+                            $addToSet:
+                                tags: $each: loweredKeywords
+
+
+    makeSuggestionsTags: (id)->
+        doc = Docs.findOne id
+        Docs.update id,
+            $addToSet:
+                tags: doc.keyword_array
+
 
 
 Meteor.publish 'docs', (selected_tags)->
@@ -68,9 +97,9 @@ Meteor.publish 'docs', (selected_tags)->
 
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    match.authorId = @userId
+    # match.authorId = @userId
     Docs.find match,
-        limit: 20
+        limit: 5
         sort: timestamp: -1
 
 Meteor.publish 'doc', (id)-> Docs.find id
@@ -86,7 +115,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
     match = {}
     if selected_user then match.authorId = selected_user
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    match.authorId = @userId
+    # match.authorId = @userId
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -95,7 +124,7 @@ Meteor.publish 'tags', (selected_tags, selected_user)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selected_tags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 50 }
+        { $limit: 25 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

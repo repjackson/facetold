@@ -33,6 +33,9 @@ Template.importerView.helpers
 
 Template.importerView.events
     'click #saveImporter': ->
-        console.log $('#urlField').val()
-        Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#urlField').val(), ->
+        Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#urlField').val(), $('#methodField').val(), ->
             FlowRouter.go '/importers'
+
+    'click #runImporter': ->
+        Meteor.call 'runImporter', @_id, (err, response)->
+            Session.set 'jsonResponse', true

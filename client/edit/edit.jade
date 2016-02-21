@@ -2,12 +2,11 @@ template(name='edit')
     with doc
         .ui.container
             .ui.segment
-                .ui.center.aligned.header Edit Doc
                 .ui.segment
                     .ui.header Document Tags
                     each tags
-                        .ui.labeled.icon.button.docTag
-                            i.remove.icon
+                        .chip.docTag
+                            i.material-icons close
                             |#{this}
                     .ui.left.icon.input
                         i.plus.icon
@@ -16,18 +15,18 @@ template(name='edit')
                     input#place(type='text' placeholder='Add Address')
                 .ui.input
                     input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
-                    .ui.button.clearDT Clear Date/Time
+                    .btn.clearDT Clear Date/Time
                 if keywords
                     .ui.segment
                         .ui.header Suggestions
                         if keywords
                             div Keywords
                                 each keywords
-                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
+                                    .docKeyword.btn(class=docKeywordClass) #{text}
                         if concepts
                             div Concepts
                                 each concepts
-                                    .docKeyword.ui.compact.button(class=docKeywordClass) #{text}
+                                    .docKeyword.btn(class=docKeywordClass) #{text}
                 if sentiment
                     |Sentiment: #{docSentiment.type} #{docSentiment.score}
                 if language
@@ -40,7 +39,7 @@ template(name='edit')
                             // div Score: #{score}
                             // div Confident: #{confident}
                 .ui.basic.segment
-                    #analyzeBody.ui.basic.button Analyze Body
+                    #analyzeBody.btn Analyze Body
                     +CodeMirror id="body" options=editorOptions code=body
-                #saveDoc.ui.button Save
-                #deleteDoc.ui.button Delete
+                #saveDoc.btn Save
+                #deleteDoc.btn Delete

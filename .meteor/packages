@@ -13,8 +13,6 @@ tracker                 # Meteor's client-side reactive programming library
 
 coffeescript
 mquandalle:jade
-mquandalle:stylus
-semantic:ui
 flemay:less-autoprefixer
 random
 manuel:reactivearray
@@ -23,15 +21,15 @@ jquery
 tmeasday:publish-counts
 babrahams:constellation
 http
-service-configuration
 perak:markdown
 raix:handlebar-helpers
 accounts-password
 momentjs:moment
-yogiben:helpers
 drewy:datetimepicker
 kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
-iandouglas:accounts-ui-semantic-ui
 jeremy:geocomplete
+yasinuslu:json-view
+materialize:materialize
+accounts-ui
