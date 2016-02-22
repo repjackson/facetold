@@ -1,16 +1,16 @@
 .card-content
     each tags
         .chip.doc_tag(class=doc_tag_class)= this
-    .meta by #{username} #{when}
+    | #{username} #{when}
     +markdown
         #{body}
 .card-action
     if isAuthor
-        .btn.deletePost Delete
+        .btn.deletePost x
         .btn.editDoc Edit
-    .btn.cloneDoc Clone
-    .btn.disabled.authorButton(class=authorButtonClass) Author: #{username}
-    |Points: #{points}
-    unless isAuthor
-        .vote_up.btn(class=vote_up_button_class) Like
-        .vote_down.btn(class=vote_down_button_class) Dislike
+    // .btn.cloneDoc Clone
+    // .btn.disabled.authorButton(class=authorButtonClass) Author: #{username}
+    // |Points: #{points}
+    // unless isAuthor
+    //     .vote_up.btn(class=vote_up_button_class) Like
+    //     .vote_down.btn(class=vote_down_button_class) Dislike

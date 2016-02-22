@@ -53,15 +53,10 @@ Template.edit.helpers
         mode: 'markdown'
         lineWrapping: true
 
-    # unpickedConcepts: ->
-    #     diff = _.map @tags, (tag)->
-    #         tag.toLowerCase() in @concept_array
-    # unpickedKeywords: ->
-    #     keywordNames = keyword.text for keyword in @keywords
-    #     console.log keywordNames
-    #     _.difference @tags, @keywords
-
-
+    unpickedConcepts: ->
+        _.difference @concept_array, @tags
+    unpickedKeywords: ->
+        _.difference @keyword_array, @tags
 
     docKeywordClass: ->
         docId = FlowRouter.getParam('docId')
@@ -95,10 +90,17 @@ Template.edit.events
                 dateTime: null
         $('#datetimepicker').val('')
 
+    'click #addAll': ->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+
+        Docs.update docId,
+            $addToSet: tags: $each: doc.keyword_array
+
     'click .docTag': ->
         tag = @valueOf()
         Docs.update FlowRouter.getParam('docId'),
-            $pull: tags: @valueOf()
+            $pull: tags: tag
         $('#addTag').val(tag)
 
     'click #analyzeBody': ->
@@ -122,9 +124,4 @@ Template.edit.events
 
     'click .docKeyword': ->
         docId = FlowRouter.getParam('docId')
-        doc = Docs.findOne docId
-        loweredTag = @text.toLowerCase()
-        if @text in doc.tags
-            Docs.update FlowRouter.getParam('docId'), $pull: tags: loweredTag
-        else
-            Docs.update FlowRouter.getParam('docId'), $push: tags: loweredTag
+        Docs.update docId, $addToSet: tags: @valueOf()

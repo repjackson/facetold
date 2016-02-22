@@ -1,25 +1,25 @@
 template(name='importerList')
     .ui.segment
-        #addImporter.ui.button Add Importer
+        #addImporter.btn Add Importer
         each importers
             div #{this.url}
-            .ui.icon.button.editImporter: i.pencil.icon
-            .ui.icon.button.deleteImporter: i.remove.icon
+            .btn.editImporter Edit Importer
+            .btn.deleteImporter Delete Importer
 
 template(name='importerView')
     .ui.segment
         with importerDoc
             #addImporterForm.ui.form
-                .field
-                    label Method (GET or POST)
-                    input#methodField(type='text' value=method)
-                .field
-                    label Url
-                    input#urlField(type='text' value=url)
-                .field
+                .input-field
+                    label(for='methodinput') Method (GET or POST)
+                    input#methodinput(type='text' value=method)
+                .input-field
+                    label(for='urlinput') Url
+                    input#urlinput(type='text' value=url)
+                .input-field
                     label Data subkey
                     input#subKey(type='text')
-                .ui.button#saveImporter Save Importer
-                .ui.button#runImporter Run Importer
+                .btn#saveImporter Save Importer
+                .btn#runImporter Run Importer
             if $.Session.get 'jsonResponse'
                 +jsonView json=jsonData options=options

@@ -39,23 +39,24 @@ Meteor.methods
 FlowRouter.route '/',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
             main: 'home'
 
 FlowRouter.route '/edit/:docId',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
             main: 'edit'
 
 FlowRouter.route '/importers',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
             main: 'importerList'
 
 FlowRouter.route '/importers/:iId',
     action: (params) ->
         BlazeLayout.render 'layout',
-            top: 'nav'
             main: 'importerView'
+
+FlowRouter.route '/bulk',
+    action: (params) ->
+        BlazeLayout.render 'layout',
+            main: 'bulk'
