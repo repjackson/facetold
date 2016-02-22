@@ -5,11 +5,6 @@ Template.home.events
     'click .unselect_tag': -> selected_tags.remove @valueOf()
     'click #clear_tags': -> selected_tags.clear()
 
-    'autocompleteselect input': (event, template, doc) ->
-        console.log 'selected ', doc
-        selected_tags.push doc.name
-        $('#search').val('')
-
     'keyup #search': (e)->
         switch e.which
             when 13
@@ -38,18 +33,3 @@ Template.home.helpers
 
     user: -> Meteor.user()
     docs: -> Docs.find()
-
-    settings: ->
-        {
-            position: 'top'
-            limit: 5
-            rules: [
-                {
-                    collection: Tags
-                    field: 'name'
-                    options: ''
-                    matchAll: true
-                    template: Template.dataPiece
-                }
-            ]
-        }
