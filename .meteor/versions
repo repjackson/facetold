@@ -47,6 +47,7 @@ flemay:less-autoprefixer@1.2.0
 geojson-utils@1.0.4
 gwendall:body-events@0.1.6
 gwendall:session-json@0.1.7
+harrison:papa-parse@1.1.1
 hot-code-push@1.0.0
 html-tools@1.0.5
 htmljs@1.0.5
@@ -63,6 +64,7 @@ livedata@1.0.15
 localstorage@1.0.5
 logging@1.0.8
 manuel:reactivearray@1.0.5
+matb33:collection-hooks@0.8.1
 materialize:materialize@0.97.5
 meteor@1.1.10
 meteor-base@1.0.1
@@ -81,6 +83,7 @@ mquandalle:stylus@1.1.1
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.39_1
 observe-sequence@1.0.7
+okgrow:analytics@1.0.4
 ordered-dict@1.0.4
 perak:codemirror@1.2.9
 perak:markdown@1.0.5

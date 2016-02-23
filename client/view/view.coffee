@@ -3,8 +3,8 @@ Template.view.onCreated ->
 
 Template.view.helpers
     isAuthor: -> @authorId is Meteor.userId()
-    vote_up_icon_class: -> if Meteor.userId() and @up_voters and Meteor.userId() in @up_voters then '' else 'outline'
-    vote_down_icon_class: -> if Meteor.userId() and @down_voters and Meteor.userId() in @down_voters then '' else 'outline'
+    vote_up_button_class: -> if Meteor.userId() in @up_voters then 'darken-3' else 'lighten-3'
+    vote_down_button_class: -> if Meteor.userId() in @down_voters then 'darken-3' else 'lighten-3'
     when: -> moment(@timestamp).fromNow()
     doc_tag_class: -> if @valueOf() in selected_tags.array() then 'grey' else ''
 

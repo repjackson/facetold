@@ -24,5 +24,7 @@ template(name='edit')
             else
                 #analyzeBody.btn Analyze Body
             +CodeMirror id="body" options=editorOptions code=body
-            #saveDoc.btn Save
-            #deleteDoc.btn Delete
+            #saveDoc.btn-floating
+                i.material-icons done
+            #deleteDoc.btn-floating
+                i.material-icons delete

@@ -8,16 +8,20 @@ Importers.allow
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
+Docs.before.insert (userId, doc)->
+    doc.tags = []
+    doc.timestamp = Date.now()
+    doc.authorId = Meteor.userId()
+    doc.points = 0
+    doc.down_voters = []
+    doc.up_voters = []
+    doc.username = Meteor.user().username
+
+
+
 Meteor.methods
     create: ->
         id = Docs.insert
-            tags: []
-            timestamp: Date.now()
-            authorId: Meteor.userId()
-            points: 0
-            down_voters: []
-            up_voters: []
-            username: Meteor.user().username
         return id
 
     createImporter: ->
@@ -104,15 +108,6 @@ Meteor.methods
 
 
 
-Meteor.publish 'docs', (selected_tags)->
-    Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
-
-    match = {}
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
-    # match.authorId = @userId
-    Docs.find match,
-        limit: 5
-        sort: timestamp: -1
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
@@ -120,14 +115,26 @@ Meteor.publish 'importers', -> Importers.find {}
 
 Meteor.publish 'importer', (id)-> Importers.find id
 
+Meteor.publish 'people', ->
+    Meteor.users.find {},
+        fields: 'username': 1
 
-Meteor.publish 'tags', (selected_tags, selected_user)->
+Meteor.publish 'docs', (selected_tags, viewMode)->
+    Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
+
+    match = {}
+    if selected_tags.length > 0 then match.tags = $all: selected_tags
+    if viewMode is 'mine' then match.authorId = @userId
+    Docs.find match,
+        limit: 10
+        sort: timestamp: -1
+
+Meteor.publish 'tags', (selected_tags, viewMode)->
     self = @
 
     match = {}
-    if selected_user then match.authorId = selected_user
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    # match.authorId = @userId
+    if viewMode is 'mine' then match.authorId = @userId
 
     cloud = Docs.aggregate [
         { $match: match }

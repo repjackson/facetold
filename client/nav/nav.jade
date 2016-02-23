@@ -4,14 +4,16 @@ template(name='nav')
             a#logo-container.brand-logo(href='/') Facet
             ul.right.hide-on-med-and-down
                 if currentUser
+                    li: a(href='/mine') My Docs
                     li: a(href='/bulk') Bulk Editor
                     li: a(href='/importers') Importer
                     li: a#addDoc(href='#') Add
-                li: #{user_counter} users #{doc_counter} docs
+                li: |#{user_counter} users #{doc_counter} docs
                 li
                     +loginButtons align='right'
             ul#nav-mobile.side-nav
                 if currentUser
+                    li: a(href='/mine') My Docs
                     li: a(href='/bulk') Bulk Editor
                     li: a(href='/importers') Importer
                     li: a#addDoc(href='#') Add

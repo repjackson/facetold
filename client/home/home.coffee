@@ -21,8 +21,8 @@ Template.home.events
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe('tags', selected_tags.array())
-    @autorun -> Meteor.subscribe('docs', selected_tags.array())
+    @autorun -> Meteor.subscribe('tags', selected_tags.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('docs', selected_tags.array(), Session.get('view'))
 
 Template.home.helpers
     global_tags: ->
