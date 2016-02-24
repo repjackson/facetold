@@ -1,30 +1,37 @@
 template(name='edit')
     with doc
         .container
-            each tags
-                .chip.docTag
-                    i.material-icons close
-                    |#{this}
-            .field-input
+            .row
+                .col.s12
+                    each tags
+                        .chip.docTag
+                            i.material-icons close
+                            |#{this}
+            .field-input.col.s6
                 i.plus.icon
                 input#addTag(type=text placeholder='Manually add tag' autofocus='')
             // .field-input
             //     input#place(type='text' placeholder='Add Address')
             .row
-                .field-input
+                .field-input.col.s6
                     input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
                 .btn.clearDT Clear Date/Time
-            if unpickedKeywords
+            if unpickedKeywords.length
                 .card
-                    strong Suggestions
-                    #addAll.btn-flat Add All Suggestions
-                    div Keywords
-                        each unpickedKeywords
-                            .docKeyword.chip #{this}
-            else
-                #analyzeBody.btn Analyze Body
-            +CodeMirror id="body" options=editorOptions code=body
-            #saveDoc.btn-floating
-                i.material-icons done
+                    .card-content
+                        span.card-title Suggestions
+                        div Keywords
+                            each unpickedKeywords
+                                .docKeyword.chip #{this}
+                        .card-action
+                            a#addAll Add All Suggestions
+            #analyzeBody.btn
+                |Analyze Body
+                i.material-icons.right launch
+            .card-panel
+                +CodeMirror id="body" options=editorOptions code=body
+            #saveDoc.btn
+                |Save
+                i.material-icons.right done
             #deleteDoc.btn-floating
                 i.material-icons delete

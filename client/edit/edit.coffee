@@ -49,7 +49,7 @@ Template.edit.helpers
         Docs.findOne docId
 
     editorOptions: ->
-        lineNumbers: true
+        lineNumbers: false
         mode: 'markdown'
         lineWrapping: true
 

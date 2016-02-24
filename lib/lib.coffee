@@ -2,6 +2,16 @@
 @Tags = new Meteor.Collection 'tags'
 @Importers = new Meteor.Collection 'importers'
 
+Docs.before.insert (userId, doc)->
+    doc.tags = []
+    doc.timestamp = Date.now()
+    doc.authorId = Meteor.userId()
+    doc.points = 0
+    doc.down_voters = []
+    doc.up_voters = []
+    doc.username = Meteor.user().username
+
+
 Meteor.methods
     vote_up: (id)->
         doc = Docs.findOne id

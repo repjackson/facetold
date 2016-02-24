@@ -1,25 +1,38 @@
 template(name='importerList')
     .ui.segment
-        #addImporter.btn Add Importer
-        each importers
-            div #{this.url}
-            .btn.editImporter Edit Importer
-            .btn.deleteImporter Delete Importer
+        #addImporter.fixed-action-btn(style="bottom: 45px; right: 24px;")
+            a.btn-floating.btn-large.red
+                i.large.material-icons add
+        ul.collection.with-header
+            li.collection-header: h5 Importers
+            each importers
+                a.collection-item.editImporter(href='#') #{this.name}
 
 template(name='importerView')
-    .ui.segment
+    .container
         with importerDoc
-            #addImporterForm.ui.form
-                .input-field
-                    label(for='methodinput') Method (GET or POST)
-                    input#methodinput(type='text' value=method)
-                .input-field
-                    label(for='urlinput') Url
-                    input#urlinput(type='text' value=url)
-                .input-field
-                    label Data subkey
-                    input#subKey(type='text')
-                .btn#saveImporter Save Importer
-                .btn#runImporter Run Importer
-            if $.Session.get 'jsonResponse'
-                +jsonView json=jsonData options=options
+            .input-field
+                label.active(for='importerName') Name
+                input#importerName(type='text' value=name)
+            .card
+                .card-content
+                    .card-title Import JSON
+                    .input-field
+                        label.active(for='methodinput') Method (GET or POST)
+                        input#methodinput(type='text' value=method)
+                    .input-field
+                        i.material-icons.prefix http
+                        label.active(for='urlinput') Url
+                        input#urlinput(type='text' value=url)
+                    .input-field
+                        label Data subkey
+                        input#subKey(type='text')
+                    if $.Session.get 'jsonResponse'
+                        +jsonView json=jsonData options=options
+            .card
+                .card-content
+                    .card-title Import CSV
+            .btn#saveImporter Save
+            .btn#runImporter Run
+            .btn#deleteImporter
+                i.material-icons delete

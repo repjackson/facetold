@@ -9,15 +9,14 @@ Template.importerList.helpers
 
 Template.importerList.events
     'click #addImporter': ->
-        Importers.insert
+        newId = Importers.insert
             authorId: Meteor.userId()
+        FlowRouter.go "/importers/#{newId}"
+
 
     'click .editImporter': ->
         FlowRouter.go "/importers/#{@_id}"
 
-    'click .deleteImporter': ->
-        # if confirm "Delete?"
-        Importers.remove @_id
 
 Template.importerView.onCreated ->
     self = @
@@ -32,6 +31,13 @@ Template.importerView.helpers
         Importers.findOne iId
 
 Template.importerView.events
+    'keyup #importerName': (e)->
+        switch e.which
+            when 13
+                id = FlowRouter.getParam('iId')
+                Importers.update id,
+                    $set: name: e.target.value
+
     'click #saveImporter': ->
         Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#urlField').val(), $('#methodField').val(), ->
             FlowRouter.go '/importers'
@@ -39,3 +45,8 @@ Template.importerView.events
     'click #runImporter': ->
         Meteor.call 'runImporter', @_id, (err, response)->
             Session.set 'jsonResponse', true
+
+    'click #deleteImporter': ->
+        if confirm "Delete this Importer?"
+            Importers.remove @_id
+            FlowRouter.go '/importers'

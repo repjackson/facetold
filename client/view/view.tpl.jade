@@ -1,10 +1,10 @@
 .card-content
     each tags
         .chip.doc_tag(class=doc_tag_class)= this
-    | #{username} #{when}
     +markdown
         #{body}
 .card-action
+    |by #{username} #{when}
     if isAuthor
         // .btn-floating.deletePost
         //     i.material-icons delete
@@ -12,12 +12,9 @@
             i.material-icons settings
     .btn-floating.cloneDoc
         i.material-icons call_split
-    if username
-        |Author: #{username}
     unless isAuthor
         a.vote_up.btn-floating.blue(class=vote_up_button_class)
             i.material-icons thumb_up
         a.vote_down.btn-floating.blue(class=vote_down_button_class)
             i.material-icons thumb_down
-    if points
-        |Points: #{points}
+    |Points: #{points}

@@ -7,10 +7,11 @@ template(name='nav')
                     li: a(href='/mine') My Docs
                     li: a(href='/bulk') Bulk Editor
                     li: a(href='/importers') Importer
-                    li: a#addDoc(href='#') Add
-                li: |#{user_counter} users #{doc_counter} docs
+                    li: a#addDoc(href='#')
+                        i.material-icons add
                 li
                     +loginButtons align='right'
+                li: small #{user_counter} users #{doc_counter} docs
             ul#nav-mobile.side-nav
                 if currentUser
                     li: a(href='/mine') My Docs

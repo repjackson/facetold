@@ -8,22 +8,7 @@ Importers.allow
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
-Docs.before.insert (userId, doc)->
-    doc.tags = []
-    doc.timestamp = Date.now()
-    doc.authorId = Meteor.userId()
-    doc.points = 0
-    doc.down_voters = []
-    doc.up_voters = []
-    doc.username = Meteor.user().username
-
-
-
 Meteor.methods
-    create: ->
-        id = Docs.insert
-        return id
-
     createImporter: ->
         id = Importers.insert
             tags: []
