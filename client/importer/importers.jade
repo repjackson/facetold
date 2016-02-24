@@ -1,5 +1,5 @@
 template(name='importerList')
-    .ui.segment
+    .container
         #addImporter.fixed-action-btn(style="bottom: 45px; right: 24px;")
             a.btn-floating.btn-large.red
                 i.large.material-icons add
@@ -32,6 +32,18 @@ template(name='importerView')
             .card
                 .card-content
                     .card-title Import CSV
+                    unless uploading
+                        input(type="file" name="uploadCSV")
+                    else
+                        p
+                            i.fa.fa-spin.fa-refresh
+                            |Uploading files...
+                    if fields
+                        ul.collection.with-header
+                            li.collection-header: h5 Fields
+                            each fields
+                                li.collection-item #{this}
+
             .btn#saveImporter Save
             .btn#runImporter Run
             .btn#deleteImporter

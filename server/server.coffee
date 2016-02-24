@@ -9,6 +9,10 @@ Importers.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Meteor.methods
+    parseUpload: (data) ->
+        # for item in data
+            # console.log item
+
     createImporter: ->
         id = Importers.insert
             tags: []

@@ -12,6 +12,3 @@ Template.nav.helpers
     user_counter: -> Meteor.users.find().count()
 
 Template.nav.events
-    'click #addDoc': ->
-        newId = Docs.insert({})
-        FlowRouter.go "/edit/#{newId}"

@@ -17,7 +17,9 @@ Template.home.events
             when 8
                 if e.target.value is ''
                     selected_tags.pop()
-
+    'click #addDoc': ->
+        newId = Docs.insert({})
+        FlowRouter.go "/edit/#{newId}"
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'

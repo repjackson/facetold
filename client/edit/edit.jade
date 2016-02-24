@@ -26,12 +26,12 @@ template(name='edit')
                         .card-action
                             a#addAll Add All Suggestions
             #analyzeBody.btn
+                i.material-icons.left launch
                 |Analyze Body
-                i.material-icons.right launch
             .card-panel
                 +CodeMirror id="body" options=editorOptions code=body
             #saveDoc.btn
+                i.material-icons.left done
                 |Save
-                i.material-icons.right done
             #deleteDoc.btn-floating
                 i.material-icons delete
