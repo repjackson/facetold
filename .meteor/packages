@@ -32,10 +32,11 @@ perak:codemirror
 jeremy:geocomplete
 yasinuslu:json-view
 materialize:materialize
-accounts-ui
 mquandalle:stylus
 harrison:papa-parse
 okgrow:analytics
 reactive-var
 matb33:collection-hooks
 themeteorchef:bert
+useraccounts:materialize
+useraccounts:flow-routing

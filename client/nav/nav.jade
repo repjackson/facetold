@@ -9,6 +9,8 @@ template(name='nav')
                     li: a(href='/importers') Importers
                 li
                     +loginButtons align='right'
+                li
+                    +atNavButton
                 li: small #{user_counter} users #{doc_counter} docs
             ul#nav-mobile.side-nav
                 if currentUser
@@ -18,5 +20,7 @@ template(name='nav')
                 li: #{user_counter} users #{doc_counter} docs
                 li
                     +loginButtons
+                li
+                    +atNavButton
             a.button-collapse(href='#', data-activates='nav-mobile')
                 i.material-icons menu

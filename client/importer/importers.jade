@@ -29,6 +29,7 @@ template(name='importerView')
                         input#subKey(type='text')
                     if $.Session.get 'jsonResponse'
                         +jsonView json=jsonData options=options
+                    .btn#runImporter Run
             .card
                 .card-content
                     .card-title Import CSV
@@ -43,8 +44,6 @@ template(name='importerView')
                             li.collection-header: h5 Fields
                             each fields
                                 li.collection-item #{this}
-
             .btn#saveImporter Save
-            .btn#runImporter Run
             .btn#deleteImporter
                 i.material-icons delete
