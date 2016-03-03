@@ -27,6 +27,11 @@ Template.importerView.onCreated ->
     Template.instance().uploading = new ReactiveVar( false )
     return
 
+Template.importerView.onRendered ->
+    Meteor.setTimeout ( ->
+        $('select').material_select()
+        ), 500
+    return
 
 Template.importerView.helpers
     importerDoc: ->
@@ -36,12 +41,9 @@ Template.importerView.helpers
     uploading: ->
         Template.instance().uploading.get()
 
-Template.importerView.onRendered ->
-    Meteor.setTimeout ( ->
-        $('select').material_select()
-        ), 500
-    return
-
+    selectedDataType: (fieldName)->
+        console.log fieldname
+        # console.log _.findWhere(@fieldsObject, {name: fieldName})
 
 Template.importerView.events
     'keyup #importerName': (e)->
@@ -83,11 +85,25 @@ Template.importerView.events
                 else
                     console.log res
 
+    'click .toggleTag': (e,t)->
+        id = FlowRouter.getParam('iId')
+        fieldName = e.currentTarget.id
+        value = e.currentTarget.checked
+        console.log fieldName
+        Meteor.call 'toggleFieldTag', id, fieldName, value, (err, res)->
+            if err then console.log error.reason
+            else
+                Bert.alert 'Setting Saved', 'success', 'growl-top-right'
+
+
     'change .typeSelector': (e,t)->
         id = FlowRouter.getParam('iId')
-        Importers.update id,
-            $set: "fieldSettings.#{e.currentTarget.id}": 'test'
-        console.log e
+        fieldName = e.currentTarget.id
+        value = e.currentTarget.value
+        Meteor.call 'updateFieldType', id, fieldName, value, (err, res)->
+            if err then console.log error.reason
+            else
+                Bert.alert 'Type Saved', 'success', 'growl-top-right'
 
     'change [name="uploadCSV"]': (event, template) ->
         id = FlowRouter.getParam('iId')
@@ -106,10 +122,7 @@ Template.importerView.events
                     )
                 Importers.update id,
                     $set:
-                        fields: fields
                         fieldsObject: fieldsObject
-                        fieldNames: fieldNames
-                        firstValues: firstValues
                 Meteor.call 'parseUpload', results.data, (err, res) ->
                     if err then console.log error.reason
                     else

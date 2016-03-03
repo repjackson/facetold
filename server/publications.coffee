@@ -12,9 +12,9 @@ Meteor.publish 'docs', (selected_tags, viewMode)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
 
     match = {}
+    if not @userId? then match.personal = false
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     if viewMode is 'mine' then match.authorId = @userId
-    match.personal = false
 
     Docs.find match,
         limit: 5

@@ -31,3 +31,22 @@ Meteor.methods
                 $addToSet: down_voters: Meteor.userId()
                 $inc: points: -1
 
+    updateFieldType: (id, fieldName, selection)->
+        # direct tag
+        # time/date
+        # geo
+        # skip
+        Importers.update {
+            _id: id
+            fieldsObject: $elemMatch:
+                name: fieldName
+            }, $set: 'fieldsObject.$.type': selection
+
+    toggleFieldTag: (id, fieldName, value)->
+        Importers.update {
+            _id: id
+            fieldsObject: $elemMatch:
+                name: fieldName
+            }, $set: 'fieldsObject.$.tag': value
+
+

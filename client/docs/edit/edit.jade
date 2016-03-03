@@ -34,10 +34,12 @@ template(name='edit')
                         |Analyze Body
                     .card-panel
                         +CodeMirror id="body" options=editorOptions code=body
-                    #saveDoc.btn
+                    .field-input
+                        input(type="checkbox" id="personal" checked=personal)
+                        label(for="personal") Personal (only you see it)
+                .card-action
+                    a#saveDoc.btn
                         i.material-icons.left done
                         |Save
-                    #deleteDoc.btn-floating
+                    a#deleteDoc.btn-floating
                         i.material-icons delete
-                    input(type="checkbox" id="personal" checked=personal)
-                    label(for="personal") Personal (only you see it)

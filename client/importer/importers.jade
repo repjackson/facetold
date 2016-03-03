@@ -46,34 +46,30 @@ template(name='importerView')
                         p
                             i.fa.fa-spin.fa-refresh
                             |Uploading files...
-                    if fieldNames
+                    if fieldsObject
                         table.responsive-table.striped
                             thead
                                 tr
                                     th Field Name
                                     th First Row Data Example
-                                    th Action/Data Type
+                                    th Action
                             tbody
                                 each fieldsObject
                                     tr
                                         td #{this.name}
                                         td #{this.firstValue}
-                                        td
-                                            .input-field.col.s12
-                                                select.browser-default.typeSelector(id="#{this}")
-                                                    option(value='', disabled='', selected='') Choose Data Type/Action
-                                                    option(value='1') Direct Tag
-                                                    option(value='2') Time/Date
-                                                    option(value='3') Geo
-                                                    option(value='4') Skip
-                                                // label Pick Data Type
                                         // td
-                                            // .switch
-                                            //     label
-                                            //         input(type="checkbox")
-                                            //         span.lever
-                                            //         |Tag Directly
-                                            .input-field
+                                        //     .input-field.col.s12
+                                        //         select.browser-default.typeSelector(id="#{this.name}")
+                                        //             option(value='', disabled='') Choose Data Type/Action
+                                        //             option(value='1' selected="{{selectedDataType 1}}") Direct Tag
+                                        //             option(value='2' selected="{{selectedDataType 2}}") Time/Date
+                                        //             option(value='3' selected="{{selectedDataType 3}}") Geo
+                                        //             option(value='4' selected="{{selectedDataType 4}}") Skip
+                                        //         // label Pick Data Type
+                                        td
+                                            input.toggleTag(type="checkbox" id="#{this.name}" checked="#{this.tag}")
+                                            label(for="#{this.name}") Tag
             .btn#runTest Test Importer
             if testRun
                 .card-panel
