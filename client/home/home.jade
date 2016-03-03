@@ -1,11 +1,12 @@
 template(name='home')
     #addDoc.fixed-action-btn(style="bottom: 45px; right: 24px;")
-        a.btn-floating.btn-large.red
+        a.btn-floating.btn-large.teal.darken-3
             i.large.material-icons add
-    .row
-        .col.s12
+    .card.grey.lighten-4
+        .card-content
             .input-field
-                input#search(type='text' placeholder='Search tags...')
+                input#search(type='text')
+                label(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
             if selected_tags
                 #clear_tags.btn-floating.grey
                     i.material-icons close
@@ -18,7 +19,7 @@ template(name='home')
                     small #{this.count}
     .container
         each docs
-            .card
+            .card.grey.lighten-4
                 +view
 
 

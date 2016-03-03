@@ -7,6 +7,10 @@ Template.edit.onCreated ->
 
 Template.edit.onRendered ->
     Meteor.setTimeout (->
+
+        $('.datepicker').pickadate
+            selectMonths: true
+            selectYears: 15
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -125,3 +129,11 @@ Template.edit.events
     'click .docKeyword': ->
         docId = FlowRouter.getParam('docId')
         Docs.update docId, $addToSet: tags: @valueOf()
+
+    'click #personal': ->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+        newValue = !doc.personal
+        Docs.update docId,
+            $set:
+                personal: newValue

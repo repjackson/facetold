@@ -10,17 +10,17 @@ Template.view.helpers
 
 Template.view.events
     'click .deletePost': -> if confirm 'Delete Post?' then Docs.remove @_id
-    'click .cloneDoc': ->
-        if confirm 'Clone Post?'
-            id = Docs.insert
-                tags: @tags
-                timestamp: Date.now()
-                authorId: Meteor.userId()
-                username: Meteor.user().username
-                points: 0
-                down_voters: []
-                up_voters: []
-            FlowRouter.go "/edit/#{id}"
+    # 'click .cloneDoc': ->
+    #     if confirm 'Clone Post?'
+    #         id = Docs.insert
+    #             tags: @tags
+    #             timestamp: Date.now()
+    #             authorId: Meteor.userId()
+    #             username: Meteor.user().username
+    #             points: 0
+    #             down_voters: []
+    #             up_voters: []
+    #         FlowRouter.go "/edit/#{id}"
     'click .vote_up': -> Meteor.call 'vote_up', @_id
     'click .vote_down': -> Meteor.call 'vote_down', @_id
     'click .doc_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove @valueOf() else selected_tags.push @valueOf()

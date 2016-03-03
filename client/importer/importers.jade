@@ -4,46 +4,83 @@ template(name='importerList')
             a.btn-floating.btn-large.red
                 i.large.material-icons add
         ul.collection.with-header
-            li.collection-header: h5 Importers
+            li.collection-header: h5 My Importers
             each importers
                 a.collection-item.editImporter(href='#') #{this.name}
 
 template(name='importerView')
     .container
         with importerDoc
-            .input-field
-                label.active(for='importerName') Name
-                input#importerName(type='text' value=name)
+            // .card
+            //     .card-content
+            //         .card-title Import JSON
+            //         .input-field
+            //             label.active(for='methodinput') Method (GET or POST)
+            //             input#methodinput(type='text' value=method)
+            //         .input-field
+            //             i.material-icons.prefix http
+            //             label.active(for='urlinput') Url
+            //             input#urlinput(type='text' value=url)
+            //         .input-field
+            //             label Data subkey
+            //             input#subKey(type='text')
+            //         if $.Session.get 'jsonResponse'
+            //             +jsonView json=jsonData options=options
+            //         .btn#runImporter Run
             .card
                 .card-content
-                    .card-title Import JSON
                     .input-field
-                        label.active(for='methodinput') Method (GET or POST)
-                        input#methodinput(type='text' value=method)
+                        label.active(for='importerName') Importer Name
+                        input#importerName(type='text' value=name)
                     .input-field
-                        i.material-icons.prefix http
-                        label.active(for='urlinput') Url
-                        input#urlinput(type='text' value=url)
-                    .input-field
-                        label Data subkey
-                        input#subKey(type='text')
-                    if $.Session.get 'jsonResponse'
-                        +jsonView json=jsonData options=options
-                    .btn#runImporter Run
-            .card
-                .card-content
-                    .card-title Import CSV
+                        label.active(for='immportTag') Importer Tag (included with all documents imported to facilitate future editing)
+                        input#importTag(type='text' value=importTag)
                     unless uploading
-                        input(type="file" name="uploadCSV")
+                        .file-field.input-field
+                            .btn
+                                span Upload CSV File
+                                input(type='file' name='uploadCSV')
+                            .file-path-wrapper
+                                input.file-path.validate(type='text')
                     else
                         p
                             i.fa.fa-spin.fa-refresh
                             |Uploading files...
-                    if fields
-                        ul.collection.with-header
-                            li.collection-header: h5 Fields
-                            each fields
-                                li.collection-item #{this}
+                    if fieldNames
+                        table.responsive-table.striped
+                            thead
+                                tr
+                                    th Field Name
+                                    th First Row Data Example
+                                    th Action/Data Type
+                            tbody
+                                each fieldsObject
+                                    tr
+                                        td #{this.name}
+                                        td #{this.firstValue}
+                                        td
+                                            .input-field.col.s12
+                                                select.browser-default.typeSelector(id="#{this}")
+                                                    option(value='', disabled='', selected='') Choose Data Type/Action
+                                                    option(value='1') Direct Tag
+                                                    option(value='2') Time/Date
+                                                    option(value='3') Geo
+                                                    option(value='4') Skip
+                                                // label Pick Data Type
+                                        // td
+                                            // .switch
+                                            //     label
+                                            //         input(type="checkbox")
+                                            //         span.lever
+                                            //         |Tag Directly
+                                            .input-field
+            .btn#runTest Test Importer
+            if testRun
+                .card-panel
+                    .card-title Test Doc
+                    .card-content
+                        each testRunTags
+                            .chip= this
             .btn#saveImporter Save
             .btn#deleteImporter
                 i.material-icons delete

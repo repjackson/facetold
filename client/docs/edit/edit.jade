@@ -1,0 +1,43 @@
+template(name='edit')
+    with doc
+        .container
+            .card
+                .card-content
+                    .row
+                        .col.s12
+                            each tags
+                                .chip.docTag
+                                    i.material-icons close
+                                    |#{this}
+                    .field-input.col.s6
+                        i.plus.icon
+                        input#addTag(type=text autofocus='')
+                        label(for='addTag')  Manually add tag
+                    // .field-input
+                    //     input#place(type='text' placeholder='Add Address')
+                    .row
+                        .field-input.col.s6
+                            input#datetimepicker(type="text" value=dateTime)
+                            label(for='datetimepicker') Add Date/Time
+                        .btn.clearDT Clear Date/Time
+                    if unpickedKeywords.length
+                        .card
+                            .card-content
+                                span.card-title Suggestions
+                                div Keywords
+                                    each unpickedKeywords
+                                        .docKeyword.chip #{this}
+                                .card-action
+                                    a#addAll Add All Suggestions
+                    #analyzeBody.btn
+                        i.material-icons.left launch
+                        |Analyze Body
+                    .card-panel
+                        +CodeMirror id="body" options=editorOptions code=body
+                    #saveDoc.btn
+                        i.material-icons.left done
+                        |Save
+                    #deleteDoc.btn-floating
+                        i.material-icons delete
+                    input(type="checkbox" id="personal" checked=personal)
+                    label(for="personal") Personal (only you see it)

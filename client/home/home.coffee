@@ -12,14 +12,20 @@ Template.home.events
                     selected_tags.clear()
                     $('#search').val('')
                 else
-                    selected_tags.push e.target.value
+                    selected_tags.push e.target.value.toLowerCase()
                     $('#search').val('')
             when 8
                 if e.target.value is ''
                     selected_tags.pop()
+
     'click #addDoc': ->
-        newId = Docs.insert({})
-        FlowRouter.go "/edit/#{newId}"
+        Meteor.call 'createDoc', (err, id)->
+            if err
+                console.log err
+            else
+                console.log id
+                FlowRouter.go "/edit/#{id}"
+
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'

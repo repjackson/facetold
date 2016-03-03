@@ -40,3 +40,9 @@ matb33:collection-hooks
 themeteorchef:bert
 useraccounts:materialize
 useraccounts:flow-routing
+accounts-google
+accounts-twitter
+accounts-meteor-developer
+accounts-facebook
+accounts-github
+zimme:active-route
