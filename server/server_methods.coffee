@@ -16,11 +16,15 @@ Meteor.methods
             username: Meteor.user().username
         return id
 
-    saveImporter: (id, url, method)->
+    saveImporter: (id, importerName, importerTag)->
         Importers.update id,
             $set:
-                url: url
-                method: method
+                name: importerName
+                importerTag: importerTag
+
+    testImporter: (iId)->
+        importer = Importers.findOne iId
+        
 
     runImporter: (id)->
         importer = Importers.findOne id

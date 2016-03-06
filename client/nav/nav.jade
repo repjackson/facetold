@@ -1,8 +1,7 @@
 template(name='nav')
     nav.black.darken-4(role='navigation')
         .nav-wrapper.container
-            a(href='/' class="{{isActivePath '/'}}")
-                strong Facet
+            a.brand-logo(href='/' class="{{isActivePath '/'}}") Facet
             ul.right.hide-on-med-and-down
                 if currentUser
                     li(class="{{isActivePath '/mine'}}")
@@ -11,8 +10,10 @@ template(name='nav')
                         a(href='/bulk') Bulk Editor
                     li(class="{{isActivePath '/importers'}}")
                         a(href='/importers') Importers
+                    li(class="{{isActivePath '/profile'}}")
+                        a(href='/profile') Profile
                 li
-                    +atNavButton
+                    +loginButtons
                 li
                     small #{user_counter} users #{doc_counter} docs
             ul#nav-mobile.side-nav
@@ -23,9 +24,9 @@ template(name='nav')
                         a(href='/bulk') Bulk Editor
                     li(class="{{isActivePath '/importers'}}")
                         a(href='/importers') Importers
+                    li(class="{{isActivePath '/profile'}}")
+                        a(href='/profile') Profile
                 li
-                    #{user_counter} users #{doc_counter} docs
-                li
-                    +atNavButton
+                    |#{user_counter} users #{doc_counter} docs
             a.button-collapse(href='#', data-activates='nav-mobile')
                 i.material-icons menu

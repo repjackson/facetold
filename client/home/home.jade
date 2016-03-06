@@ -1,7 +1,8 @@
 template(name='home')
-    #addDoc.fixed-action-btn(style="bottom: 45px; right: 24px;")
-        a.btn-floating.btn-large.teal.darken-3
-            i.large.material-icons add
+    if currentUser
+        #addDoc.fixed-action-btn(style="bottom: 45px; right: 24px;")
+            a.btn-floating.btn-large.teal.darken-3
+                i.large.material-icons add
     .card.grey.lighten-4
         .card-content
             .input-field
@@ -21,7 +22,3 @@ template(name='home')
         each docs
             .card.grey.lighten-4
                 +view
-
-
-template(name='dataPiece')
-    span.label #{name}

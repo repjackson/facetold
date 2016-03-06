@@ -1,0 +1,10 @@
+template(name='importerList')
+    .container
+        #addImporter.fixed-action-btn(style="bottom: 45px; right: 24px;")
+            a.btn-floating.btn-large.red
+                i.large.material-icons add
+        ul.collection.with-header
+            li.collection-header: h5 My Importers
+            each importers
+                a.collection-item.editImporter(href='#') #{this.name}
+

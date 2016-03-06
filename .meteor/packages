@@ -23,7 +23,6 @@ babrahams:constellation
 http
 perak:markdown
 raix:handlebar-helpers
-accounts-password
 momentjs:moment
 drewy:datetimepicker
 kadira:flow-router
@@ -38,11 +37,9 @@ okgrow:analytics
 reactive-var
 matb33:collection-hooks
 themeteorchef:bert
-useraccounts:materialize
 useraccounts:flow-routing
 accounts-google
 accounts-twitter
-accounts-meteor-developer
-accounts-facebook
-accounts-github
 zimme:active-route
+edgee:slingshot
+alisalaah:accounts-ui-material

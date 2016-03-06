@@ -1,23 +1,3 @@
-Template.importerList.onCreated ->
-    self = @
-    self.autorun ->
-        self.subscribe 'importers'
-
-
-Template.importerList.helpers
-    importers: -> Importers.find()
-
-Template.importerList.events
-    'click #addImporter': ->
-        newId = Importers.insert
-            authorId: Meteor.userId()
-        FlowRouter.go "/importers/#{newId}"
-
-
-    'click .editImporter': ->
-        FlowRouter.go "/importers/#{@_id}"
-
-
 Template.importerView.onCreated ->
     self = @
     self.autorun ->
@@ -66,7 +46,7 @@ Template.importerView.events
 
 
     'click #saveImporter': ->
-        Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#urlField').val(), $('#methodField').val(), ->
+        Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#importerName').val(), $('#importerTag').val(), ->
             FlowRouter.go '/importers'
 
     'click #runImporter': ->
@@ -80,7 +60,7 @@ Template.importerView.events
 
     'click #testRun': ->
         if confirm "Test this Importer?"
-            Meteor.call 'testRunImporter', FlowRouter.getParam 'iId', (err, res)->
+            Meteor.call 'testImporter', FlowRouter.getParam 'iId', (err, res)->
                 if err then console.log error.reason
                 else
                     console.log res
@@ -108,10 +88,23 @@ Template.importerView.events
     'change [name="uploadCSV"]': (event, template) ->
         id = FlowRouter.getParam('iId')
         template.uploading.set true
+        console.log event.target.files
+        uploader = new (Slingshot.Upload)('myFileUploads')
+        uploader.send event.target.files[0], (error, downloadUrl) ->
+            if error
+                # Log service detailed response.
+                # console.error 'Error uploading', uploader.xhr.response
+                console.error 'Error uploading', error
+                alert error
+            else
+                Meteor.users.update Meteor.userId(), $push: 'profile.files': downloadUrl
+            return
+
+        name = event.target.files[0].name
         Papa.parse event.target.files[0],
             header: true
             complete: (results, file) ->
-                # console.log results
+                console.log results
                 # console.log results.data[0]
                 fieldNames = results.meta.fields
                 firstValues = _.values(results.data[0])
@@ -122,9 +115,10 @@ Template.importerView.events
                     )
                 Importers.update id,
                     $set:
+                        fileName: name
                         fieldsObject: fieldsObject
                 Meteor.call 'parseUpload', results.data, (err, res) ->
                     if err then console.log error.reason
                     else
                         template.uploading.set false
-                        Bert.alert 'Upload complete!', 'success', 'growl-top-right'
+                        Bert.alert 'Upload complete', 'success', 'growl-top-right'

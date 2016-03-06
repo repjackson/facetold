@@ -23,3 +23,5 @@ FlowRouter.route '/mine',
     action: (params) ->
         Session.set('view', 'mine')
         BlazeLayout.render 'layout', main: 'home'
+
+FlowRouter.route '/profile', action: (params) -> BlazeLayout.render 'layout', main: 'profile'
