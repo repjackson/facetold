@@ -38,8 +38,10 @@ reactive-var
 matb33:collection-hooks
 themeteorchef:bert
 useraccounts:flow-routing
-accounts-google
 accounts-twitter
 zimme:active-route
 edgee:slingshot
+accounts-google
 alisalaah:accounts-ui-material
+service-configuration
+mrt:twit

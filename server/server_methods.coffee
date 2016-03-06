@@ -24,7 +24,7 @@ Meteor.methods
 
     testImporter: (iId)->
         importer = Importers.findOne iId
-        
+
 
     runImporter: (id)->
         importer = Importers.findOne id
@@ -52,6 +52,43 @@ Meteor.methods
             {multi: true})
         console.log result
         return result
+
+    get_tweets: (screen_name)->
+        if not screen_name
+            console.error 'No screen name provided'
+            return false
+
+
+        twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
+        twitter = Meteor.user().services.twitter
+
+
+        Twit = new TwitMaker(
+            consumer_key: twitterConf.consumerKey
+            consumer_secret: twitterConf.secret
+            access_token: twitter.accessToken
+            access_token_secret: twitter.accessTokenSecret
+            app_only_auth:true)
+
+        Twit.get 'statuses/user_timeline', {
+            screen_name: screen_name
+            count: 200
+            include_rts: false
+        }, Meteor.bindEnvironment(((err, data, response) ->
+            for tweet in data
+                id = Docs.insert
+                    body: tweet.text
+                    screen_name: screen_name
+                Meteor.call 'analyze', id, tweet.text
+            ))
+
+        if screen_name is Meteor.user().profile.name
+            Meteor.users.update Meteor.userId,
+                $set: hasReceivedTweets: true
+
+
+
+
 
     analyze: (id, auto)->
         doc = Docs.findOne id

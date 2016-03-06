@@ -2,4 +2,11 @@
     .card
         .card-content
             .card-title Profile
-            +accountsMeld
+            if hasReceivedTweets
+                a.item.clear_my_docs
+                    i.material-icons delete
+                    |Delete My Tweets
+            else
+                a.btn.get_tweets
+                    i.cloud.green.download.icon
+                    |Get My Tweets

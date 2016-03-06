@@ -84,6 +84,7 @@ mousetrap:mousetrap@1.4.6_1
 mquandalle:jade@0.4.9
 mquandalle:jade-compiler@0.4.5
 mquandalle:stylus@1.1.1
+mrt:twit@0.2.0
 npm-mongo@1.4.39_1
 oauth@1.1.6
 oauth1@1.1.5
