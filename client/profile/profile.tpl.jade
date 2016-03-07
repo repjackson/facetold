@@ -3,10 +3,11 @@
         .card-content
             .card-title Profile
             if hasReceivedTweets
-                a.item.clear_my_docs
-                    i.material-icons delete
+                a.btn.delete_tweets
+                    i.material-icons.left delete
                     |Delete My Tweets
             else
                 a.btn.get_tweets
-                    i.cloud.green.download.icon
+                    i.material-icons.left play_for_work
                     |Get My Tweets
+            div Tweet Doc Count: #{tweetDocCount}

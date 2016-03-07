@@ -3,6 +3,8 @@ template(name='nav')
         .nav-wrapper.container
             a.brand-logo(href='/' class="{{isActivePath '/'}}") Facet
             ul.right.hide-on-med-and-down
+                li
+                    small #{user_counter} users #{doc_counter} docs
                 if currentUser
                     li(class="{{isActivePath '/mine'}}")
                         a(href='/mine') My Docs
@@ -14,8 +16,6 @@ template(name='nav')
                         a(href='/profile') Profile
                 li
                     +loginButtons
-                li
-                    small #{user_counter} users #{doc_counter} docs
             ul#nav-mobile.side-nav
                 if currentUser
                     li(class="{{isActivePath '/mine'}}")

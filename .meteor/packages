@@ -13,7 +13,6 @@ tracker                 # Meteor's client-side reactive programming library
 
 coffeescript
 mquandalle:jade
-flemay:less-autoprefixer
 random
 manuel:reactivearray
 meteorhacks:aggregate
@@ -37,11 +36,9 @@ okgrow:analytics
 reactive-var
 matb33:collection-hooks
 themeteorchef:bert
-useraccounts:flow-routing
 accounts-twitter
 zimme:active-route
 edgee:slingshot
-accounts-google
-alisalaah:accounts-ui-material
 service-configuration
 mrt:twit
+accounts-ui

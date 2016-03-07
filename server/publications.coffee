@@ -4,9 +4,16 @@ Meteor.publish 'importers', -> Importers.find { authorId: @userId}
 
 Meteor.publish 'importer', (id)-> Importers.find id
 
-Meteor.publish 'people', ->
-    Meteor.users.find {},
-        fields: 'username': 1
+Meteor.publish 'people', -> Meteor.users.find {}
+
+Meteor.publish 'person', (id)-> Meteor.users.find id
+
+Meteor.publish 'tweetDocs', ->
+    Docs.find
+        $and: [
+            { authorId: @userId }
+            { tags: $in: ['tweet'] }
+        ]
 
 Meteor.publish 'docs', (selected_tags, viewMode)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
@@ -17,7 +24,7 @@ Meteor.publish 'docs', (selected_tags, viewMode)->
     if viewMode is 'mine' then match.authorId = @userId
 
     Docs.find match,
-        limit: 5
+        limit: 10
         sort: timestamp: -1
 
 Meteor.publish 'tags', (selected_tags, viewMode)->

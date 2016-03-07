@@ -57,7 +57,9 @@ Meteor.methods
         if not screen_name
             console.error 'No screen name provided'
             return false
-
+        existingDoc = Docs.findOne username: screen_name
+        if existingDoc
+              throw new Meteor.Error('already-imported','Tweets from author already exist')
 
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
         twitter = Meteor.user().services.twitter
@@ -78,15 +80,30 @@ Meteor.methods
             for tweet in data
                 id = Docs.insert
                     body: tweet.text
-                    screen_name: screen_name
+                    username: screen_name
+                Docs.update id,
+                    $addToSet: tags: 'tweet'
                 Meteor.call 'analyze', id, tweet.text
             ))
 
         if screen_name is Meteor.user().profile.name
             Meteor.users.update Meteor.userId,
-                $set: hasReceivedTweets: true
+                $set: 'profile.hasReceivedTweets': true
+        importCount = Docs.find( username: screen_name ).count()
+        return importCount
 
 
+    delete_tweets: ->
+        result = Docs.remove
+            $and: [
+                { username: Meteor.user().profile.name }
+                { tags: $in: ['tweet'] }
+            ]
+
+        Meteor.users.update Meteor.userId(),
+            $set: 'profile.hasReceivedTweets': false
+
+        return result
 
 
 
@@ -129,3 +146,17 @@ Meteor.methods
             {multi: true})
         console.log result
         return result
+
+    findDocsWithTag: (tagSelector)->
+        match = {}
+        match.authorId = Meteor.userId()
+        match.tags = $in: [tagSelector]
+
+        result = {}
+        result.count = Docs.find(match).count()
+        result.firstDoc = Docs.findOne(match)
+        return result
+
+    deleteQueryDocs: (query)->
+        Docs.remove
+            tags: $in: [query]

@@ -10,5 +10,5 @@ Docs.before.insert (userId, doc)->
     doc.down_voters = []
     doc.up_voters = []
     doc.personal = false
-    doc.username = Meteor.user().profile.name
+    # doc.username = Meteor.user().profile.name
     return

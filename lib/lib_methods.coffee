@@ -49,4 +49,3 @@ Meteor.methods
                 name: fieldName
             }, $set: 'fieldsObject.$.tag': value
 
-

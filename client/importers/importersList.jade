@@ -7,4 +7,10 @@ template(name='importerList')
             li.collection-header: h5 My Importers
             each importers
                 a.collection-item.editImporter(href='#') #{this.name}
+        .card
+            .card-content
+                .card-title Import Tweets
+                .input-field
+                    label.active(for='importTweets') Search Twitter User
+                    input#importTweets(type=text)
 
