@@ -2,12 +2,25 @@
     .card
         .card-content
             .card-title Profile
-            if hasReceivedTweets
-                a.btn.delete_tweets
-                    i.material-icons.left delete
-                    |Delete My Tweets
-            else
-                a.btn.get_tweets
-                    i.material-icons.left play_for_work
-                    |Get My Tweets
-            div Tweet Doc Count: #{tweetDocCount}
+            // if hasReceivedTweets
+            //     a.btn.delete_tweets
+            //         i.material-icons.left delete
+            //         |Delete My Tweets
+            // else
+            //     a.btn.get_tweets
+            //         i.material-icons.left play_for_work
+            //         |Get My Tweets
+            // div Tweet Doc Count: #{tweetDocCount}
+            #generatePersonalCloud.btn (re)Generate Personal Cloud
+            if userCloud
+                .row.section
+                    each userCloud
+                        .chip
+                            |#{this.name}
+                            small #{this.count}
+            strong Top Matched Users
+            .row
+                // #calculateUserMatch.btn Calculate User Matches
+                ul.collection
+                    each usernames
+                        a.collection-item.calculateUserMatch #{this.text}

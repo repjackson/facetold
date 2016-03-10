@@ -16,6 +16,7 @@ template(name='importerView')
                                 input(type='file' name='uploadCSV' accept='.csv')
                             .file-path-wrapper
                                 input.file-path.validate(type='text' value=fileName)
+                            p #{downloadUrl}
                     else
                         p
                             i.fa.fa-spin.fa-refresh
@@ -44,13 +45,13 @@ template(name='importerView')
                                         td
                                             input.toggleTag(type="checkbox" id="#{this.name}" checked="#{this.tag}")
                                             label(for="#{this.name}") Tag
-                    .row
-                        .btn#runTest Test Importer
-                    if testRun
+                    // .row
+                    //     .btn#testImporter Test Importer
+                    if testDoc
                         .card-panel
                             .card-title Test Doc
                             .card-content
-                                each testRunTags
+                                each testDoc.tags
                                     .chip= this
                 .card-action
                     .btn#saveImporter

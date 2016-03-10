@@ -15,7 +15,7 @@ template(name='nav')
                     li(class="{{isActivePath '/profile'}}")
                         a(href='/profile') Profile
                 li
-                    +loginButtons
+                    +loginButtons align='right'
             ul#nav-mobile.side-nav
                 if currentUser
                     li(class="{{isActivePath '/mine'}}")

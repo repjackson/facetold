@@ -7,3 +7,6 @@ Meteor.startup ->
 Template.progressBar.helpers
     progress: ->
         Math.round @uploader.progress() * 100
+
+Accounts.ui.config
+    passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'

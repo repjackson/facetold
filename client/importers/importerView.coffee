@@ -58,12 +58,11 @@ Template.importerView.events
             Importers.remove @_id
             FlowRouter.go '/importers'
 
-    'click #testRun': ->
-        if confirm "Test this Importer?"
-            Meteor.call 'testImporter', FlowRouter.getParam 'iId', (err, res)->
-                if err then console.log error.reason
-                else
-                    console.log res
+    'click #testImporter': ->
+        Meteor.call 'testImporter', FlowRouter.getParam 'iId', (err, res)->
+            if err then console.log error.reason
+            else
+                console.log res
 
     'click .toggleTag': (e,t)->
         id = FlowRouter.getParam('iId')
@@ -74,7 +73,7 @@ Template.importerView.events
             if err then console.log error.reason
             else
                 Bert.alert 'Setting Saved', 'success', 'growl-top-right'
-
+                Meteor.call 'testImporter', id, ->
 
     'change .typeSelector': (e,t)->
         id = FlowRouter.getParam('iId')
@@ -98,6 +97,7 @@ Template.importerView.events
                 alert error
             else
                 Meteor.users.update Meteor.userId(), $push: 'profile.files': downloadUrl
+                Importers.update id, $set: downloadUrl: downloadUrl
             return
 
         name = event.target.files[0].name

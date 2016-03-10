@@ -4,7 +4,10 @@
     +markdown
         #{body}
 .card-action
-    .row by #{username} #{when}
+    .row by
+        // .chip.authorFilterButton(class=authorButtonClass) #{username}
+        |#{username}
+        |#{when}
     .row
         if isAuthor
             // .btn-floating.deletePost
@@ -19,4 +22,5 @@
                     i.material-icons thumb_up
                 a.vote_down.btn-floating.blue(class=vote_down_button_class)
                     i.material-icons thumb_down
-    .row Points: #{points}
+    if points
+        .row Points: #{points}

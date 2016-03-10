@@ -8,16 +8,28 @@ template(name='home')
             .input-field
                 input#search(type='text' autofocus='')
                 label.active(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
-            if selected_tags
-                #clear_tags.btn-floating.grey
-                    i.material-icons close
-            each selected_tags
-                .unselect_tag.grey.chip
-                    |#{this}
-            each global_tags
-                .select_tag.chip
-                    |#{this.name}
-                    small #{this.count}
+            .row Tags
+                if selected_tags
+                    #clear_tags.btn-floating.grey
+                        i.material-icons close
+                each selected_tags
+                    .unselect_tag.grey.chip
+                        |#{this}
+                each global_tags
+                    .select_tag.chip
+                        |#{this.name}
+                        small #{this.count}
+            .row Authors
+                if selected_usernames.length
+                    #clear_usernames.btn-floating.grey
+                        i.material-icons close
+                each selected_usernames
+                    .unselect_username.grey.chip
+                        |#{this}
+                each global_usernames
+                    .select_username.chip
+                        |#{this.text}
+                        small #{this.count}
     .row
         each docs
             .col.s12.m6.l4

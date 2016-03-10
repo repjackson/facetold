@@ -7,6 +7,7 @@ Meteor.methods
         uid = Meteor.userId()
         Docs.insert
             authorId: uid
+            username: Meteor.user().profile.name
 
     createImporter: ->
         id = Importers.insert
@@ -24,7 +25,14 @@ Meteor.methods
 
     testImporter: (iId)->
         importer = Importers.findOne iId
-
+        testDoc = {}
+        testDoc.tags = []
+        for field in importer.fieldsObject
+            if field.tag is true
+                testDoc.tags.push field.firstValue
+        Importers.update iId,
+            $set: testDoc: testDoc
+        console.log importer
 
     runImporter: (id)->
         importer = Importers.findOne id
@@ -105,8 +113,6 @@ Meteor.methods
 
         return result
 
-
-
     analyze: (id, auto)->
         doc = Docs.findOne id
         encoded = encodeURIComponent(doc.body)
@@ -131,7 +137,6 @@ Meteor.methods
                             keyword_array: $each: loweredKeywords
                             tags: $each: loweredKeywords
 
-
     makeSuggestionsTagsIndividual: (id)->
         doc = Docs.findOne id
         Docs.update id,
@@ -155,8 +160,50 @@ Meteor.methods
         result = {}
         result.count = Docs.find(match).count()
         result.firstDoc = Docs.findOne(match)
+
+        cloud = Docs.aggregate [
+            { $match: match }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $match: _id: $nin: selected_tags }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 50 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+
+        result.cloud = cloud
         return result
 
     deleteQueryDocs: (query)->
         Docs.remove
             tags: $in: [query]
+
+    generatePersonalCloud: (uid)->
+        cloud = Docs.aggregate [
+            { $match: authorId: uid }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 50 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+
+        Meteor.users.update uid,
+            $set:
+                cloud: cloud
+
+
+    calculateUserMatch: (username)->
+        myCloud = Meteor.user().cloud
+        otherGuy = Meteor.users.findOne "profile.name": username
+        console.log username
+        console.log otherGuy
+        Meteor.call 'generatePersonalCloud', otherGuy._id
+        otherCloud = otherGuy.cloud
+
+        myLinearCloud = _.pluck(myCloud, 'name')
+        otherLinearCloud = _.pluck(otherCloud, 'name')
+        intersection = _.intersection(myLinearCloud, otherLinearCloud)
+        console.log intersection

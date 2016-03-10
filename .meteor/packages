@@ -42,3 +42,5 @@ edgee:slingshot
 service-configuration
 mrt:twit
 accounts-ui
+accounts-password
+accounts-google
