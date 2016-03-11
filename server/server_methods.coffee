@@ -57,24 +57,31 @@ Meteor.methods
         #             Meteor.call 'analyze', id, true
 
         importer = Importers.findOne id
+        console.log 'before http get'
         HTTP.get importer.downloadUrl, (err, result)->
             if err then console.error err
             else
+                console.log 'success http get'
                 csvToParse = result.content
                 # console.log csvToParse
+                secondIteration = false
                 Papa.parse csvToParse,
                     header: true
                     complete: (results, file) ->
-                        slicedResults = results.data[0..5]
-                        # console.log slicedResults
-                        for row in slicedResults
-                            tagsToInsert = []
-                            tagsToInsert.push importer.importerTag
-                            for name in importer.pluckedNames
-                                tagsToInsert.push row[name]
-                            console.log tagsToInsert
-                            Docs.insert
-                                tags: tagsToInsert
+                        console.log secondIteration
+                        if secondIteration then return
+                        else
+                            slicedResults = results.data[0..5]
+                            console.log slicedResults.length
+                            for row in slicedResults
+                                tagsToInsert = []
+                                tagsToInsert.push importer.importerTag
+                                for name in importer.pluckedNames
+                                    tagsToInsert.push row[name]
+                                Docs.insert
+                                    tags: tagsToInsert
+                            secondIteration = true
+
                         # console.log results.data[0]
                         # fieldNames = results.meta.fields
                         # firstValues = _.values(results.data[0])

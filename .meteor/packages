@@ -28,7 +28,6 @@ kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
 jeremy:geocomplete
-yasinuslu:json-view
 materialize:materialize
 mquandalle:stylus
 harrison:papa-parse
