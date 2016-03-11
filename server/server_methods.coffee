@@ -57,22 +57,18 @@ Meteor.methods
         #             Meteor.call 'analyze', id, true
 
         importer = Importers.findOne id
-        console.log 'before http get'
         HTTP.get importer.downloadUrl, (err, result)->
             if err then console.error err
             else
-                console.log 'success http get'
                 csvToParse = result.content
                 # console.log csvToParse
                 secondIteration = false
                 Papa.parse csvToParse,
                     header: true
                     complete: (results, file) ->
-                        console.log secondIteration
                         if secondIteration then return
                         else
                             slicedResults = results.data[0..5]
-                            console.log slicedResults.length
                             for row in slicedResults
                                 tagsToInsert = []
                                 tagsToInsert.push importer.importerTag
@@ -201,8 +197,9 @@ Meteor.methods
         return result
 
     findDocsWithTag: (tagSelector)->
+        console.log tagSelector
         match = {}
-        match.authorId = Meteor.userId()
+        # match.authorId = Meteor.userId()
         match.tags = $in: [tagSelector]
 
         result = {}
@@ -214,7 +211,6 @@ Meteor.methods
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
-            { $match: _id: $nin: selected_tags }
             { $sort: count: -1, _id: 1 }
             { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 }

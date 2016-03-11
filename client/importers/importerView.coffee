@@ -1,4 +1,6 @@
 Template.importerView.onCreated ->
+    Session.setDefault 'resultCount', null
+
     self = @
     self.autorun ->
         iId = FlowRouter.getParam('iId')
@@ -122,3 +124,36 @@ Template.importerView.events
                     else
                         template.uploading.set false
                         Bert.alert 'Upload complete', 'success', 'growl-top-right'
+
+    'click #cleanNonStringTags': -> Meteor.call 'cleanNonStringTags', (err, response)->
+        alert "Cleaned #{response} docs"
+
+    'click #alchemize': -> Meteor.call 'alchemize', (err, response)->
+        alert "Cleaned #{response} docs"
+
+    'click #findDocsWithTag': (e,t)->
+        Meteor.call 'findDocsWithTag', @importerTag, (err,res)->
+            id = FlowRouter.getParam('iId')
+            console.log res
+            Importers.update id,
+                $set:
+                    docsWithImporterTagCount: res.count
+                    firstDocFromImporter: res.firstDoc
+                    docTagCloudFromImporter: res.cloud
+            Session.set 'resultCount', res.count
+
+    'keyup #tagSelector': (e)->
+        switch e.which
+            when 13
+                query = e.target.value
+                Session.set 'query', query
+                Meteor.call 'findDocsWithTag', query, (err,res)->
+                    console.log res
+                    Session.set 'resultCount', res.count
+                    Blaze.renderWithData(Template.view, res.firstDoc, $('.firstDocFromQuery')[0])
+
+    'click #deleteQueryDocs': ->
+        if confirm 'Delete all docs matching query?'
+            Meteor.call 'deleteQueryDocs', @importerTag, (err,res)->
+                console.log res
+                Bert.alert "Deleted #{res} docs", 'success', 'growl-top-right'

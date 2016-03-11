@@ -27,6 +27,8 @@ Template.edit.onRendered ->
                 year = moment(val).format('YYYY')
 
                 datearray = [hour, minute, ampm, weekday, month, date, year]
+                datearray = _.map(datearray, (el)-> el.toString().toLowerCase())
+                # datearray = _.each(datearray, (el)-> console.log(typeof el))
 
                 docid = FlowRouter.getParam 'docId'
 

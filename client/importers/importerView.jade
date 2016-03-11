@@ -60,3 +60,30 @@ template(name='importerView')
                         |Save
                     .btn-floating#deleteImporter
                         i.material-icons delete
+            // Editor
+            // .card
+            //     .card-content
+            //         #cleanNonStringTags.btn Clean Non String Tags From My Docs
+            //         #alchemize.btn Autotag all my docs
+            .card
+                .card-content
+                    .card-title Bulk Editor
+                    p Tag Selector: #{importerTag}
+                    // .field-input.col.s6
+                    //     label.active(for='tagSelector' va)  Tag Selector
+                    //     input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
+                    #findDocsWithTag.btn Find Docs with Tag
+                    if $.Session.get 'resultCount'
+                        .card
+                            .card-content
+                                |Result Count: {{$.Session.get 'resultCount'}}
+                                .row
+                                    if docTagCloudFromImporter
+                                        each docTagCloudFromImporter
+                                            .chip
+                                                span #{this.name}
+                                                small #{this.count}
+                                .row
+                                    #deleteQueryDocs.btn Delete Query Docs
+                    // .row
+                    //     .firstDocFromQuery First Result From Query
