@@ -4,7 +4,7 @@
 @Usernames = new Meteor.Collection 'usernames'
 
 Docs.before.insert (userId, doc)->
-    doc.tags = []
+    # doc.tags = []
     doc.timestamp = Date.now()
     doc.authorId = Meteor.userId()
     doc.points = 0

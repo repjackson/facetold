@@ -35,14 +35,16 @@ Template.importerView.events
                     , (err, res)->
                         Bert.alert 'Importer Name Saved', 'success', 'growl-top-right'
 
-    'keyup #importTag': (e)->
+    'keyup #importerTag': (e)->
         switch e.which
             when 13
                 id = FlowRouter.getParam('iId')
                 Importers.update id,
-                    $set: importTag: e.target.value
+                    $set: importerTag: e.target.value
                     , (err, res)->
                         Bert.alert 'Importer Tag Saved', 'success', 'growl-top-right'
+                        Meteor.call 'testImporter', id, (err, res)->
+
 
 
     'click #saveImporter': ->
@@ -51,7 +53,6 @@ Template.importerView.events
 
     'click #runImporter': ->
         Meteor.call 'runImporter', @_id, (err, response)->
-            Session.set 'jsonResponse', true
 
     'click #deleteImporter': ->
         if confirm "Delete this Importer?"
@@ -68,7 +69,6 @@ Template.importerView.events
         id = FlowRouter.getParam('iId')
         fieldName = e.currentTarget.id
         value = e.currentTarget.checked
-        console.log fieldName
         Meteor.call 'toggleFieldTag', id, fieldName, value, (err, res)->
             if err then console.log error.reason
             else

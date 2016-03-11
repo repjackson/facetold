@@ -25,32 +25,73 @@ Meteor.methods
 
     testImporter: (iId)->
         importer = Importers.findOne iId
+        pluckedNames = []
         testDoc = {}
         testDoc.tags = []
+        testDoc.tags.push importer.importerTag
         for field in importer.fieldsObject
             if field.tag is true
                 testDoc.tags.push field.firstValue
+                pluckedNames.push field.name
         Importers.update iId,
-            $set: testDoc: testDoc
-        console.log importer
+            $set:
+                testDoc: testDoc
+                pluckedNames: pluckedNames
 
     runImporter: (id)->
+        # importer = Importers.findOne id
+        # HTTP.call importer.method, importer.url, {}, (err, result)->
+        #     if err then console.error err
+        #     else
+        #         parsedContent = JSON.parse result.content
+
+        #         features = parsedContent.features
+        #         # console.log features[0].properties
+        #         newDocs = (feature.properties for feature in features)
+        #         for doc in newDocs
+        #             id = Docs.insert
+        #                 body: doc.CASE_DESCR
+        #                 authorId: Meteor.userId()
+        #                 timestamp: Date.now()
+        #                 tags: ['boulder permits', doc.STAFF_EMAI?.toLowerCase(), doc.STAFF_PHON?.toLowerCase(), doc.STAFF_CONT?.toLowerCase(), doc.CASE_NUMBE?.toLowerCase(), doc.CASE_TYPE?.toLowerCase(), doc.APPLICANT_?.toLowerCase(), doc.CASE_ADDRE?.toLowerCase()]
+        #             Meteor.call 'analyze', id, true
+
         importer = Importers.findOne id
-        HTTP.call importer.method, importer.url, {}, (err, result)->
+        HTTP.get importer.downloadUrl, (err, result)->
             if err then console.error err
             else
-                parsedContent = JSON.parse result.content
-
-                features = parsedContent.features
-                # console.log features[0].properties
-                newDocs = (feature.properties for feature in features)
-                for doc in newDocs
-                    id = Docs.insert
-                        body: doc.CASE_DESCR
-                        authorId: Meteor.userId()
-                        timestamp: Date.now()
-                        tags: ['boulder permits', doc.STAFF_EMAI?.toLowerCase(), doc.STAFF_PHON?.toLowerCase(), doc.STAFF_CONT?.toLowerCase(), doc.CASE_NUMBE?.toLowerCase(), doc.CASE_TYPE?.toLowerCase(), doc.APPLICANT_?.toLowerCase(), doc.CASE_ADDRE?.toLowerCase()]
-                    Meteor.call 'analyze', id, true
+                csvToParse = result.content
+                # console.log csvToParse
+                Papa.parse csvToParse,
+                    header: true
+                    complete: (results, file) ->
+                        slicedResults = results.data[0..5]
+                        # console.log slicedResults
+                        for row in slicedResults
+                            tagsToInsert = []
+                            tagsToInsert.push importer.importerTag
+                            for name in importer.pluckedNames
+                                tagsToInsert.push row[name]
+                            console.log tagsToInsert
+                            Docs.insert
+                                tags: tagsToInsert
+                        # console.log results.data[0]
+                        # fieldNames = results.meta.fields
+                        # firstValues = _.values(results.data[0])
+                        # fields = _.zip(fieldNames, firstValues)
+                        # fieldsObject = _.map(fields, (field)->
+                        #     name: field[0]
+                        #     firstValue: field[1]
+                        #     )
+                        # Importers.update id,
+                        #     $set:
+                        #         fileName: name
+                        #         fieldsObject: fieldsObject
+                        # Meteor.call 'parseUpload', results.data, (err, res) ->
+                        #     if err then console.log error.reason
+                        #     else
+                        #         template.uploading.set false
+                        #         Bert.alert 'Upload complete', 'success', 'growl-top-right'
 
     cleanNonStringTags: ->
         uId = Meteor.userId()
