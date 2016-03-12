@@ -150,7 +150,18 @@ Template.importerView.events
                 Meteor.call 'findDocsWithTag', query, (err,res)->
                     console.log res
                     Session.set 'resultCount', res.count
-                    Blaze.renderWithData(Template.view, res.firstDoc, $('.firstDocFromQuery')[0])
+
+    'keyup #importAmount': (e)->
+        switch e.which
+            when 13
+                amount = e.target.value
+                id = FlowRouter.getParam('iId')
+                Importers.update id,
+                    $set: importAmount: amount
+
+                Meteor.call 'findDocsWithTag', query, (err,res)->
+                    console.log res
+                    Session.set 'resultCount', res.count
 
     'click #deleteQueryDocs': ->
         if confirm 'Delete all docs matching query?'

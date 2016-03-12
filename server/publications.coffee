@@ -13,12 +13,12 @@ Meteor.publish 'me', ->
         fields:
             cloud: 1
 
-Meteor.publish 'tweetDocs', ->
-    Docs.find
-        $and: [
-            { authorId: @userId }
-            { tags: $in: ['tweet'] }
-        ]
+# Meteor.publish 'tweetDocs', ->
+#     Docs.find
+#         $and: [
+#             { authorId: @userId }
+#             { tags: $in: ['tweet'] }
+#         ]
 
 Meteor.publish 'usernames', (selected_keywords = [], selected_usernames = [])->
     self = @

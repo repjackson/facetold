@@ -5,7 +5,7 @@
 
 Docs.before.insert (userId, doc)->
     # doc.tags = []
-    doc.tags = _.map(doc.tags, (tag)-> tag.toLowerCase())
+    # doc.tags = _.map(doc.tags, (tag)-> tag.toString().toLowerCase())
     doc.timestamp = Date.now()
     doc.authorId = Meteor.userId()
     doc.points = 0

@@ -73,6 +73,9 @@ template(name='importerView')
                     //     label.active(for='tagSelector' va)  Tag Selector
                     //     input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
                     #findDocsWithTag.btn Find Docs with Tag
+                    .input-field
+                        label.active(for='importAmount') Import Amount
+                        input#importAmount(type='number' value=importAmount)
                     if $.Session.get 'resultCount'
                         .card
                             .card-content

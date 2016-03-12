@@ -38,7 +38,7 @@ Meteor.methods
                 testDoc: testDoc
                 pluckedNames: pluckedNames
 
-    runImporter: (id)->
+    runImporter: (id, amount=1000)->
         # importer = Importers.findOne id
         # HTTP.call importer.method, importer.url, {}, (err, result)->
         #     if err then console.error err
@@ -68,15 +68,35 @@ Meteor.methods
                     complete: (results, file) ->
                         if secondIteration then return
                         else
-                            slicedResults = results.data[0..5]
-                            for row in slicedResults
-                                tagsToInsert = []
-                                tagsToInsert.push importer.importerTag
-                                for name in importer.pluckedNames
-                                    tagsToInsert.push row[name]
+                            # slicedResults = results.data[0..amount]
+                            slicedResults = results.data[0..2]
+                            fieldNames = _.compact results.meta.fields
+                            resultData = results.data
+                            for row in resultData
+                                for name in fieldNames
+                                    fieldTagsToInsert = []
+                                    fieldTagsToInsert.push importer.importerTag
+                                    fieldTagsToInsert.push row['']
+                                    fieldTagsToInsert.push name
+                                    fieldTagsToInsert.push row[name]
+                                    console.log fieldTagsToInsert
+                                    Docs.insert
+                                        tags: fieldTagsToInsert
+                                rowTagsToInsert = []
+                                rowTagsToInsert.push importer.importerTag
+                                rowTagsToInsert.push row['']
+                                for name in fieldNames
+                                    # rowTagsToInsert.push name
+                                    rowTagsToInsert.push row[name]
+                                console.log rowTagsToInsert
                                 Docs.insert
-                                    tags: tagsToInsert
-                            secondIteration = true
+                                    tags: rowTagsToInsert
+
+
+
+                            #     for name in importer.pluckedNames
+                            #         tagsToInsert.push row[name]
+                            # secondIteration = true
 
                         # console.log results.data[0]
                         # fieldNames = results.meta.fields
@@ -197,7 +217,6 @@ Meteor.methods
         return result
 
     findDocsWithTag: (tagSelector)->
-        console.log tagSelector
         match = {}
         # match.authorId = Meteor.userId()
         match.tags = $in: [tagSelector]

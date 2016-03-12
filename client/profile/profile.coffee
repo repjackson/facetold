@@ -1,5 +1,5 @@
 Template.profile.onCreated ->
-    @autorun -> Meteor.subscribe 'tweetDocs'
+    # @autorun -> Meteor.subscribe 'tweetDocs'
     @autorun -> Meteor.subscribe 'me'
     @autorun -> Meteor.subscribe 'usernames'
 
