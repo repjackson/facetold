@@ -35,11 +35,9 @@ okgrow:analytics
 reactive-var
 matb33:collection-hooks
 themeteorchef:bert
-accounts-twitter
 zimme:active-route
 edgee:slingshot
 service-configuration
 mrt:twit
 accounts-ui
 accounts-password
-accounts-google
