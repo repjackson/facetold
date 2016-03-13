@@ -131,17 +131,17 @@ Meteor.methods
             return false
         existingDoc = Docs.findOne username: screen_name
         if existingDoc
-              throw new Meteor.Error('already-imported','Tweets from author already exist')
+              throw new Meteor.Error('already-imported',"Tweets from #{screen_name} already exist")
 
         twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
-        twitter = Meteor.user().services.twitter
+        twitterConf = Meteor.settings.
 
 
         Twit = new TwitMaker(
-            consumer_key: twitterConf.consumerKey
-            consumer_secret: twitterConf.secret
-            access_token: twitter.accessToken
-            access_token_secret: twitter.accessTokenSecret
+            consumer_key: Meteor.settings.twitterConsumerKey
+            consumer_secret: Meteor.settings.twitterSecret
+            access_token: Meteor.settings.twitterAccessToken
+            access_token_secret: Meteor.settings.twitterAccessTokenSecret
             app_only_auth:true)
 
         Twit.get 'statuses/user_timeline', {

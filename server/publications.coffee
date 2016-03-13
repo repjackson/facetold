@@ -20,30 +20,6 @@ Meteor.publish 'me', ->
 #             { tags: $in: ['tweet'] }
 #         ]
 
-Meteor.publish 'usernames', (selected_keywords = [], selected_usernames = [])->
-    self = @
-
-    match = {}
-    if selected_keywords.length > 0 then match.keyword_array = $all: selected_keywords
-    if selected_usernames.length > 0 then match.username = $in: selected_usernames
-
-    cloud = Docs.aggregate [
-        { $match: match }
-        { $project: username: 1 }
-        { $group: _id: '$username', count: $sum: 1 }
-        { $match: _id: $nin: selected_usernames }
-        { $sort: count: -1, _id: 1 }
-        { $limit: 20 }
-        { $project: _id: 0, text: '$_id', count: 1 }
-        ]
-
-    cloud.forEach (username) ->
-        self.added 'usernames', Random.id(),
-            text: username.text
-            count: username.count
-    self.ready()
-
-
 
 Meteor.publish 'docs', (selected_tags, viewMode, selected_usernames)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
