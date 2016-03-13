@@ -7,7 +7,6 @@ Template.view.helpers
     vote_down_button_class: -> if Meteor.userId() in @down_voters then 'darken-3' else 'lighten-3'
     when: -> moment(@timestamp).fromNow()
     doc_tag_class: -> if @valueOf() in selected_tags.array() then 'grey' else ''
-    authorButtonClass: -> if @username in selected_usernames.array() then 'active' else ''
 
 
 Template.view.events
@@ -30,9 +29,3 @@ Template.view.events
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
 
     'click .doc_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove @valueOf() else selected_tags.push @valueOf()
-
-    'click .authorFilterButton': (event)->
-        if @username in selected_usernames.array() then selected_usernames.remove @username else selected_usernames.push @username
-        console.log @
-        console.log @username
-        selected_usernames.push @username.valueOf()

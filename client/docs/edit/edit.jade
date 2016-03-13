@@ -11,15 +11,19 @@ template(name='edit')
                                     |#{this}
                     .field-input.col.s6
                         i.plus.icon
+                        label.active(for='addTag')  Manually add tag
                         input#addTag(type=text autofocus='')
-                        label(for='addTag')  Manually add tag
                     // .field-input
                     //     input#place(type='text' placeholder='Add Address')
                     .row
                         .field-input.col.s6
+                            label.active(for='datetimepicker') Add Date/Time
                             input#datetimepicker(type="text" value=dateTime)
-                            label(for='datetimepicker') Add Date/Time
                         .btn.clearDT Clear Date/Time
+                    .row
+                        .field-input
+                            label.active(for='url') Get URL Text
+                            input#url(type="text" value=url)
                     if unpickedKeywords.length
                         .card
                             .card-content

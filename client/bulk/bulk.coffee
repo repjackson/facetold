@@ -13,7 +13,6 @@ Template.bulk.events
         Meteor.call 'findDocsWithTag', tagSelector, (err,res)->
             console.log res
             Session.set 'resultCount', res.count
-            # Blaze.renderWithData(Template.view, res.firstDoc, $('.firstDocFromQuery')[0])
 
     'keyup #tagSelector': (e)->
         switch e.which
@@ -23,7 +22,6 @@ Template.bulk.events
                 Meteor.call 'findDocsWithTag', query, (err,res)->
                     console.log res
                     Session.set 'resultCount', res.count
-                    Blaze.renderWithData(Template.view, res.firstDoc, $('.firstDocFromQuery')[0])
 
     'click #deleteQueryDocs': ->
         if confirm 'Delete all docs matching query?'

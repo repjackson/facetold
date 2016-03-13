@@ -1,14 +1,11 @@
 Template.profile.onCreated ->
-    # @autorun -> Meteor.subscribe 'tweetDocs'
     @autorun -> Meteor.subscribe 'me'
-    @autorun -> Meteor.subscribe 'usernames'
 
 
 Template.profile.helpers
     viewMyTweetsClass: -> if Meteor.user().profile.name in selected_screen_names.array() then 'active' else ''
     hasReceivedTweets: -> Meteor.user().profile.hasReceivedTweets
     userCloud: -> if Meteor.user().cloud then Meteor.user().cloud
-    usernames: -> Usernames.find()
 
 
 Template.profile.events

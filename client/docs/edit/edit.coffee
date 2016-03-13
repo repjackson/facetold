@@ -87,6 +87,16 @@ Template.edit.events
                     FlowRouter.go '/'
                     selectedTags = thisDocTags
 
+    'keyup #url': (e,t)->
+        docId = FlowRouter.getParam('docId')
+        url = $('#url').val()
+        switch e.which
+            when 13
+                if url.length > 0
+                    Docs.update docId,
+                        $set: url: url
+                    Meteor.call 'fetchUrlTags', docId, url
+
     'click .clearDT': ->
         tagsWithoutDate = _.difference(@tags, @datearray)
         Docs.update FlowRouter.getParam('docId'),

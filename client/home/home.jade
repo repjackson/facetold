@@ -8,7 +8,7 @@ template(name='home')
             .input-field
                 input#search(type='text' autofocus='')
                 label.active(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
-            .row Tags
+            .row
                 if selected_tags
                     #clear_tags.btn-floating.grey
                         i.material-icons close
@@ -19,19 +19,7 @@ template(name='home')
                     .select_tag.chip
                         |#{this.name}
                         small #{this.count}
-            .row Authors
-                if selected_usernames.length
-                    #clear_usernames.btn-floating.grey
-                        i.material-icons close
-                each selected_usernames
-                    .unselect_username.grey.chip
-                        |#{this}
-                each global_usernames
-                    .select_username.chip
-                        |#{this.text}
-                        small #{this.count}
-    .row
+    .container
         each docs
-            .col.s12.m6.l4
-                .card.grey.lighten-3
-                    +view
+            .card.grey.lighten-3
+                +view

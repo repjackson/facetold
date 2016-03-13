@@ -1,7 +1,6 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
 @Importers = new Meteor.Collection 'importers'
-@Usernames = new Meteor.Collection 'usernames'
 
 Docs.before.insert (userId, doc)->
     # doc.tags = []
@@ -12,5 +11,5 @@ Docs.before.insert (userId, doc)->
     doc.down_voters = []
     doc.up_voters = []
     doc.personal = false
-    # doc.username = Meteor.user().profile.name
+    doc.username = Meteor.user().username
     return

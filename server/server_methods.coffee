@@ -4,10 +4,9 @@ Meteor.methods
             # console.log item
 
     createDoc: ->
-        uid = Meteor.userId()
         Docs.insert
-            authorId: uid
-            username: Meteor.user().profile.name
+            authorId: Meteor.userId()
+            username: Meteor.user().username
 
     createImporter: ->
         id = Importers.insert
@@ -129,13 +128,9 @@ Meteor.methods
         if not screen_name
             console.error 'No screen name provided'
             return false
-        existingDoc = Docs.findOne username: screen_name
+        existingDoc = Docs.findOne tags: $all: ['tweet', screen_name]
         if existingDoc
               throw new Meteor.Error('already-imported',"Tweets from #{screen_name} already exist")
-
-        twitterConf = ServiceConfiguration.configurations.findOne(service: 'twitter')
-        twitterConf = Meteor.settings.
-
 
         Twit = new TwitMaker(
             consumer_key: Meteor.settings.twitterConsumerKey
@@ -152,30 +147,12 @@ Meteor.methods
             for tweet in data
                 id = Docs.insert
                     body: tweet.text
-                    username: screen_name
                 Docs.update id,
-                    $addToSet: tags: 'tweet'
+                    $addToSet: tags: $each: ['tweet', screen_name]
                 Meteor.call 'analyze', id, tweet.text
             ))
 
-        if screen_name is Meteor.user().profile.name
-            Meteor.users.update Meteor.userId,
-                $set: 'profile.hasReceivedTweets': true
-        importCount = Docs.find( username: screen_name ).count()
-        return importCount
 
-
-    delete_tweets: ->
-        result = Docs.remove
-            $and: [
-                { username: Meteor.user().profile.name }
-                { tags: $in: ['tweet'] }
-            ]
-
-        Meteor.users.update Meteor.userId(),
-            $set: 'profile.hasReceivedTweets': false
-
-        return result
 
     analyze: (id, auto)->
         doc = Docs.findOne id
@@ -200,6 +177,34 @@ Meteor.methods
                         $addToSet:
                             keyword_array: $each: loweredKeywords
                             tags: $each: loweredKeywords
+
+
+    fetchUrlTags: (docId, url)->
+        doc = Docs.findOne docId
+        HTTP.call 'POST', 'http://gateway-a.watsonplatform.net/calls/url/URLGetRankedKeywords', { params:
+            apikey: '6656fe7c66295e0a67d85c211066cf31b0a3d0c8'
+            url: url
+            keywordExtractMode: 'normal'
+            outputMode: 'json'
+            showSourceText: 1
+            sourceText: 'cleaned_or_raw'
+            extract: 'keyword' }
+            , (err, result)->
+                if err then console.log err
+                else
+                    keyword_array = _.pluck(result.data.keywords, 'text')
+                    # concept_array = _.pluck(result.data.concepts, 'text')
+                    loweredKeywords = _.map(keyword_array, (keyword)->
+                        keyword.toLowerCase()
+                        )
+
+                    Docs.update docId,
+                        $set:
+                            body: result.data.text
+                        $addToSet:
+                            keyword_array: $each: loweredKeywords
+                            tags: $each: loweredKeywords
+
 
     makeSuggestionsTagsIndividual: (id)->
         doc = Docs.findOne id

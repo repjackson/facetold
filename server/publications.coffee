@@ -21,27 +21,25 @@ Meteor.publish 'me', ->
 #         ]
 
 
-Meteor.publish 'docs', (selected_tags, viewMode, selected_usernames)->
+Meteor.publish 'docs', (selected_tags, viewMode)->
     Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
 
     match = {}
     if not @userId? then match.personal = false
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     if viewMode is 'mine' then match.authorId = @userId
-    if selected_usernames.length > 0 then match.username = $in: selected_usernames
 
     Docs.find match,
-        limit: 10
+        limit: 5
         sort: timestamp: -1
 
-Meteor.publish 'tags', (selected_tags, viewMode,selected_usernames)->
+Meteor.publish 'tags', (selected_tags, viewMode)->
     self = @
 
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
     if viewMode is 'mine' then match.authorId = @userId
     if not @userId? then match.personal = false
-    if selected_usernames.length > 0 then match.username = $in: selected_usernames
 
     cloud = Docs.aggregate [
         { $match: match }

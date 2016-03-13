@@ -1,21 +1,18 @@
 .card-content
     each tags
         .chip.doc_tag(class=doc_tag_class)= this
-    +markdown
-        #{body}
+    .section
+        +markdown
+            #{body}
 .card-action
-    .row by
-        // .chip.authorFilterButton(class=authorButtonClass) #{username}
-        |#{username}
-        |#{when}
     .row
         if isAuthor
             // .btn-floating.deletePost
             //     i.material-icons delete
-            .btn-floating.editDoc
+            a.btn-floating.editDoc
                 i.material-icons settings
         if currentUser
-            .btn-floating.cloneDoc
+            a.btn-floating.cloneDoc
                 i.material-icons call_split
             unless isAuthor
                 a.vote_up.btn-floating.blue(class=vote_up_button_class)
@@ -24,3 +21,4 @@
                     i.material-icons thumb_down
         if points
             |Points: #{points}
+        |by #{username} #{when}
