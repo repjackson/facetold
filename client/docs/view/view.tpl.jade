@@ -1,13 +1,12 @@
-.panel-body
-    each tags
-        .btn.doc_tag(class=doc_tag_class)= this
-    .section
+.panel.panel-default
+    .panel-heading
+        each tags
+            .btn.doc_tag(class=doc_tag_class)= this
+    .panel-body
         +markdown
             #{body}
-    .row
+    .panel-footer
         if isAuthor
-            // .btn-floating.deletePost
-            //     i.material-icons delete
             a.btn.btn-info.editDoc Edit
         if currentUser
             a.btn.btn-info.cloneDoc Clone

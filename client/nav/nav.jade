@@ -1,36 +1,5 @@
 template(name='nav')
-    // nav.black.darken-4(role='navigation')
-    //     .nav-wrapper.container
-    //         a.brand-logo(href='/' class="{{isActivePath '/'}}") Facet
-    //         ul.right.hide-on-med-and-down
-    //             li
-    //                 small #{user_counter} users #{doc_counter} docs
-    //             if currentUser
-    //                 li(class="{{isActivePath '/mine'}}")
-    //                     a(href='/mine') My Docs
-    //                 li(class="{{isActivePath '/bulk'}}")
-    //                     a(href='/bulk') Bulk Editor
-    //                 li(class="{{isActivePath '/importers'}}")
-    //                     a(href='/importers') Importers
-    //                 li(class="{{isActivePath '/profile'}}")
-    //                     a(href='/profile') Profile
-    //             li
-    //                 +loginButtons align='right'
-    //         ul#nav-mobile.side-nav
-    //             if currentUser
-    //                 li(class="{{isActivePath '/mine'}}")
-    //                     a(href='/mine') My Docs
-    //                 li(class="{{isActivePath '/bulk'}}")
-    //                     a(href='/bulk') Bulk Editor
-    //                 li(class="{{isActivePath '/importers'}}")
-    //                     a(href='/importers') Importers
-    //                 li(class="{{isActivePath '/profile'}}")
-    //                     a(href='/profile') Profile
-    //             li
-    //                 |#{user_counter} users #{doc_counter} docs
-    //         a.button-collapse(href='#', data-activates='nav-mobile')
-    //             i.material-icons menu
-    nav.navbar.navbar-default
+    nav.navbar.navbar-inverse
         .container-fluid
             // Brand and toggle get grouped for better mobile display
             .navbar-header
@@ -45,46 +14,52 @@ template(name='nav')
                 ul.nav.navbar-nav
                     li
                         a#addDoc(href='#') Add
-                    li
-                        a(href='#') Link
-                    li.dropdown
-                        a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                            | Dropdown
-                            span.caret
-                        ul.dropdown-menu
-                            li
-                                a(href='#') Action
-                            li
-                                a(href='#') Another action
-                            li
-                                a(href='#') Something else here
-                            li.divider(role='separator')
-                            li
-                                a(href='#') Separated link
-                            li.divider(role='separator')
-                            li
-                                a(href='#') One more separated link
-                form#search.navbar-form.navbar-left(role='search')
+                    if currentUser
+                        li(class="{{isActivePath '/mine'}}")
+                            a(href='/mine') My Docs
+                    p.navbar-text #{user_counter} users #{doc_counter} docs
+                    // li.dropdown
+                    //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                    //         | Dropdown
+                    //         span.caret
+                        // ul.dropdown-menu
+                        //     li
+                        //         a(href='#') Action
+                        //     li
+                        //         a(href='#') Another action
+                        //     li
+                        //         a(href='#') Something else here
+                        //     li.divider(role='separator')
+                        //     li
+                        //         a(href='#') Separated link
+                        //     li.divider(role='separator')
+                        //     li
+                        //         a(href='#') One more separated link
+                .navbar-form.navbar-left
                     .form-group
-                        input.form-control(type='text', placeholder="Search tags... (backspace to unselect last, 'clear' to clear all)")
-                    button.btn.btn-default(type='submit') Search
+                        input#search.form-control(type='text', placeholder="Search")
                 ul.nav.navbar-nav.navbar-right
-                    li
-                        a(href='#') Link
-                    li.dropdown
-                        a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                            | Profile
-                            span.caret
-                        ul.dropdown-menu
-                            li
-                                a(href='#') Action
-                            li
-                                a(href='#') Another action
-                            li
-                                a(href='#') Something else here
-                            li.divider(role='separator')
-                            li
-                                a(href='#') Separated link
+                    if currentUser
+                        li(class="{{isActivePath '/bulk'}}")
+                            a(href='/bulk') Bulk Editor
+                        li(class="{{isActivePath '/importers'}}")
+                            a(href='/importers') Importers
+                        li(class="{{isActivePath '/profile'}}")
+                            a(href='/profile') Profile
+                    // li.dropdown
+                    //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
+                    //         | Profile
+                    //         span.caret
+                    //     ul.dropdown-menu
+                    //         li
+                    //             a(href='#') Action
+                    //         li
+                    //             a(href='#') Another action
+                    //         li
+                    //             a(href='#') Something else here
+                    //         li.divider(role='separator')
+                    //         li
+                    //             a(href='#') Separated link
                     +loginButtons align='right'
             // /.navbar-collapse
         // /.container-fluid

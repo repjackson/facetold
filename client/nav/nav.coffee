@@ -1,6 +1,3 @@
-Template.nav.onRendered ->
-    $('.button-collapse').sideNav();
-
 Template.nav.onCreated ->
     self = @
     self.autorun ->
@@ -19,3 +16,17 @@ Template.nav.events
                 console.log err
             else
                 FlowRouter.go "/edit/#{id}"
+
+    'keyup #search': (e)->
+        e.preventDefault()
+        switch e.which
+            when 13
+                if e.target.value is 'clear'
+                    selected_tags.clear()
+                    $('#search').val('')
+                else
+                    selected_tags.push e.target.value.toLowerCase()
+                    $('#search').val('')
+            when 8
+                if e.target.value is ''
+                    selected_tags.pop()

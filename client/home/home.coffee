@@ -21,18 +21,6 @@ Template.home.events
     'click .unselect_tag': -> selected_tags.remove @valueOf()
     'click #clear_tags': -> selected_tags.clear()
 
-    'keyup #search': (e)->
-        switch e.which
-            when 13
-                if e.target.value is 'clear'
-                    selected_tags.clear()
-                    $('#search').val('')
-                else
-                    selected_tags.push e.target.value.toLowerCase()
-                    $('#search').val('')
-            when 8
-                if e.target.value is ''
-                    selected_tags.pop()
 
     'click .authorFilterButton': (event)->
         if event.target.innerHTML in selected_usernames.array() then selected_usernames.remove event.target.innerHTML else selected_usernames.push event.target.innerHTML

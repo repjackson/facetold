@@ -9,12 +9,6 @@ Template.importerView.onCreated ->
     Template.instance().uploading = new ReactiveVar( false )
     return
 
-Template.importerView.onRendered ->
-    Meteor.setTimeout ( ->
-        $('select').material_select()
-        ), 500
-    return
-
 Template.importerView.helpers
     importerDoc: ->
         iId = FlowRouter.getParam('iId')

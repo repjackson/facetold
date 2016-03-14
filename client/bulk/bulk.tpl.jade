@@ -1,20 +1,19 @@
 .container
-    .card
-        .card-content
-            #cleanNonStringTags.btn Clean Non String Tags From My Docs
-            #alchemize.btn Autotag all my docs
-    .card
-        .card-content
-            .card-title Bulk Editor
-            .field-input.col.s6
+    .panel.panel-default
+        .panel-body
+            #cleanNonStringTags.btn.btn-default Clean Non String Tags From My Docs
+            #alchemize.btn.btn-default Autotag all my docs
+    .panel.panel-default
+        .panel-heading Bulk Editor
+        .panel-body
+            .form-group
                 label.active(for='tagSelector')  Tag Selector
-                input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
-            #findDocsWithTag.btn Find Docs with Tag
+                input#tagSelector.form-control(type=text value="{{$.Session.get 'query'}}" autofocus='')
+            #findDocsWithTag.btn.btn-default Find Docs with Tag
             if $.Session.get 'resultCount'
-                .card
-                    .card-content
+                .panel.panel-default
+                    .panel-body
                         |Result Count: {{$.Session.get 'resultCount'}}
-                        .row
-                            #deleteQueryDocs.btn Delete Query Docs
+                        #deleteQueryDocs.btn.btn-danger Delete Query Docs
             // .row
             //     .firstDocFromQuery First Result From Query

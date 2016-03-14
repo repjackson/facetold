@@ -1,16 +1,15 @@
 template(name='importerList')
     .container
-        #addImporter.fixed-action-btn(style="bottom: 45px; right: 24px;")
-            a.btn-floating.btn-large.red
-                i.large.material-icons add
-        ul.collection.with-header
-            li.collection-header: h5 My Importers
-            each importers
-                a.collection-item.editImporter(href='#') #{this.name}
-        .card
-            .card-content
-                .card-title Import Tweets
-                .input-field
+        #addImporter.btn.btn-default Add Importer
+        .panel.panel-default
+            .panel-heading My Importers
+            ul.list-group
+                each importers
+                    a.list-group-item.editImporter(href='#') #{this.name}
+        .panel.panel-default
+            .panel-heading Import Tweets
+            .panel-body
+                .form-group
                     label.active(for='importTweets') Search Twitter User
-                    input#importTweets(type=text)
+                    input#importTweets.form-control(type=text)
 

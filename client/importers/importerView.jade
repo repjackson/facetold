@@ -1,28 +1,26 @@
 template(name='importerView')
     .container
         with importerDoc
-            .card
-                .card-content
-                    .input-field
+            .panel.panel-default
+                .panel-body
+                    .form-group
                         label.active(for='importerName') Importer Name
-                        input#importerName(type='text' value=name)
-                    .input-field
+                        input#importerName.form-control(type='text' value=name)
+                    .form-group
                         label.active(for='importerTag') Importer Tag (included with all documents imported to facilitate future editing)
-                        input#importerTag(type='text' value=importerTag)
+                        input#importerTag.form-control(type='text' value=importerTag)
                     unless uploading
-                        .file-field.input-field
-                            .btn
-                                span Upload CSV File
-                                input(type='file' name='uploadCSV' accept='.csv')
-                            .file-path-wrapper
-                                input.file-path.validate(type='text' value=fileName)
+                        .form-group
+                            span Upload CSV File
+                            input(type='file' name='uploadCSV' accept='.csv' defaultValue='Upload')
+                            p #{fileName}
                             p #{downloadUrl}
                     else
                         p
                             i.fa.fa-spin.fa-refresh
                             |Uploading files...
                     if fieldsObject
-                        table.responsive-table.striped
+                        table.table.table-striped
                             thead
                                 tr
                                     th Field Name
@@ -48,45 +46,41 @@ template(name='importerView')
                     // .row
                     //     .btn#testImporter Test Importer
                     if testDoc
-                        .card-panel
-                            .card-title Test Doc
-                            .card-content
+                        .panel.panel-default
+                            .panel-heading Test Doc
+                            .panel-body
                                 each testDoc.tags
                                     .chip= this
-                    #runImporter.btn Run Importer
-                .card-action
-                    .btn#saveImporter
-                        i.material-icons.left done
-                        |Save
-                    .btn-floating#deleteImporter
-                        i.material-icons delete
+                    #saveImporter.btn.btn-default.btn-lg Save
+                    #runImporter.btn.btn-default Run Importer
+                    #deleteImporter.btn.btn-default Delete
             // Editor
             // .card
             //     .card-content
             //         #cleanNonStringTags.btn Clean Non String Tags From My Docs
             //         #alchemize.btn Autotag all my docs
-            .card
-                .card-content
-                    .card-title Bulk Editor
+            .panel.panel-default
+                .panel-heading Bulk Editor
+                .panel-body
                     p Tag Selector: #{importerTag}
                     // .field-input.col.s6
                     //     label.active(for='tagSelector' va)  Tag Selector
                     //     input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
-                    #findDocsWithTag.btn Find Docs with Tag
-                    .input-field
-                        label.active(for='importAmount') Import Amount
-                        input#importAmount(type='number' value=importAmount)
+                    #findDocsWithTag.btn.btn-default Find Docs with Tag
+                    .form-inline
+                        .form-group
+                            label.active(for='importAmount') Import Amount
+                            input#importAmount.form-control(type='number' value=importAmount)
                     if $.Session.get 'resultCount'
-                        .card
-                            .card-content
-                                |Result Count: {{$.Session.get 'resultCount'}}
+                        .panel.panel-default
+                            .panel-body
+                                p Result Count: {{$.Session.get 'resultCount'}}
                                 .row
                                     if docTagCloudFromImporter
                                         each docTagCloudFromImporter
-                                            .chip
+                                            button.btn.btn-link(disabled="disabled")
                                                 span #{this.name}
                                                 small #{this.count}
-                                .row
-                                    #deleteQueryDocs.btn Delete Query Docs
+                                #deleteQueryDocs.btn.btn-danger Delete Query Docs
                     // .row
                     //     .firstDocFromQuery First Result From Query

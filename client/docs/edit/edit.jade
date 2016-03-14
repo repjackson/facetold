@@ -2,48 +2,37 @@ template(name='edit')
     with doc
         .container
             .panel.panel-default
+                .panel-heading
+                    each tags
+                        .btn.btn-default.docTag #{this}
                 .panel-body
-                    .row
-                        .col.s12
-                            each tags
-                                .chip.docTag
-                                    i.material-icons close
-                                    |#{this}
-                    .field-input.col.s6
-                        i.plus.icon
-                        label.active(for='addTag')  Manually add tag
-                        input#addTag(type=text autofocus='')
+                    .form-group
+                        label(for='addTag')  Manually add tag
+                        input#addTag.form-control(type=text autofocus='')
                     // .field-input
                     //     input#place(type='text' placeholder='Add Address')
-                    .row
-                        .field-input.col.s6
-                            label.active(for='datetimepicker') Add Date/Time
-                            input#datetimepicker(type="text" value=dateTime)
-                        .btn.clearDT Clear Date/Time
-                    .row
-                        .field-input
-                            label.active(for='url') Get URL Text
-                            input#url(type="text" value=url)
+                    .form-group
+                        label.active(for='datetimepicker') Add Date/Time
+                        input#datetimepicker.form-control(type="text" value=dateTime)
+                        .btn.btn-info.clearDT Clear Date/Time
+                    .form-group
+                        label.active(for='url') Get URL Text
+                        input#url.form-control(type="text" value=url)
+                    .form-group
+                        input.form-control(type="checkbox" id="personal" checked=personal)
+                        label(for="personal") Personal (only you see it)
                     if unpickedKeywords.length
-                        .card
-                            .card-content
-                                span.card-title Suggestions
+                        .panel.panel-default
+                            .panel-heading Suggestions
+                            .panel-body
                                 div Keywords
                                     each unpickedKeywords
-                                        .docKeyword.chip #{this}
+                                        .docKeyword.btn.btn-default #{this}
                                 .card-action
                                     a#addAll Add All Suggestions
-                    #analyzeBody.btn
-                        i.material-icons.left launch
-                        |Analyze Body
-                    .card-panel
-                        +CodeMirror id="body" options=editorOptions code=body
-                    .field-input
-                        input(type="checkbox" id="personal" checked=personal)
-                        label(for="personal") Personal (only you see it)
-                .card-action
-                    a#saveDoc.btn.btn-primary
-                        i.material-icons.left done
-                        |Save
-                    a#deleteDoc.btn.btn-default
-                        i.material-icons delete
+                    #analyzeBody.btn.btn-default Analyze Body
+                .well
+                    +CodeMirror id="body" options=editorOptions code=body
+                .panel-footer
+                    a#saveDoc.btn.btn-primary.btn-lg Save
+                    a#deleteDoc.btn.btn-danger Delete
