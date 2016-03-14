@@ -1,25 +1,18 @@
 template(name='home')
-    if currentUser
-        #addDoc.fixed-action-btn(style="bottom: 45px; right: 24px;")
-            a.btn-floating.btn-large.teal.darken-3
-                i.large.material-icons add
-    .card.grey.lighten-3
-        .card-content
-            .input-field
-                input#search(type='text' autofocus='')
-                label.active(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
-            .row
-                if selected_tags
-                    #clear_tags.btn-floating.grey
-                        i.material-icons close
-                each selected_tags
-                    .unselect_tag.grey.chip
-                        |#{this}
-                each global_tags
-                    .select_tag.chip
-                        |#{this.name}
-                        small #{this.count}
+    .panel.panel-default
+        .panel-body
+            // .input-field
+            //     input#search(type='text' autofocus='')
+            //     label.active(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
+            if selected_tags
+                #clear_tags.btn.btn-primary
+                    span.glyphicon.glyphicon-remove-sign
+            each selected_tags
+                a.btn.btn-primary.unselect_tag #{this}
+            each global_tags
+                a.btn.btn-default.select_tag #{this.name}
+                    // span.badge #{this.count}
     .container
         each docs
-            .card.grey.lighten-3
+            .panel.panel-default
                 +view

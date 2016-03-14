@@ -28,7 +28,6 @@ kadira:flow-router
 kadira:blaze-layout
 perak:codemirror
 jeremy:geocomplete
-materialize:materialize
 mquandalle:stylus
 harrison:papa-parse
 okgrow:analytics
@@ -38,5 +37,6 @@ themeteorchef:bert
 zimme:active-route
 edgee:slingshot
 mrt:twit
-accounts-ui
 accounts-password
+twbs:bootstrap
+ian:accounts-ui-bootstrap-3

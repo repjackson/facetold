@@ -1,24 +1,19 @@
-.card-content
+.panel-body
     each tags
-        .chip.doc_tag(class=doc_tag_class)= this
+        .btn.doc_tag(class=doc_tag_class)= this
     .section
         +markdown
             #{body}
-.card-action
     .row
         if isAuthor
             // .btn-floating.deletePost
             //     i.material-icons delete
-            a.btn-floating.editDoc
-                i.material-icons settings
+            a.btn.btn-info.editDoc Edit
         if currentUser
-            a.btn-floating.cloneDoc
-                i.material-icons call_split
+            a.btn.btn-info.cloneDoc Clone
             unless isAuthor
-                a.vote_up.btn-floating.blue(class=vote_up_button_class)
-                    i.material-icons thumb_up
-                a.vote_down.btn-floating.blue(class=vote_down_button_class)
-                    i.material-icons thumb_down
+                a.vote_up.btn.btn-info(class=vote_up_button_class) Vote Up
+                a.vote_down.btn.btn-info(class=vote_down_button_class) Vote Down
         if points
             |Points: #{points}
         |by #{username} #{when}

@@ -1,8 +1,8 @@
 template(name='edit')
     with doc
         .container
-            .card
-                .card-content
+            .panel.panel-default
+                .panel-body
                     .row
                         .col.s12
                             each tags
@@ -42,8 +42,8 @@ template(name='edit')
                         input(type="checkbox" id="personal" checked=personal)
                         label(for="personal") Personal (only you see it)
                 .card-action
-                    a#saveDoc.btn
+                    a#saveDoc.btn.btn-primary
                         i.material-icons.left done
                         |Save
-                    a#deleteDoc.btn-floating
+                    a#deleteDoc.btn.btn-default
                         i.material-icons delete

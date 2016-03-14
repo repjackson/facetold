@@ -13,3 +13,9 @@ Template.nav.helpers
     userperson: -> Meteor.user()
 
 Template.nav.events
+    'click #addDoc': ->
+        Meteor.call 'createDoc', (err, id)->
+            if err
+                console.log err
+            else
+                FlowRouter.go "/edit/#{id}"

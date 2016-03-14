@@ -34,12 +34,5 @@ Template.home.events
                 if e.target.value is ''
                     selected_tags.pop()
 
-    'click #addDoc': ->
-        Meteor.call 'createDoc', (err, id)->
-            if err
-                console.log err
-            else
-                FlowRouter.go "/edit/#{id}"
-
     'click .authorFilterButton': (event)->
         if event.target.innerHTML in selected_usernames.array() then selected_usernames.remove event.target.innerHTML else selected_usernames.push event.target.innerHTML

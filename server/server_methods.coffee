@@ -71,31 +71,39 @@ Meteor.methods
                             slicedResults = results.data[0..2]
                             fieldNames = _.compact results.meta.fields
                             resultData = results.data
+                            # console.log resultData.length
                             for row in resultData
-                                for name in fieldNames
-                                    fieldTagsToInsert = []
-                                    fieldTagsToInsert.push importer.importerTag
-                                    fieldTagsToInsert.push row['']
-                                    fieldTagsToInsert.push name
-                                    fieldTagsToInsert.push row[name]
-                                    console.log fieldTagsToInsert
-                                    Docs.insert
-                                        tags: fieldTagsToInsert
-                                rowTagsToInsert = []
-                                rowTagsToInsert.push importer.importerTag
-                                rowTagsToInsert.push row['']
-                                for name in fieldNames
-                                    # rowTagsToInsert.push name
-                                    rowTagsToInsert.push row[name]
-                                console.log rowTagsToInsert
+                                tagsToInsert = []
+                                tagsToInsert.push importer.importerTag
+                                for field, value of row
+                                    tagsToInsert.push "#{field}: #{value}"
                                 Docs.insert
-                                    tags: rowTagsToInsert
+                                    tags: tagsToInsert
+                            # for row in resultData
+                            #     for name in fieldNames
+                            #         fieldTagsToInsert = []
+                            #         fieldTagsToInsert.push importer.importerTag
+                            #         fieldTagsToInsert.push row['']
+                            #         fieldTagsToInsert.push name
+                            #         fieldTagsToInsert.push row[name]
+                            #         console.log fieldTagsToInsert
+                            #         Docs.insert
+                            #             tags: fieldTagsToInsert
+                            #     rowTagsToInsert = []
+                            #     rowTagsToInsert.push importer.importerTag
+                            #     rowTagsToInsert.push row['']
+                            #     for name in fieldNames
+                            #         # rowTagsToInsert.push name
+                            #         rowTagsToInsert.push row[name]
+                            #     console.log rowTagsToInsert
+                            #     Docs.insert
+                            #         tags: rowTagsToInsert
 
 
 
                             #     for name in importer.pluckedNames
                             #         tagsToInsert.push row[name]
-                            # secondIteration = true
+                            secondIteration = true
 
                         # console.log results.data[0]
                         # fieldNames = results.meta.fields
@@ -188,6 +196,7 @@ Meteor.methods
             outputMode: 'json'
             showSourceText: 1
             sourceText: 'cleaned_or_raw'
+            knowledgeGraph: 0
             extract: 'keyword' }
             , (err, result)->
                 if err then console.log err
