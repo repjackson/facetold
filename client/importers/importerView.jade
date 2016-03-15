@@ -7,7 +7,7 @@ template(name='importerView')
                         label.active(for='importerName') Importer Name
                         input#importerName.form-control(type='text' value=name)
                     .form-group
-                        label.active(for='importerTag') Importer Tag (included with all documents imported to facilitate future editing)
+                        label.active(for='importerTag') Importer Tag (included with all documents to facilitate future editing)
                         input#importerTag.form-control(type='text' value=importerTag)
                     unless uploading
                         .form-group
@@ -50,9 +50,10 @@ template(name='importerView')
                             .panel-heading Test Doc
                             .panel-body
                                 each testDoc.tags
-                                    .chip= this
-                    #saveImporter.btn.btn-default.btn-lg Save
-                    #runImporter.btn.btn-default Run Importer
+                                    .btn.btn-default= this
+                    #saveImporter.btn.btn-primary.btn-lg Save
+                    if importerTag
+                        #runImporter.btn.btn-success Run Importer
                     #deleteImporter.btn.btn-default Delete
             // Editor
             // .card
@@ -67,10 +68,10 @@ template(name='importerView')
                     //     label.active(for='tagSelector' va)  Tag Selector
                     //     input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
                     #findDocsWithTag.btn.btn-default Find Docs with Tag
-                    .form-inline
-                        .form-group
-                            label.active(for='importAmount') Import Amount
-                            input#importAmount.form-control(type='number' value=importAmount)
+                    // .form-inline
+                    //     .form-group
+                    //         label.active(for='importAmount') Import Amount
+                    //         input#importAmount.form-control(type='number' value=importAmount)
                     if $.Session.get 'resultCount'
                         .panel.panel-default
                             .panel-body

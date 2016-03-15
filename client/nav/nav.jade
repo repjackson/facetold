@@ -12,9 +12,9 @@ template(name='nav')
             // Collect the nav links, forms, and other content for toggling
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
                 ul.nav.navbar-nav
-                    li
-                        a#addDoc(href='#') Add
                     if currentUser
+                        li
+                            a#addDoc(href='#') Add
                         li(class="{{isActivePath '/mine'}}")
                             a(href='/mine') My Docs
                     p.navbar-text #{user_counter} users #{doc_counter} docs

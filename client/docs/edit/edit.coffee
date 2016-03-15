@@ -8,9 +8,9 @@ Template.edit.onCreated ->
 Template.edit.onRendered ->
     Meteor.setTimeout (->
 
-        $('.datepicker').pickadate
-            selectMonths: true
-            selectYears: 15
+        # $('.datepicker').pickadate
+        #     selectMonths: true
+        #     selectYears: 15
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -46,7 +46,6 @@ Template.edit.onRendered ->
     @autorun ->
         if GoogleMaps.loaded()
             $('#place').geocomplete().bind 'geocode:result', (event, result) ->
-                docid = Session.get 'editing'
                 Meteor.call 'updatelocation', docid, result, ->
 
 Template.edit.helpers

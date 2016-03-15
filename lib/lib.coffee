@@ -7,9 +7,9 @@ Docs.before.insert (userId, doc)->
     # doc.tags = _.map(doc.tags, (tag)-> tag.toString().toLowerCase())
     doc.timestamp = Date.now()
     doc.authorId = Meteor.userId()
+    doc.username = Meteor.user().username
     doc.points = 0
     doc.down_voters = []
     doc.up_voters = []
     doc.personal = false
-    doc.username = Meteor.user().username
     return

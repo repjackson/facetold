@@ -1,18 +1,29 @@
 .panel.panel-default
     .panel-heading
         each tags
-            .btn.doc_tag(class=doc_tag_class)= this
-    .panel-body
-        +markdown
-            #{body}
+            .btn.btn-sm.doc_tag(class=doc_tag_class)= this
+    if body.length
+        .panel-body
+            +markdown
+                #{body}
     .panel-footer
         if isAuthor
             a.btn.btn-info.editDoc Edit
         if currentUser
-            a.btn.btn-info.cloneDoc Clone
+            // a.btn.btn-info.cloneDoc Clone
             unless isAuthor
-                a.vote_up.btn.btn-info(class=vote_up_button_class) Vote Up
-                a.vote_down.btn.btn-info(class=vote_down_button_class) Vote Down
+                .btn.btn-group
+                    a.vote_up.btn.btn-info(class=vote_up_button_class)
+                        |Vote Up
+                        span.glyphicon.glyphicon-thumbs-up
+                    a.vote_down.btn.btn-info(class=vote_down_button_class)
+                        |Vote Down
+                        span.glyphicon.glyphicon-thumbs-down
         if points
-            |Points: #{points}
-        |by #{username} #{when}
+            span.label.label-info Points: #{points}
+        span.label.label-default by #{username} #{when}
+        .btn.btn-default.findTopDocMatches Find Top Matches
+        p #{_id}
+        each topDocMatches
+            p #{this.docId}
+            p #{this.intersectionTags}

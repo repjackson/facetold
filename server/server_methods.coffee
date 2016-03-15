@@ -4,9 +4,7 @@ Meteor.methods
             # console.log item
 
     createDoc: ->
-        Docs.insert
-            authorId: Meteor.userId()
-            username: Meteor.user().username
+        Docs.insert {}
 
     createImporter: ->
         id = Importers.insert
@@ -271,7 +269,6 @@ Meteor.methods
             $set:
                 cloud: cloud
 
-
     calculateUserMatch: (username)->
         myCloud = Meteor.user().cloud
         otherGuy = Meteor.users.findOne "profile.name": username
@@ -284,3 +281,44 @@ Meteor.methods
         otherLinearCloud = _.pluck(otherCloud, 'name')
         intersection = _.intersection(myLinearCloud, otherLinearCloud)
         console.log intersection
+
+
+    matchTwoDocs: (firstId, secondId)->
+        firstDoc = Docs.findOne firstId
+        secondDoc = Docs.findOne secondId
+
+        firstTags = firstDoc.tags
+        secondTags = secondDoc.tags
+
+        intersection = _.intersection firstTags, secondTags
+        intersectionCount = intersection.length
+
+    findTopDocMatches: (docId)->
+        thisDoc = Docs.findOne docId
+        tags = thisDoc.tags
+        matchObject = {}
+        for tag in tags
+            idArrayWithTag = []
+            Docs.find({ tags: $in: [tag] }, { tags: 1 }).forEach (doc)->
+                if doc._id isnt docId
+                    idArrayWithTag.push doc._id
+            matchObject[tag] = idArrayWithTag
+        arrays = _.values matchObject
+        flattenedArrays = _.flatten arrays
+        countObject = {}
+        for id in flattenedArrays
+            if countObject[id]? then countObject[id]++ else countObject[id]=1
+        # console.log countObject
+        result = []
+        for id, count of countObject
+            comparedDocTags = Docs.findOne(id, {tags:1}).tags
+            returnedObject = {}
+            returnedObject.docId = id
+            returnedObject.tags = comparedDocTags
+            returnedObject.intersectionTags = _.intersection tags, comparedDocTags
+            result.push returnedObject
+
+        Docs.update docId,
+            $set: topDocMatches: result
+
+        return result

@@ -5,13 +5,13 @@ template(name='home')
             //     input#search(type='text' autofocus='')
             //     label.active(for='search') Search tags... (backspace to unselect last, 'clear' to clear all)
             if selected_tags
-                #clear_tags.btn.btn-primary
+                #clear_tags.btn.btn-default.active
                     span.glyphicon.glyphicon-remove-sign
             each selected_tags
-                a.btn.btn-primary.unselect_tag #{this}
+                a.btn.btn-default.active.unselect_tag #{this}
             each global_tags
                 a.btn.btn-default.select_tag #{this.name}
-                    // span.badge #{this.count}
+                    small (#{this.count})
     .container
         each docs
             +view

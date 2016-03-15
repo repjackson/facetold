@@ -6,21 +6,28 @@ template(name='edit')
                     each tags
                         .btn.btn-default.docTag #{this}
                 .panel-body
+                    // .form-horizontal
+                    // .form-inline
                     .form-group
                         label(for='addTag')  Manually add tag
                         input#addTag.form-control(type=text autofocus='')
-                    // .field-input
-                    //     input#place(type='text' placeholder='Add Address')
+                    // .form-inline
                     .form-group
-                        label.active(for='datetimepicker') Add Date/Time
+                        label(for='place') Add Address
+                        input#place.form-control(type='text' disabled='')
+                    // .form-inline
+                    .form-group
+                        label(for='datetimepicker') Add Date/Time
                         input#datetimepicker.form-control(type="text" value=dateTime)
                         .btn.btn-info.clearDT Clear Date/Time
+                    // .form-inline
                     .form-group
-                        label.active(for='url') Get URL Text
+                        label(for='url') Get URL Text
                         input#url.form-control(type="text" value=url)
-                    .form-group
-                        input.form-control(type="checkbox" id="personal" checked=personal)
-                        label(for="personal") Personal (only you see it)
+                    .checkbox
+                        label
+                            input(type="checkbox" id="personal" checked=personal)
+                            |Personal (only you see it)
                     if unpickedKeywords.length
                         .panel.panel-default
                             .panel-heading Suggestions
@@ -30,8 +37,8 @@ template(name='edit')
                                         .docKeyword.btn.btn-default #{this}
                                 .card-action
                                     a#addAll Add All Suggestions
-                    #analyzeBody.btn.btn-default Analyze Body
                 .well
+                    #analyzeBody.btn.btn-default Analyze Body
                     +CodeMirror id="body" options=editorOptions code=body
                 .panel-footer
                     a#saveDoc.btn.btn-primary.btn-lg Save
