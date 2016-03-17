@@ -52,9 +52,11 @@ Meteor.publish 'tags', (selected_tags, viewMode)->
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
-    cloud.forEach (tag) ->
+    cloud.forEach (tag, i) ->
         self.added 'tags', Random.id(),
             name: tag.name
             count: tag.count
+            index: i
+
 
     self.ready()

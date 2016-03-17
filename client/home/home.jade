@@ -10,8 +10,8 @@ template(name='home')
             each selected_tags
                 a.btn.btn-default.active.unselect_tag #{this}
             each global_tags
-                a.btn.btn-default.select_tag #{this.name}
-                    small (#{this.count})
+                a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
+                    // small #{this.count}
     .container
         each docs
             +view

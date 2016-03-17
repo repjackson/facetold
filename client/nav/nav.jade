@@ -1,5 +1,5 @@
 template(name='nav')
-    nav.navbar.navbar-inverse
+    nav.navbar.navbar-default
         .container-fluid
             // Brand and toggle get grouped for better mobile display
             .navbar-header
@@ -14,7 +14,9 @@ template(name='nav')
                 ul.nav.navbar-nav
                     if currentUser
                         li
-                            a#addDoc(href='#') Add
+                            a#addDoc(href='#')
+                                span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
+                                |Add
                         li(class="{{isActivePath '/mine'}}")
                             a(href='/mine') My Docs
                     p.navbar-text #{user_counter} users #{doc_counter} docs

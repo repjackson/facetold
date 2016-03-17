@@ -126,7 +126,7 @@ Template.edit.events
     'click #saveDoc': ->
         Docs.update FlowRouter.getParam('docId'),
             $set: body: $('#body').val()
-
+        Meteor.call 'findTopDocMatches', @_id
         thisDocTags = @tags
         FlowRouter.go '/'
         selectedTags = thisDocTags

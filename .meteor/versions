@@ -88,6 +88,7 @@ okgrow:analytics@1.0.4
 ordered-dict@1.0.4
 perak:codemirror@1.2.9
 perak:markdown@1.0.5
+percolatestudio:segment.io@2.0.0_1
 pntbr:js-yaml-client@0.0.1
 promise@0.5.1
 raix:handlebar-helpers@0.2.5

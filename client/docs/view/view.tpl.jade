@@ -1,5 +1,6 @@
 .panel.panel-default
     .panel-heading
+        span.glyphicon.glyphicon-tags
         each tags
             .btn.btn-sm.doc_tag(class=doc_tag_class)= this
     if body.length
@@ -8,7 +9,9 @@
                 #{body}
     .panel-footer
         if isAuthor
-            a.btn.btn-info.editDoc Edit
+            a.btn.btn-default.editDoc
+                span.glyphicon.glyphicon-pencil
+                |Edit
         if currentUser
             // a.btn.btn-info.cloneDoc Clone
             unless isAuthor
@@ -23,7 +26,9 @@
             span.label.label-info Points: #{points}
         span.label.label-default by #{username} #{when}
         .btn.btn-default.findTopDocMatches Find Top Matches
-        p #{_id}
-        each topDocMatches
-            p #{this.docId}
-            p #{this.intersectionTags}
+        if topDocMatches
+            ul.list-group Top Matches
+                each topDocMatches
+                    li.list-group-item #{this.docId}
+                        each this.intersectionTags
+                            span.badge #{this}

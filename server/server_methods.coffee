@@ -316,9 +316,13 @@ Meteor.methods
             returnedObject.docId = id
             returnedObject.tags = comparedDocTags
             returnedObject.intersectionTags = _.intersection tags, comparedDocTags
+            returnedObject.intersectionTagsCount = returnedObject.intersectionTags.length
             result.push returnedObject
 
+        result = _.sortBy(result, 'intersectionTagsCount').reverse()
+        result = result[0..5]
         Docs.update docId,
             $set: topDocMatches: result
 
+        console.log result
         return result

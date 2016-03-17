@@ -4,7 +4,9 @@ template(name='edit')
             .panel.panel-default
                 .panel-heading
                     each tags
-                        .btn.btn-default.docTag #{this}
+                        .btn.btn-default.docTag
+                            span.glyphicon.glyphicon-minus
+                            |#{this}
                 .panel-body
                     // .form-horizontal
                     // .form-inline

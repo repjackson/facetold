@@ -15,6 +15,7 @@ Template.nav.events
             if err
                 console.log err
             else
+                analytics.track 'Added Doc'
                 FlowRouter.go "/edit/#{id}"
 
     'keyup #search': (e)->

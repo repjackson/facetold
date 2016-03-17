@@ -7,11 +7,17 @@ Template.home.onCreated ->
 
 Template.home.helpers
     global_tags: ->
-        # doccount = Docs.find().count()
-        # if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
-        Tags.find()
+        doccount = Docs.find().count()
+        if 0 < doccount < 3 then Tags.find { count: $lt: doccount } else Tags.find()
+        # Tags.find()
     docs: -> Docs.find()
-
+    globalTagClass: ->
+        buttonClass = switch
+            when @index < 5 then ''
+            when @index < 20 then ''
+            when @index < 30 then 'btn-sm'
+            when @index < 50 then 'btn-xs'
+        return buttonClass
     selected_tags: -> selected_tags.list()
 
     user: -> Meteor.user()
