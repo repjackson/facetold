@@ -13,10 +13,10 @@ Template.home.helpers
     docs: -> Docs.find()
     globalTagClass: ->
         buttonClass = switch
-            when @index < 5 then ''
-            when @index < 20 then ''
-            when @index < 30 then 'btn-sm'
-            when @index < 50 then 'btn-xs'
+            when @index <= 7 then 'btn-lg'
+            when 7 < @index <= 14 then ''
+            when @index > 14 then 'btn-sm'
+            # when @index < 50 then 'btn-sm'
         return buttonClass
     selected_tags: -> selected_tags.list()
 

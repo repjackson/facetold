@@ -4,14 +4,32 @@ Meteor.publish 'importers', -> Importers.find { authorId: @userId}
 
 Meteor.publish 'importer', (id)-> Importers.find id
 
-Meteor.publish 'people', -> Meteor.users.find {}
+Meteor.publish 'people', ->
+    Meteor.users.find {},
+        fields:
+            authored_cloud: 1
+            upvoted_cloud: 1
+            downvoted_cloud: 1
+            points: 1
+            username: 1
 
-Meteor.publish 'person', (id)-> Meteor.users.find id
+Meteor.publish 'person', (id)->
+    Meteor.users.find id,
+        fields:
+            username: 1
+            authored_cloud: 1
+            upvoted_cloud: 1
+            downvoted_cloud: 1
+            points: 1
 
 Meteor.publish 'me', ->
     Meteor.users.find @userId,
         fields:
-            cloud: 1
+            username: 1
+            authored_cloud: 1
+            upvoted_cloud: 1
+            downvoted_cloud: 1
+            points: 1
 
 # Meteor.publish 'tweetDocs', ->
 #     Docs.find

@@ -6,7 +6,7 @@ Template.profile.helpers
     viewMyTweetsClass: -> if Meteor.user().profile.name in selected_screen_names.array() then 'active' else ''
     hasReceivedTweets: -> Meteor.user().profile.hasReceivedTweets
     userCloud: -> if Meteor.user().cloud then Meteor.user().cloud
-
+    user: -> Meteor.user()
 
 Template.profile.events
     'click .get_tweets': ->

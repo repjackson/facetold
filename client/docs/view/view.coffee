@@ -7,7 +7,7 @@ Template.view.helpers
     vote_down_button_class: -> if Meteor.userId() in @down_voters then 'active' else ''
     when: -> moment(@timestamp).fromNow()
     doc_tag_class: -> if @valueOf() in selected_tags.array() then 'btn-default active' else 'btn-default'
-
+    author: -> Meteor.users.findOne(@authorId)
 
 Template.view.events
     'click .deletePost': -> if confirm 'Delete Post?' then Docs.remove @_id

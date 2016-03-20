@@ -2,25 +2,38 @@
     .panel.panel-default
         .panel-heading Profile
         .panel-body
-            // if hasReceivedTweets
-            //     a.btn.delete_tweets
-            //         i.material-icons.left delete
-            //         |Delete My Tweets
-            // else
-            //     a.btn.get_tweets
-            //         i.material-icons.left play_for_work
-            //         |Get My Tweets
-            // div Tweet Doc Count: #{tweetDocCount}
-            #generatePersonalCloud.btn.btn-default (re)Generate Personal Cloud
-            if userCloud
-                .well
-                    each userCloud
-                        .btn.btn-link(disabled='disabled')
-                            |#{this.name}
-                            small #{this.count}
-            strong Top Matched Users
-            .row
-                // #calculateUserMatch.btn Calculate User Matches
-                ul.list-group
-                    each usernames
-                        a.list-group-item.calculateUserMatch #{this.text}
+            with user
+                // if hasReceivedTweets
+                //     a.btn.delete_tweets
+                //         i.material-icons.left delete
+                //         |Delete My Tweets
+                // else
+                //     a.btn.get_tweets
+                //         i.material-icons.left play_for_work
+                //         |Get My Tweets
+                // div Tweet Doc Count: #{tweetDocCount}
+                #generatePersonalCloud.btn.btn-default (re)Generate Personal Cloud
+                if authored_cloud
+                    .well Authored Cloud
+                        each authored_cloud
+                            .btn.btn-link(disabled='disabled')
+                                |#{this.name}
+                                small #{this.count}
+                if upvoted_cloud
+                    .well Upvoted Cloud
+                        each upvoted_cloud
+                            .btn.btn-link(disabled='disabled')
+                                |#{this.name}
+                                small #{this.count}
+                if downvoted_cloud
+                    .well Downvoted Cloud
+                        each downvoted_cloud
+                            .btn.btn-link(disabled='disabled')
+                                |#{this.name}
+                                small #{this.count}
+                strong Top Matched Users
+                .row
+                    // #calculateUserMatch.btn Calculate User Matches
+                    ul.list-group
+                        each usernames
+                            a.list-group-item.calculateUserMatch #{this.text}

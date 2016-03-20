@@ -11,37 +11,41 @@ template(name='edit')
                     // .form-horizontal
                     // .form-inline
                     .form-group
-                        label(for='addTag')  Manually add tag
+                        label(for='addTag')  add tag
                         input#addTag.form-control(type=text autofocus='')
                     // .form-inline
                     .form-group
-                        label(for='place') Add Address
-                        input#place.form-control(type='text' disabled='')
+                        label(for='place') add address
+                        input#place.form-control(type='text' value=locationob.formatted_address)
                     // .form-inline
                     .form-group
-                        label(for='datetimepicker') Add Date/Time
+                        label(for='datetimepicker') add date/time
                         input#datetimepicker.form-control(type="text" value=dateTime)
-                        .btn.btn-info.clearDT Clear Date/Time
+                        // .btn.btn-info.clearDT clear date/time
                     // .form-inline
                     .form-group
-                        label(for='url') Get URL Text
+                        label(for='url') get url text
                         input#url.form-control(type="text" value=url)
+                    // .btn-group(data-toggle='buttons')
+                    //     label.btn.btn-primary.active
+                    //         input(type='checkbox', autocomplete='off', checked='')
+                    //         |  Checkbox 1 (pre-checked)
                     .checkbox
                         label
                             input(type="checkbox" id="personal" checked=personal)
-                            |Personal (only you see it)
+                            |private
                     if unpickedKeywords.length
                         .panel.panel-default
-                            .panel-heading Suggestions
+                            .panel-heading suggestions
                             .panel-body
-                                div Keywords
+                                div keywords
                                     each unpickedKeywords
                                         .docKeyword.btn.btn-default #{this}
                                 .card-action
-                                    a#addAll Add All Suggestions
+                                    a#addAll add all suggestions
                 .well
-                    #analyzeBody.btn.btn-default Analyze Body
+                    #analyzeBody.btn.btn-default autotag body
                     +CodeMirror id="body" options=editorOptions code=body
                 .panel-footer
-                    a#saveDoc.btn.btn-primary.btn-lg Save
-                    a#deleteDoc.btn.btn-danger Delete
+                    a#saveDoc.btn.btn-primary save
+                    a#deleteDoc.btn.btn-danger.btn-sm.pull-right delete

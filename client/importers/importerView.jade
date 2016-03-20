@@ -4,28 +4,28 @@ template(name='importerView')
             .panel.panel-default
                 .panel-body
                     .form-group
-                        label.active(for='importerName') Importer Name
+                        label.active(for='importerName') importer name
                         input#importerName.form-control(type='text' value=name)
                     .form-group
-                        label.active(for='importerTag') Importer Tag (included with all documents to facilitate future editing)
+                        label.active(for='importerTag') importer tag (included with all documents to facilitate future editing)
                         input#importerTag.form-control(type='text' value=importerTag)
                     unless uploading
                         .form-group
-                            span Upload CSV File
+                            span upload csv file
                             input(type='file' name='uploadCSV' accept='.csv' defaultValue='Upload')
                             p #{fileName}
                             p #{downloadUrl}
                     else
                         p
                             i.fa.fa-spin.fa-refresh
-                            |Uploading files...
+                            |uploading files...
                     if fieldsObject
                         table.table.table-striped
                             thead
                                 tr
-                                    th Field Name
-                                    th First Row Data Example
-                                    th Action
+                                    th field name
+                                    th first row data example
+                                    th action
                             tbody
                                 each fieldsObject
                                     tr
@@ -42,32 +42,32 @@ template(name='importerView')
                                         //         // label Pick Data Type
                                         td
                                             input.toggleTag(type="checkbox" id="#{this.name}" checked="#{this.tag}")
-                                            label(for="#{this.name}") Tag
+                                            label(for="#{this.name}") tag
                     // .row
                     //     .btn#testImporter Test Importer
                     if testDoc
                         .panel.panel-default
-                            .panel-heading Test Doc
+                            .panel-heading test doc
                             .panel-body
                                 each testDoc.tags
                                     .btn.btn-default= this
-                    #saveImporter.btn.btn-primary.btn-lg Save
+                    #saveImporter.btn.btn-primary.btn-lg save
                     if importerTag
-                        #runImporter.btn.btn-success Run Importer
-                    #deleteImporter.btn.btn-default Delete
+                        #runImporter.btn.btn-success run importer
+                    #deleteImporter.btn.btn-default delete
             // Editor
             // .card
             //     .card-content
             //         #cleanNonStringTags.btn Clean Non String Tags From My Docs
             //         #alchemize.btn Autotag all my docs
             .panel.panel-default
-                .panel-heading Bulk Editor
+                .panel-heading bulk editor
                 .panel-body
-                    p Tag Selector: #{importerTag}
+                    p tag selector: #{importerTag}
                     // .field-input.col.s6
                     //     label.active(for='tagSelector' va)  Tag Selector
                     //     input#tagSelector(type=text value="{{$.Session.get 'query'}}" autofocus='')
-                    #findDocsWithTag.btn.btn-default Find Docs with Tag
+                    #findDocsWithTag.btn.btn-default find docs with tag
                     // .form-inline
                     //     .form-group
                     //         label.active(for='importAmount') Import Amount
@@ -75,13 +75,13 @@ template(name='importerView')
                     if $.Session.get 'resultCount'
                         .panel.panel-default
                             .panel-body
-                                p Result Count: {{$.Session.get 'resultCount'}}
+                                p result count: {{$.Session.get 'resultCount'}}
                                 .row
                                     if docTagCloudFromImporter
                                         each docTagCloudFromImporter
                                             button.btn.btn-link(disabled="disabled")
                                                 span #{this.name}
                                                 small #{this.count}
-                                #deleteQueryDocs.btn.btn-danger Delete Query Docs
+                                #deleteQueryDocs.btn.btn-danger delete query docs
                     // .row
                     //     .firstDocFromQuery First Result From Query

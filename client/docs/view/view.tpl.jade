@@ -1,6 +1,6 @@
 .panel.panel-default
     .panel-heading
-        span.glyphicon.glyphicon-tags
+        // span.glyphicon.glyphicon-tags
         each tags
             .btn.btn-sm.doc_tag(class=doc_tag_class)= this
     if body.length
@@ -9,26 +9,25 @@
                 #{body}
     .panel-footer
         if isAuthor
-            a.btn.btn-default.editDoc
-                span.glyphicon.glyphicon-pencil
-                |Edit
+            a.btn.btn-primary.btn-sm.editDoc edit
         if currentUser
             // a.btn.btn-info.cloneDoc Clone
             unless isAuthor
                 .btn.btn-group
-                    a.vote_up.btn.btn-info(class=vote_up_button_class)
-                        |Vote Up
+                    a.vote_up.btn.btn-primary(class=vote_up_button_class)
+                        // |Vote Up
                         span.glyphicon.glyphicon-thumbs-up
-                    a.vote_down.btn.btn-info(class=vote_down_button_class)
-                        |Vote Down
+                    a.vote_down.btn.btn-primary(class=vote_down_button_class)
+                        // |Vote Down
                         span.glyphicon.glyphicon-thumbs-down
         if points
-            span.label.label-info Points: #{points}
-        span.label.label-default by #{username} #{when}
-        .btn.btn-default.findTopDocMatches Find Top Matches
+            span.label.label-primary Points: #{points}
+        span.label.label-default by #{username} [#{author.points}] #{when}
+        .btn.btn-primary.btn-sm.findTopDocMatches find top matches
         if topDocMatches
-            ul.list-group Top Matches
-                each topDocMatches
-                    li.list-group-item #{this.docId}
-                        each this.intersectionTags
-                            span.badge #{this}
+            .section
+                ul.list-group top matches
+                    each topDocMatches
+                        li.list-group-item #{this.docId}
+                            each this.intersectionTags
+                                span.badge #{this}

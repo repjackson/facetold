@@ -1,15 +1,15 @@
 template(name='importerList')
     .container
-        #addImporter.btn.btn-default Add Importer
+        #addImporter.btn.btn-default add importer
         .panel.panel-default
-            .panel-heading My Importers
+            .panel-heading my importers
             ul.list-group
                 each importers
                     a.list-group-item.editImporter(href='#') #{this.name}
         .panel.panel-default
-            .panel-heading Import Tweets
+            .panel-heading import tweets
             .panel-body
                 .form-group
-                    label.active(for='importTweets') Search Twitter User
+                    label.active(for='importTweets') search twitter user
                     input#importTweets.form-control(type=text)
 

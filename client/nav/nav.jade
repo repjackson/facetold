@@ -8,17 +8,16 @@ template(name='nav')
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
-                a.navbar-brand(href='/') Facet
+                a.navbar-brand(href='/') facet
+                    // img(src='/f_logo.png' height='42' width='42')
             // Collect the nav links, forms, and other content for toggling
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
                 ul.nav.navbar-nav
                     if currentUser
                         li
                             a#addDoc(href='#')
-                                span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
-                                |Add
-                        li(class="{{isActivePath '/mine'}}")
-                            a(href='/mine') My Docs
+                                // span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
+                                |add
                     p.navbar-text #{user_counter} users #{doc_counter} docs
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
@@ -39,15 +38,17 @@ template(name='nav')
                         //         a(href='#') One more separated link
                 .navbar-form.navbar-left
                     .form-group
-                        input#search.form-control(type='text', placeholder="Search")
+                        input#search.form-control(type='text', placeholder="search tags...")
                 ul.nav.navbar-nav.navbar-right
                     if currentUser
+                        li(class="{{isActivePath '/mine'}}")
+                            a(href='/mine') my docs
                         li(class="{{isActivePath '/bulk'}}")
-                            a(href='/bulk') Bulk Editor
+                            a(href='/bulk') bulk editor
                         li(class="{{isActivePath '/importers'}}")
-                            a(href='/importers') Importers
+                            a(href='/importers') importers
                         li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') Profile
+                            a(href='/profile') profile [#{user.points}]
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
                     //         | Profile
