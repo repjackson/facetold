@@ -344,11 +344,12 @@ Meteor.methods
         # console.log countObject
         result = []
         for id, count of countObject
-            comparedDocTags = Docs.findOne(id, {tags:1}).tags
+            comparedDoc = Docs.findOne(id)
             returnedObject = {}
             returnedObject.docId = id
-            returnedObject.tags = comparedDocTags
-            returnedObject.intersectionTags = _.intersection tags, comparedDocTags
+            returnedObject.tags = comparedDoc.tags
+            returnedObject.username = comparedDoc.username
+            returnedObject.intersectionTags = _.intersection tags, comparedDoc.tags
             returnedObject.intersectionTagsCount = returnedObject.intersectionTags.length
             result.push returnedObject
 

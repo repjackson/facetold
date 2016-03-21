@@ -1,5 +1,3 @@
-@selected_tags = new ReactiveArray []
-
 Template.home.onCreated ->
     Meteor.subscribe 'people'
     @autorun -> Meteor.subscribe('tags', selected_tags.array(), Session.get('view'))

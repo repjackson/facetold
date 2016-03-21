@@ -34,6 +34,17 @@ template(name='edit')
                         label
                             input(type="checkbox" id="personal" checked=personal)
                             |private
+                    .checkbox
+                        label
+                            input(type='checkbox' id='auctionable' checked=auctionable)
+                            |auctionable
+                    if auctionable
+                        .panel.panel-default
+                            .panel-heading auction settings
+                            .panel-body
+                                .form-group
+                                    label(for='auctionDateTimePicker') expiration date
+                                    input#auctionDateTimePicker.form-control(type="text" value=auctionEndDateTime)
                     if unpickedKeywords.length
                         .panel.panel-default
                             .panel-heading suggestions

@@ -7,6 +7,9 @@ FlowRouter.route '/edit/:docId', action: (params) ->
     analytics.page()
     BlazeLayout.render 'layout', main: 'edit'
 
+FlowRouter.route '/view/:docId', action: (params) ->
+    BlazeLayout.render 'layout', main: 'viewFull'
+
 FlowRouter.route '/importers', action: (params) ->
     analytics.page()
     BlazeLayout.render 'layout', main: 'importerList'

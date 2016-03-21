@@ -27,6 +27,7 @@ Template.view.events
     'click .vote_down': -> Meteor.call 'vote_down', @_id
 
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
+    'click .viewDoc': -> FlowRouter.go "/view/#{@_id}"
 
     'click .doc_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove @valueOf() else selected_tags.push @valueOf()
 

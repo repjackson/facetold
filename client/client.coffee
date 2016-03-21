@@ -1,3 +1,5 @@
+@selected_tags = new ReactiveArray []
+
 Meteor.startup ->
     GoogleMaps.load
         key: 'AIzaSyBluAacaAcSdXuk0hTRrnvoly0HI5wcf2Q'
@@ -9,7 +11,7 @@ Meteor.startup ->
         if !user then return
         else
             analytics.identify user._id,
-                name: user.profile.username
+                name: user.username
         c.stop()
 
 

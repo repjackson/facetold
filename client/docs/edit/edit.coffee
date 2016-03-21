@@ -41,7 +41,9 @@ Template.edit.onRendered ->
                         tags: tagsWithNew
                         datearray: datearray
                         dateTime: val
-            )), 2000
+            )
+        $('#auctionDateTimePicker').datetimepicker()
+        ), 2000
 
     @autorun ->
         if GoogleMaps.loaded()
@@ -83,10 +85,9 @@ Template.edit.events
                 else
                     Docs.update FlowRouter.getParam('docId'),
                         $set: body: $('#body').val()
-
                     thisDocTags = @tags
                     FlowRouter.go '/'
-                    selectedTags = thisDocTags
+                    selected_tags.clear()
 
     'keyup #url': (e,t)->
         docId = FlowRouter.getParam('docId')
@@ -128,10 +129,11 @@ Template.edit.events
     'click #saveDoc': ->
         Docs.update FlowRouter.getParam('docId'),
             $set: body: $('#body').val()
-        Meteor.call 'findTopDocMatches', @_id
-        thisDocTags = @tags
-        FlowRouter.go '/'
-        selectedTags = thisDocTags
+        Meteor.call 'findTopDocMatches', @_id, (err, result)->
+            thisDocTags = @tags
+            FlowRouter.go '/'
+
+            selectedTags = thisDocTags
 
     'click #deleteDoc': ->
         if confirm 'Delete this doc?'
@@ -150,3 +152,14 @@ Template.edit.events
         Docs.update docId,
             $set:
                 personal: newValue
+
+    'click #auctionable': (e)->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+        newValue = !doc.auctionable
+        Docs.update docId,
+            $set:
+                auctionable: newValue
+        Meteor.setTimeout (->
+            $('#auctionDateTimePicker').datetimepicker()
+        ), 200
