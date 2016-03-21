@@ -1,5 +1,8 @@
 Meteor.publish 'doc', (id)-> Docs.find id
 
+Meteor.publish 'messages', (id)->
+    Messages.find docId: id
+
 Meteor.publish 'importers', -> Importers.find { authorId: @userId}
 
 Meteor.publish 'importer', (id)-> Importers.find id

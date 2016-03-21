@@ -1,6 +1,7 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
 @Importers = new Meteor.Collection 'importers'
+@Messages = new Meteor.Collection 'messages'
 
 Docs.before.insert (userId, doc)->
     # doc.tags = []

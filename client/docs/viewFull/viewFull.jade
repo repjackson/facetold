@@ -4,7 +4,7 @@ template(name='viewFull')
             .panel-heading
                 // span.glyphicon.glyphicon-tags
                 each tags
-                    .doc_tag #{this}
+                    .btn.btn-sm.doc_tag #{this}
             if body.length
                 .panel-body
                     +markdown
@@ -31,3 +31,4 @@ template(name='viewFull')
                             li.list-group-item #{this.docId} by #{this.username}
                                 each this.intersectionTags
                                     span.badge #{this}
+    +messageList
