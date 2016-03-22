@@ -55,14 +55,18 @@ Meteor.methods
                 Docs.update {
                     _id: id
                     "donations.user": Meteor.userId()
-                    }, $pull: { donations: {user: Meteor.userId()}, donators: Meteor.userId()}
+                    },
+                    $pull: { donations: {user: Meteor.userId()}, donators: Meteor.userId()}
+                    $inc: points: -1
+
                 Meteor.users.update Meteor.userId(), $inc: points: 1
 
             else
                 Docs.update {
                     _id: id
                     "donations.user": Meteor.userId()
-                    }, $inc: "donations.$.amount": -1
+                    }, $inc: "donations.$.amount": -1, points: -1
+
                 Meteor.users.update Meteor.userId(), $inc: points: 1
 
         else
@@ -72,6 +76,8 @@ Meteor.methods
                     donations:
                         user: Meteor.userId()
                         amount: 1
+                $inc: points: -1
+
             Meteor.users.update Meteor.userId(), $inc: points: 1
 
 
