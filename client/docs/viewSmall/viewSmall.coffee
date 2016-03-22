@@ -36,3 +36,4 @@ Template.viewSmall.events
             if err then console.error err
             else
                 console.log result
+    'click .sendpoint': -> Meteor.call 'sendpoint', @authorId, ->

@@ -7,6 +7,12 @@ Meteor.publish 'importers', -> Importers.find { authorId: @userId}
 
 Meteor.publish 'importer', (id)-> Importers.find id
 
+Meteor.publish 'leaderboard', ->
+    Meteor.users.find {},
+        fields:
+            username: 1
+            points: 1
+
 Meteor.publish 'people', ->
     Meteor.users.find {},
         fields:
@@ -48,7 +54,10 @@ Meteor.publish 'docs', (selected_tags, viewMode)->
     match = {}
     if not @userId? then match.personal = false
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    if viewMode is 'mine' then match.authorId = @userId
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'marketplace' then match.auctionable = true
+
 
     Docs.find match,
         limit: 5
@@ -59,7 +68,9 @@ Meteor.publish 'tags', (selected_tags, viewMode)->
 
     match = {}
     if selected_tags.length > 0 then match.tags = $all: selected_tags
-    if viewMode is 'mine' then match.authorId = @userId
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'marketplace' then match.auctionable = true
     if not @userId? then match.personal = false
 
     cloud = Docs.aggregate [

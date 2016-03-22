@@ -1,12 +1,12 @@
 template(name='messageList')
-    p hi there
-    .panel.panel-default
-        .panel-heading messages regarding post
-        .panel-body
-            .form-group
-                label(for='addMessage')  add message
-                input#addMessage.form-control(type=text autofocus='')
-            ul.list-group
-                each messages
-                    li.list-group-item
-                        +message message=this
+    .container
+        .panel.panel-default
+            .panel-heading messages regarding post
+            .panel-body
+                .form-group
+                    label(for='addMessage')  add message
+                    input#addMessage.form-control(type=text autofocus='')
+                ul.list-group
+                    each messages
+                        li.list-group-item
+                            +message message=this

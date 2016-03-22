@@ -40,4 +40,5 @@ mrt:twit
 accounts-password
 twbs:bootstrap
 ian:accounts-ui-bootstrap-3
-percolatestudio:segment.io@=2.0.0_1
+dburles:collection-helpers
+mizzao:autocomplete

@@ -17,7 +17,7 @@ template(name='nav')
                         li
                             a#addDoc(href='#')
                                 // span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
-                                |add
+                                |add (-1)
                     p.navbar-text #{user_counter} users #{doc_counter} docs
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
@@ -37,18 +37,25 @@ template(name='nav')
                         //     li
                         //         a(href='#') One more separated link
                 .navbar-form.navbar-left
-                    .form-group
-                        input#search.form-control(type='text', placeholder="search tags...")
+                    // .form-group
+                    //     input#search.form-control(type='text', placeholder="search tags...")
+                    // .form-group
+                    //     .form-control
+                    //         +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="Tag Drilldown/'clear'")
                 ul.nav.navbar-nav.navbar-right
                     if currentUser
                         li(class="{{isActivePath '/mine'}}")
                             a(href='/mine') my docs
+                        li(class="{{isActivePath '/marketplace'}}")
+                            a(href='/marketplace') marketplace
                         li(class="{{isActivePath '/bulk'}}")
                             a(href='/bulk') bulk editor
                         li(class="{{isActivePath '/importers'}}")
                             a(href='/importers') importers
                         li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') profile [#{user.points}]
+                            a(href='/profile') profile
+                        li(class="{{isActivePath '/leaderboard'}}")
+                            a(href='/leaderboard') my points [#{user.points}]
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
                     //         | Profile
@@ -66,3 +73,8 @@ template(name='nav')
                     +loginButtons align='right'
             // /.navbar-collapse
         // /.container-fluid
+
+
+template(name='tagresult')
+    .label.label-default #{name}
+        small (#{count})

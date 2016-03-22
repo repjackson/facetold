@@ -14,3 +14,11 @@ Docs.before.insert (userId, doc)->
     doc.up_voters = []
     doc.personal = false
     return
+
+Docs.helpers
+    author: (doc)-> Meteor.users.findOne @authorId
+
+
+Messages.helpers
+    from: (doc)-> Meteor.users.findOne @fromId
+    to: (doc)-> Meteor.users.findOne @toId

@@ -10,6 +10,9 @@ FlowRouter.route '/edit/:docId', action: (params) ->
 FlowRouter.route '/view/:docId', action: (params) ->
     BlazeLayout.render 'layout', main: 'viewFull'
 
+FlowRouter.route '/leaderboard', action: (params) ->
+    BlazeLayout.render 'layout', main: 'leaderboard'
+
 FlowRouter.route '/importers', action: (params) ->
     analytics.page()
     BlazeLayout.render 'layout', main: 'importerList'
@@ -21,6 +24,10 @@ FlowRouter.route '/importers/:iId', action: (params) ->
 FlowRouter.route '/bulk', action: (params) ->
     analytics.page()
     BlazeLayout.render 'layout', main: 'bulk'
+
+FlowRouter.route '/marketplace', action: (params) ->
+    Session.set('view', 'marketplace')
+    BlazeLayout.render 'layout', main: 'home'
 
 FlowRouter.route '/mine', action: (params) ->
     analytics.page()

@@ -1,0 +1,7 @@
+template(name='leaderboard')
+    .container
+        .panel.panel-default
+            .panel-heading Leaderboard
+            .panel-body
+                each users
+                    p #{username} [#{points}]

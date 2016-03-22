@@ -17,18 +17,19 @@ template(name='viewSmall')
                 unless isAuthor
                     .btn.btn-group
                         a.vote_up.btn.btn-primary(class=vote_up_button_class)
-                            // |Vote Up
-                            span.glyphicon.glyphicon-thumbs-up
+                            span.glyphicon.glyphicon-plus
+                            |Send Point
                         a.vote_down.btn.btn-primary(class=vote_down_button_class)
-                            // |Vote Down
-                            span.glyphicon.glyphicon-thumbs-down
-            span.label.label-primary Points: #{points}
+                            span.glyphicon.glyphicon-minus
+                            |Retrieve Point
+                    // .bid.btn.btn-primary increment bid
+            span.label.label-primary.label-lg Doc Points: #{points}
             span.label.label-default by #{username} [#{author.points}] #{when}
             // .btn.btn-primary.btn-sm.findTopDocMatches find top matches
-            if topDocMatches
-                .section
-                    ul.list-group top matches
-                        each topDocMatches
-                            li.list-group-item #{this.docId} by #{this.username}
-                                each this.intersectionTags
-                                    span.badge #{this}
+            .section
+                ul.list-group top matches
+                    each topDocMatches
+                        a.list-group-item(href="/view/#{this.docId}")
+                            each this.intersectionTags
+                                .label.label-default #{this}
+                            |by #{this.username}

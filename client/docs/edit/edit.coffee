@@ -133,12 +133,17 @@ Template.edit.events
             thisDocTags = @tags
             FlowRouter.go '/'
 
-            selectedTags = thisDocTags
+            selected_tags.clear()
+            _.map(thisDocTags, (tag)->
+                selected_tags.push(tag) )
+
 
     'click #deleteDoc': ->
-        if confirm 'Delete this doc?'
-            Docs.remove @_id
-            FlowRouter.go '/'
+        if confirm 'Delete this doc? This will return 1 point'
+            Meteor.call 'deleteDoc', @_id, (err, result)->
+                if err then console.error err
+                else
+                    FlowRouter.go '/'
 
 
     'click .docKeyword': ->
