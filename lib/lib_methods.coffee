@@ -1,24 +1,24 @@
 Meteor.methods
-    vote_up: (id)->
-        doc = Docs.findOne id
-        if Meteor.userId() in doc.up_voters #undo upvote
-            Docs.update id,
-                $pull: up_voters: Meteor.userId()
-                $inc: points: -1
-            Meteor.users.update doc.authorId, $inc: points: -1
+    # vote_up: (id)->
+    #     doc = Docs.findOne id
+    #     if Meteor.userId() in doc.up_voters #undo upvote
+    #         Docs.update id,
+    #             $pull: up_voters: Meteor.userId()
+    #             $inc: points: -1
+    #         Meteor.users.update doc.authorId, $inc: points: -1
 
-        else if Meteor.userId() in doc.down_voters #switch downvote to upvote
-            Docs.update id,
-                $pull: down_voters: Meteor.userId()
-                $addToSet: up_voters: Meteor.userId()
-                $inc: points: 2
-            Meteor.users.update doc.authorId, $inc: points: 2
+    #     else if Meteor.userId() in doc.down_voters #switch downvote to upvote
+    #         Docs.update id,
+    #             $pull: down_voters: Meteor.userId()
+    #             $addToSet: up_voters: Meteor.userId()
+    #             $inc: points: 2
+    #         Meteor.users.update doc.authorId, $inc: points: 2
 
-        else #clean upvote
-            Docs.update id,
-                $addToSet: up_voters: Meteor.userId()
-                $inc: points: 1
-            Meteor.users.update doc.authorId, $inc: points: 1
+    #     else #clean upvote
+    #         Docs.update id,
+    #             $addToSet: up_voters: Meteor.userId()
+    #             $inc: points: 1
+    #         Meteor.users.update doc.authorId, $inc: points: 1
 
 
     send_point: (id)->
@@ -33,6 +33,7 @@ Meteor.methods
                         "donations.$.amount": 1
                         points: 1
             Meteor.users.update Meteor.userId(), $inc: points: -1
+            Meteor.users.update doc.authorId, $inc: points: 1
 
         else
             Docs.update id,
@@ -42,6 +43,7 @@ Meteor.methods
                         user: Meteor.userId()
                         amount: 1
             Meteor.users.update Meteor.userId(), $inc: points: -1
+            Meteor.users.update doc.authorId, $inc: points: 1
 
 
     retrieve_point: (id)->
@@ -60,6 +62,7 @@ Meteor.methods
                     $inc: points: -1
 
                 Meteor.users.update Meteor.userId(), $inc: points: 1
+                Meteor.users.update doc.authorId, $inc: points: -1
 
             else
                 Docs.update {
@@ -68,39 +71,28 @@ Meteor.methods
                     }, $inc: "donations.$.amount": -1, points: -1
 
                 Meteor.users.update Meteor.userId(), $inc: points: 1
+                Meteor.users.update doc.authorId, $inc: points: -1
 
-        else
-            Docs.update id,
-                $addToSet:
-                    donators: Meteor.userId()
-                    donations:
-                        user: Meteor.userId()
-                        amount: 1
-                $inc: points: -1
+    # vote_down: (id)->
+    #     doc = Docs.findOne id
+    #     if Meteor.userId() in doc.down_voters #undo downvote
+    #         Docs.update id,
+    #             $pull: down_voters: Meteor.userId()
+    #             $inc: points: 1
+    #         Meteor.users.update doc.authorId, $inc: points: 1
 
-            Meteor.users.update Meteor.userId(), $inc: points: 1
+    #     else if Meteor.userId() in doc.up_voters #switch upvote to downvote
+    #         Docs.update id,
+    #             $pull: up_voters: Meteor.userId()
+    #             $addToSet: down_voters: Meteor.userId()
+    #             $inc: points: -2
+    #         Meteor.users.update doc.authorId, $inc: points: -2
 
-
-    vote_down: (id)->
-        doc = Docs.findOne id
-        if Meteor.userId() in doc.down_voters #undo downvote
-            Docs.update id,
-                $pull: down_voters: Meteor.userId()
-                $inc: points: 1
-            Meteor.users.update doc.authorId, $inc: points: 1
-
-        else if Meteor.userId() in doc.up_voters #switch upvote to downvote
-            Docs.update id,
-                $pull: up_voters: Meteor.userId()
-                $addToSet: down_voters: Meteor.userId()
-                $inc: points: -2
-            Meteor.users.update doc.authorId, $inc: points: -2
-
-        else #clean downvote
-            Docs.update id,
-                $addToSet: down_voters: Meteor.userId()
-                $inc: points: -1
-            Meteor.users.update doc.authorId, $inc: points: -1
+    #     else #clean downvote
+    #         Docs.update id,
+    #             $addToSet: down_voters: Meteor.userId()
+    #             $inc: points: -1
+    #         Meteor.users.update doc.authorId, $inc: points: -1
 
 
     # updateFieldType: (id, fieldName, selection)->

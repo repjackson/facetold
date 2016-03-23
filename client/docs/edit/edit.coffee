@@ -49,8 +49,8 @@ Template.edit.onRendered ->
         if GoogleMaps.loaded()
             docId = FlowRouter.getParam('docId')
             $('#place').geocomplete().bind 'geocode:result', (event, result) ->
-                console.log result.geometry.location.lat()
-                # Meteor.call 'updatelocation', docId, result, ->
+                # console.log result.geometry.location.lat()
+                Meteor.call 'updatelocation', docId, result, ->
 
 Template.edit.helpers
     doc: ->
