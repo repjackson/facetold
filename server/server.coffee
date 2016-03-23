@@ -14,5 +14,11 @@ Messages.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Accounts.onCreateUser (options, user)->
-    user.points = 100
+    user.points = 10
     user
+
+# Meteor.startup ->
+#   handler = StripeCheckout.configure(
+#     key: Meteor.settings.stripeTestPublishableKey
+#     token: (token) ->
+#   )

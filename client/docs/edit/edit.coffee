@@ -128,14 +128,13 @@ Template.edit.events
 
     'click #saveDoc': ->
         Docs.update FlowRouter.getParam('docId'),
-            $set: body: $('#body').val()
+            $set:
+                body: $('#body').val()
+                price: $('#price').val()
         Meteor.call 'findTopDocMatches', @_id, (err, result)->
-            thisDocTags = @tags
-            FlowRouter.go '/'
-
-            selected_tags.clear()
-            _.map(thisDocTags, (tag)->
-                selected_tags.push(tag) )
+            if err then console.error err
+            else
+                FlowRouter.go '/'
 
 
     'click #deleteDoc': ->
@@ -158,13 +157,3 @@ Template.edit.events
             $set:
                 personal: newValue
 
-    'click #auctionable': (e)->
-        docId = FlowRouter.getParam('docId')
-        doc = Docs.findOne docId
-        newValue = !doc.auctionable
-        Docs.update docId,
-            $set:
-                auctionable: newValue
-        Meteor.setTimeout (->
-            $('#auctionDateTimePicker').datetimepicker()
-        ), 200

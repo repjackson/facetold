@@ -10,14 +10,12 @@ Docs.before.insert (userId, doc)->
     doc.authorId = Meteor.userId()
     doc.username = Meteor.user().username
     doc.points = 0
-    doc.down_voters = []
-    doc.up_voters = []
+    doc.price = 0
     doc.personal = false
     return
 
 Docs.helpers
     author: (doc)-> Meteor.users.findOne @authorId
-
 
 Messages.helpers
     from: (doc)-> Meteor.users.findOne @fromId

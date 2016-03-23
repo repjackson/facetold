@@ -4,14 +4,10 @@ Meteor.methods
             # console.log item
 
     createDoc: ->
-        Meteor.users.update Meteor.userId(),
-            $inc: points: -1
         newId = Docs.insert {}
         newId
 
     deleteDoc: (id)->
-        Meteor.users.update Meteor.userId(),
-            $inc: points: 1
         Docs.remove id
 
     createImporter: ->

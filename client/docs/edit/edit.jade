@@ -34,17 +34,9 @@ template(name='edit')
                         label
                             input(type="checkbox" id="personal" checked=personal)
                             |private
-                    .checkbox
-                        label
-                            input(type='checkbox' id='auctionable' checked=auctionable)
-                            |auctionable
-                    if auctionable
-                        .panel.panel-default
-                            .panel-heading auction settings
-                            .panel-body
-                                .form-group
-                                    label(for='auctionDateTimePicker') expiration date
-                                    input#auctionDateTimePicker.form-control(type="text" value=auctionEndDateTime)
+                    .form-group
+                        label(for='price') price
+                        input#price.form-control(type="number" value=price min='0')
                     if unpickedKeywords.length
                         .panel.panel-default
                             .panel-heading suggestions
@@ -59,4 +51,4 @@ template(name='edit')
                     +CodeMirror id="body" options=editorOptions code=body
                 .panel-footer
                     a#saveDoc.btn.btn-primary save
-                    a#deleteDoc.btn.btn-danger.btn-sm.pull-right delete (+1)
+                    a#deleteDoc.btn.btn-danger.btn-sm.pull-right delete

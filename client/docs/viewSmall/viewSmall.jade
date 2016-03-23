@@ -16,18 +16,20 @@ template(name='viewSmall')
                 // a.btn.btn-info.cloneDoc Clone
                 unless isAuthor
                     .btn.btn-group
-                        .send_point.btn.btn-primary
-                            span.glyphicon.glyphicon-plus
-                            // |Send Point
+                        if canSendPoints
+                            .send_point.btn.btn-primary
+                                span.glyphicon.glyphicon-plus
+                                // |Send Point
                         if canRetrievePoints
                             .retrieve_point.btn.btn-primary
                                 span.glyphicon.glyphicon-minus
                                 // |Retrieve Point
                     if canRetrievePoints
-                        .label.label-primary #{currentUserDonations} points sent
+                         | #{currentUserDonations} points sent
                     // .bid.btn.btn-primary increment bid
-            span.label.label-primary.label-lg Doc Points: #{points}
-            span.label.label-default by #{username} [#{author.points}] #{when}
+            p doc points: #{points}
+            p doc price: #{price}
+            p by #{username} [#{author.points}] #{when}
             // .btn.btn-primary.btn-sm.findTopDocMatches find top matches
             .section
                 ul.list-group top matches

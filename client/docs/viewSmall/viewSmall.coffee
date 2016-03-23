@@ -15,6 +15,7 @@ Template.viewSmall.helpers
             result.amount
         else return 0
     canRetrievePoints: -> if @donators and Meteor.userId() in @donators then true else false
+    canSendPoints: -> Meteor.user().points > 0
 
 Template.viewSmall.events
     'click .deletePost': -> if confirm 'Delete Post?' then Docs.remove @_id
@@ -26,8 +27,6 @@ Template.viewSmall.events
                 authorId: Meteor.userId()
                 username: Meteor.user().username
                 points: 0
-                down_voters: []
-                up_voters: []
             FlowRouter.go "/edit/#{id}"
 
     'click .send_point': -> Meteor.call 'send_point', @_id

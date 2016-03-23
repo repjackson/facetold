@@ -17,7 +17,7 @@ template(name='nav')
                         li
                             a#addDoc(href='#')
                                 // span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
-                                |add (-1)
+                                |add
                     p.navbar-text #{user_counter} users #{doc_counter} docs
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
@@ -50,12 +50,12 @@ template(name='nav')
                             a(href='/marketplace') marketplace
                         li(class="{{isActivePath '/bulk'}}")
                             a(href='/bulk') bulk editor
+                        li(class="{{isActivePath '/buysell'}}")
+                            a(href='/buysell') buy/sell points
                         li(class="{{isActivePath '/importers'}}")
                             a(href='/importers') importers
                         li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') profile
-                        li(class="{{isActivePath '/leaderboard'}}")
-                            a(href='/leaderboard') my points [#{user.points}]
+                            a(href='/profile') profile [#{user.points}]
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
                     //         | Profile
