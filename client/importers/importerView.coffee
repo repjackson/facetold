@@ -17,6 +17,18 @@ Template.importerView.helpers
     uploading: ->
         Template.instance().uploading.get()
 
+    ACTIONS = [
+        'geo'
+        'skip'
+        'time/date'
+        'direct'
+        ]
+
+    actions: -> ACTIONS
+
+    # selectedValue: -> if @action
+        # console.log @action
+
     selectedDataType: (fieldName)->
         console.log fieldname
         # console.log _.findWhere(@fieldsObject, {name: fieldName})
@@ -41,8 +53,6 @@ Template.importerView.events
                         Bert.alert 'Importer Tag Saved', 'success', 'growl-top-right'
                         Meteor.call 'testImporter', id, (err, res)->
 
-
-
     'click #saveImporter': ->
         Meteor.call 'saveImporter', FlowRouter.getParam('iId'), $('#importerName').val(), $('#importerTag').val(), ->
             FlowRouter.go '/importers'
@@ -61,24 +71,15 @@ Template.importerView.events
             else
                 console.log res
 
-    'click .toggleTag': (e,t)->
-        id = FlowRouter.getParam('iId')
-        fieldName = e.currentTarget.id
-        value = e.currentTarget.checked
-        Meteor.call 'toggleFieldTag', id, fieldName, value, (err, res)->
-            if err then console.log error.reason
-            else
-                Bert.alert 'Setting Saved', 'success', 'growl-top-right'
-                Meteor.call 'testImporter', id, ->
-
     'change .typeSelector': (e,t)->
         id = FlowRouter.getParam('iId')
         fieldName = e.currentTarget.id
         value = e.currentTarget.value
         Meteor.call 'updateFieldType', id, fieldName, value, (err, res)->
-            if err then console.log error.reason
+            if err then console.log err.reason
             else
-                Bert.alert 'Type Saved', 'success', 'growl-top-right'
+                Bert.alert 'action saved', 'success', 'growl-top-right'
+                Meteor.call 'testImporter', id, ->
 
     'change [name="uploadCSV"]': (event, template) ->
         id = FlowRouter.getParam('iId')
@@ -108,6 +109,7 @@ Template.importerView.events
                 fieldsObject = _.map(fields, (field)->
                     name: field[0]
                     firstValue: field[1]
+                    action: 'skip'
                     )
                 Importers.update id,
                     $set:

@@ -26,18 +26,21 @@ Meteor.methods
 
     testImporter: (iId)->
         importer = Importers.findOne iId
-        pluckedNames = []
         testDoc = {}
         testDoc.tags = []
         testDoc.tags.push importer.importerTag
         for field in importer.fieldsObject
-            if field.tag is true
-                testDoc.tags.push field.firstValue
-                pluckedNames.push field.name
+            switch field.action
+                when 'direct tag'
+                    testDoc.tags.push field.firstValue
+                when 'datetime'
+                    Meteor.call 'tagifyDateTime', field.firstValue, (err, result)->
+                        if err then console.error err
+                        else
+                            _.map result, (tag)-> testDoc.tags.push tag
         Importers.update iId,
             $set:
                 testDoc: testDoc
-                pluckedNames: pluckedNames
 
     runImporter: (id, amount=1000)->
         # importer = Importers.findOne id
@@ -162,8 +165,6 @@ Meteor.methods
                 Meteor.call 'analyze', id, tweet.text
             ))
 
-
-
     analyze: (id, auto)->
         doc = Docs.findOne id
         encoded = encodeURIComponent(doc.body)
@@ -187,7 +188,6 @@ Meteor.methods
                         $addToSet:
                             keyword_array: $each: loweredKeywords
                             tags: $each: loweredKeywords
-
 
     fetchUrlTags: (docId, url)->
         doc = Docs.findOne docId
@@ -364,3 +364,20 @@ Meteor.methods
 
         # console.log result
         return result
+
+    tagifyDateTime: (val)->
+        console.log moment(val).format("dddd, MMMM Do YYYY, h:mm:ss a")
+        minute = moment(val).minute()
+        hour = moment(val).format('h')
+        date = moment(val).format('Do')
+        ampm = moment(val).format('a')
+        weekdaynum = moment(val).isoWeekday()
+        weekday = moment().isoWeekday(weekdaynum).format('dddd')
+
+        month = moment(val).format('MMMM')
+        year = moment(val).format('YYYY')
+
+        datearray = [hour, minute, ampm, weekday, month, date, year]
+        datearray = _.map(datearray, (el)-> el.toString().toLowerCase())
+        # datearray = _.each(datearray, (el)-> console.log(typeof el))
+        return datearray

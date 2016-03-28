@@ -29,12 +29,15 @@ template(name='viewSmall')
                     // .bid.btn.btn-primary increment bid
             p doc points: #{points}
             p doc price: #{price}
+            if canBuy
+                .btn.btn-primary.buyItem buy item for #{price} points
             p by #{username} [#{author.points}] #{when}
             // .btn.btn-primary.btn-sm.findTopDocMatches find top matches
-            .section
-                ul.list-group top matches
-                    each topDocMatches
-                        a.list-group-item(href="/view/#{this.docId}")
-                            each this.intersectionTags
-                                .label.label-default #{this}
-                            |by #{this.username}
+            if topDocMatches
+                .section
+                    ul.list-group top matches
+                        each topDocMatches
+                            a.list-group-item(href="/view/#{this.docId}")
+                                each this.intersectionTags
+                                    .label.label-default #{this}
+                                |by #{this.username}

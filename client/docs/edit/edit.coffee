@@ -6,11 +6,17 @@ Template.edit.onCreated ->
 
 
 Template.edit.onRendered ->
-    Meteor.setTimeout (->
 
+    Meteor.setTimeout (->
         # $('.datepicker').pickadate
         #     selectMonths: true
         #     selectYears: 15
+        $('#summernote').summernote
+            height: 300
+            # callbacks:
+            #     onKeyup: (e)->
+            #         console.log('Key is released:', e.keyCode)
+        # $('#summernote').summernote('insertText', Template.currentData().body);
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -42,7 +48,6 @@ Template.edit.onRendered ->
                         datearray: datearray
                         dateTime: val
             )
-        $('#auctionDateTimePicker').datetimepicker()
         ), 2000
 
     @autorun ->
@@ -57,10 +62,10 @@ Template.edit.helpers
         docId = FlowRouter.getParam('docId')
         Docs.findOne docId
 
-    editorOptions: ->
-        lineNumbers: false
-        mode: 'markdown'
-        lineWrapping: true
+    # editorOptions: ->
+    #     lineNumbers: false
+    #     mode: 'markdown'
+    #     lineWrapping: true
 
     unpickedConcepts: ->
         _.difference @concept_array, @tags
@@ -127,10 +132,13 @@ Template.edit.events
         Meteor.call 'analyze', FlowRouter.getParam('docId')
 
     'click #saveDoc': ->
+        text = $("#summernote").summernote('code')
+        console.log(text)
+
         Docs.update FlowRouter.getParam('docId'),
             $set:
-                body: $('#body').val()
-                price: $('#price').val()
+                body: text
+                # price: $('#price').val()
         Meteor.call 'findTopDocMatches', @_id, (err, result)->
             if err then console.error err
             else

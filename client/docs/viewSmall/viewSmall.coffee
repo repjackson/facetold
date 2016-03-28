@@ -16,6 +16,7 @@ Template.viewSmall.helpers
         else return 0
     canRetrievePoints: -> if @donators and Meteor.userId() in @donators then true else false
     canSendPoints: -> Meteor.user().points > 0
+    canBuy: -> Meteor.user().points > @points > 0
 
 Template.viewSmall.events
     'click .deletePost': -> if confirm 'Delete Post?' then Docs.remove @_id

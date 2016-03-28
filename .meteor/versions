@@ -109,6 +109,7 @@ spacebars@1.0.7
 spacebars-compiler@1.0.7
 srp@1.0.4
 stylus@2.511.1
+summernote:summernote@0.8.1
 templating@1.1.5
 templating-tools@1.0.0
 themeteorchef:bert@2.1.0

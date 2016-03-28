@@ -26,23 +26,20 @@ template(name='importerView')
                                     th field name
                                     th first row data example
                                     th action
+                                    th change action
                             tbody
                                 each fieldsObject
                                     tr
                                         td #{this.name}
                                         td #{this.firstValue}
-                                        // td
-                                        //     .input-field.col.s12
-                                        //         select.browser-default.typeSelector(id="#{this.name}")
-                                        //             option(value='', disabled='') Choose Data Type/Action
-                                        //             option(value='1' selected="{{selectedDataType 1}}") Direct Tag
-                                        //             option(value='2' selected="{{selectedDataType 2}}") Time/Date
-                                        //             option(value='3' selected="{{selectedDataType 3}}") Geo
-                                        //             option(value='4' selected="{{selectedDataType 4}}") Skip
-                                        //         // label Pick Data Type
+                                        td #{this.action}
                                         td
-                                            input.toggleTag(type="checkbox" id="#{this.name}" checked="#{this.tag}")
-                                            label(for="#{this.name}") tag
+                                            select.form-control.typeSelector.col-md-12(id="#{this.name}")
+                                                option(value='') select to change
+                                                option(value='direct tag') direct tag
+                                                option(value='datetime') date/time
+                                                option(value='geo') geo
+                                                option(value='skip') skip
                     // .row
                     //     .btn#testImporter Test Importer
                     if testDoc
@@ -51,7 +48,7 @@ template(name='importerView')
                             .panel-body
                                 each testDoc.tags
                                     .btn.btn-default= this
-                    #saveImporter.btn.btn-primary.btn-lg save
+                    #saveImporter.btn.btn-primary. save
                     if importerTag
                         #runImporter.btn.btn-success run importer
                     #deleteImporter.btn.btn-default delete

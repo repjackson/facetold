@@ -95,16 +95,16 @@ Meteor.methods
     #         Meteor.users.update doc.authorId, $inc: points: -1
 
 
-    # updateFieldType: (id, fieldName, selection)->
-    #     # direct tag
-    #     # time/date
-    #     # geo
-    #     # skip
-    #     Importers.update {
-    #         _id: id
-    #         fieldsObject: $elemMatch:
-    #             name: fieldName
-    #         }, $set: 'fieldsObject.$.type': selection
+    updateFieldType: (id, fieldName, selection)->
+        # direct tag
+        # time/date
+        # geo
+        # skip
+        Importers.update {
+            _id: id
+            fieldsObject: $elemMatch:
+                name: fieldName
+            }, $set: 'fieldsObject.$.action': selection
 
     toggleFieldTag: (id, fieldName, value)->
         Importers.update {
