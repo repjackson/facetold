@@ -34,9 +34,9 @@ template(name='edit')
                         label
                             input(type="checkbox" id="personal" checked=personal)
                             |private
-                    // .form-group
-                    //     label(for='price') price
-                    //     input#price.form-control(type="number" value=price min='0')
+                    .form-group
+                        label(for='price') price
+                        input#price.form-control(type="number" value=price min='0')
                     if unpickedKeywords.length
                         .panel.panel-default
                             .panel-heading suggestions
