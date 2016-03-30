@@ -48,7 +48,7 @@ Template.edit.onRendered ->
                         datearray: datearray
                         dateTime: val
             )
-        ), 2000
+        ), 300
 
     @autorun ->
         if GoogleMaps.loaded()
@@ -62,10 +62,10 @@ Template.edit.helpers
         docId = FlowRouter.getParam('docId')
         Docs.findOne docId
 
-    # editorOptions: ->
-    #     lineNumbers: false
-    #     mode: 'markdown'
-    #     lineWrapping: true
+    editorOptions: ->
+        lineNumbers: false
+        mode: 'markdown'
+        lineWrapping: true
 
     unpickedConcepts: ->
         _.difference @concept_array, @tags
@@ -127,17 +127,20 @@ Template.edit.events
         $('#addTag').val(tag)
 
     'click #analyzeBody': ->
+        text = $("#summernote").summernote('code')
+
         Docs.update FlowRouter.getParam('docId'),
-            $set: body: $('#body').val()
+            $set: body: text
         Meteor.call 'analyze', FlowRouter.getParam('docId')
 
     'click #saveDoc': ->
         text = $("#summernote").summernote('code')
-        console.log(text)
+        # console.log(text)
 
         Docs.update FlowRouter.getParam('docId'),
             $set:
                 body: text
+                # body: $('#body').val()
                 # price: $('#price').val()
         Meteor.call 'findTopDocMatches', @_id, (err, result)->
             if err then console.error err

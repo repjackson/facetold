@@ -37,11 +37,11 @@ template(name='nav')
                         //     li
                         //         a(href='#') One more separated link
                 .navbar-form.navbar-left
-                    // .form-group
-                    //     input#search.form-control(type='text', placeholder="search tags...")
-                    // .form-group
-                    //     .form-control
-                    //         +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="Tag Drilldown/'clear'")
+                    .form-group
+                        input#search.form-control(type='text', placeholder="search tags...")
+                    .form-group
+                        .form-control
+                            +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="Tag Drilldown/'clear'")
                 ul.nav.navbar-nav.navbar-right
                     if currentUser
                         li(class="{{isActivePath '/mine'}}")

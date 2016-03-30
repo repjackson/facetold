@@ -26,7 +26,6 @@ momentjs:moment
 drewy:datetimepicker
 kadira:flow-router
 kadira:blaze-layout
-perak:codemirror
 jeremy:geocomplete
 mquandalle:stylus
 harrison:papa-parse
@@ -42,5 +41,5 @@ twbs:bootstrap
 ian:accounts-ui-bootstrap-3
 dburles:collection-helpers
 mizzao:autocomplete
-mrgalaxy:stripe
+perak:codemirror
 summernote:summernote
