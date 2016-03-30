@@ -1,0 +1,11 @@
+template(name='view')
+    .panel.panel-default
+        .panel-heading
+            // span.glyphicon.glyphicon-tags
+            each tags
+                .btn.btn-sm.doc_tag(class=doc_tag_class)= this
+        .panel-footer
+            if isAuthor
+                a.btn.btn-primary.btn-sm.editDoc edit
+            p doc points: #{points}
+            p by #{username} [#{author.points}] #{when}

@@ -26,30 +26,11 @@ template(name='nav')
                         .form-control
                             +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="drilldown")
                 ul.nav.navbar-nav.navbar-right
-                    li.dropdown
-                        a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                            | Menu
-                            span.caret
-                        ul.dropdown-menu
-                            if currentUser
-                                li(class="{{isActivePath '/mine'}}")
-                                    a(href='/mine') my docs
-                                li.divider(role='separator')
-                                li(class="{{isActivePath '/marketplace'}}")
-                                    a(href='/marketplace') marketplace
-                                li.divider(role='separator')
-                                li(class="{{isActivePath '/bulk'}}")
-                                    a(href='/bulk') bulk editor
-                                li.divider(role='separator')
-                                li(class="{{isActivePath '/buysell'}}")
-                                    a(href='/buysell') buy/sell points
-                                li.divider(role='separator')
-                                li(class="{{isActivePath '/importers'}}")
-                                    a(href='/importers') importers
-                                li.divider(role='separator')
-                                li(class="{{isActivePath '/profile'}}")
-                                    a(href='/profile') profile [#{user.points}]
-                                li.divider(role='separator')
+                    if currentUser
+                        li(class="{{isActivePath '/mine'}}")
+                            a(href='/mine') my docs
+                        li(class="{{isActivePath '/profile'}}")
+                            a(href='/profile') profile [#{user.points}]
                     // li.dropdown
                     //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
                     //         | Profile

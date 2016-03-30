@@ -42,15 +42,11 @@ diff-sequence@1.0.3
 drewy:datetimepicker@1.0.3
 ecmascript@0.4.1
 ecmascript-runtime@0.2.8
-edgee:slingshot@0.7.1
 ejson@1.0.9
 email@1.0.10
-fortawesome:fontawesome@4.4.0_1
-fourseven:scss@3.3.3_3
 geojson-utils@1.0.6
 gwendall:body-events@0.1.6
 gwendall:session-json@0.1.7
-harrison:papa-parse@1.1.1
 hot-code-push@1.0.2
 html-tools@1.0.7
 htmljs@1.0.7
@@ -86,7 +82,6 @@ mousetrap:mousetrap@1.4.6_1
 mquandalle:jade@0.4.9
 mquandalle:jade-compiler@0.4.5
 mquandalle:stylus@1.1.1
-mrt:twit@0.2.0
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.41
 observe-sequence@1.0.9
@@ -111,10 +106,8 @@ spacebars@1.0.9
 spacebars-compiler@1.0.9
 srp@1.0.6
 stylus@2.511.3
-summernote:summernote@0.8.1
 templating@1.1.7
 templating-tools@1.0.2
-themeteorchef:bert@2.1.0
 tmeasday:publish-counts@0.7.3
 tracker@1.0.11
 twbs:bootstrap@3.3.6

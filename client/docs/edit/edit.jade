@@ -23,34 +23,6 @@ template(name='edit')
                         input#datetimepicker.form-control(type="text" value=dateTime)
                         .btn.btn-info.clearDT clear date/time
                     // .form-inline
-                    .form-group
-                        label(for='url') get url text
-                        input#url.form-control(type="text" value=url)
-                    // .btn-group(data-toggle='buttons')
-                    //     label.btn.btn-primary.active
-                    //         input(type='checkbox', autocomplete='off', checked='')
-                    //         |  Checkbox 1 (pre-checked)
-                    .checkbox
-                        label
-                            input(type="checkbox" id="personal" checked=personal)
-                            |private
-                    .form-group
-                        label(for='price') price
-                        input#price.form-control(type="number" value=price min='0')
-                    if unpickedKeywords.length
-                        .panel.panel-default
-                            .panel-heading suggestions
-                            .panel-body
-                                div keywords
-                                    each unpickedKeywords
-                                        .docKeyword.btn.btn-default #{this}
-                                .card-action
-                                    a#addAll add all suggestions
-                .well
-                    #analyzeBody.btn.btn-default autotag body
-                    // +CodeMirror id="body" options=editorOptions code=body
-                    #summernote
-                        |!{body}
                 .panel-footer
                     a#saveDoc.btn.btn-primary save
                     a#deleteDoc.btn.btn-danger.btn-sm.pull-right delete
