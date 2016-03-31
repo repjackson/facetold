@@ -26,6 +26,8 @@ template(name='nav')
                     //         +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="drilldown")
                 ul.nav.navbar-nav.navbar-right
                     if currentUser
+                        li(class="{{isActivePath '/unvoted'}}")
+                            a(href='/unvoted') Unvoted
                         li(class="{{isActivePath '/mine'}}")
                             a(href='/mine') Mine
                         li(class="{{isActivePath '/profile'}}")

@@ -13,8 +13,3 @@ Template.profile.events
     'click .calculateUserMatch': ->
         console.log @
         Meteor.call 'calculateUserMatch', @text, ->
-
-    'click .delete_tweets': ->
-        Meteor.call 'delete_tweets', (err, res)->
-            if err then console.log err
-            console.log res

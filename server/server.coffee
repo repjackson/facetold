@@ -9,9 +9,9 @@ Meteor.publish 'doc', (id)-> Docs.find id
 Meteor.publish 'people', ->
     Meteor.users.find {},
         fields:
-            authored_cloud: 1
-            upvoted_cloud: 1
-            downvoted_cloud: 1
+            authoredCloud: 1
+            upvotedCloud: 1
+            downvotedCloud: 1
             points: 1
             username: 1
 
@@ -19,18 +19,18 @@ Meteor.publish 'person', (id)->
     Meteor.users.find id,
         fields:
             username: 1
-            authored_cloud: 1
-            upvoted_cloud: 1
-            downvoted_cloud: 1
+            authoredCloud: 1
+            upvotedCloud: 1
+            downvotedCloud: 1
             points: 1
 
 Meteor.publish 'me', ->
     Meteor.users.find @userId,
         fields:
             username: 1
-            authored_cloud: 1
-            upvoted_cloud: 1
-            downvoted_cloud: 1
+            authoredCloud: 1
+            upvotedCloud: 1
+            downvotedCloud: 1
             points: 1
 
 Meteor.publish 'docs', (selectedTags, viewMode)->
@@ -38,6 +38,7 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
+        when 'unvoted' then match.upVoters = $nin: [@userId]
 
     Docs.find match,
         limit: 10
@@ -50,6 +51,7 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
+        when 'unvoted' then match.upVoters = $nin: [@userId]
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -81,7 +83,7 @@ Meteor.methods
 
 
     generatePersonalCloud: (uid)->
-        authored_cloud = Docs.aggregate [
+        authoredCloud = Docs.aggregate [
             { $match: authorId: uid }
             { $project: tags: 1 }
             { $unwind: '$tags' }
@@ -90,15 +92,15 @@ Meteor.methods
             { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 }
             ]
-        authored_list = (tag.name for tag in authored_cloud)
+        authoredList = (tag.name for tag in authoredCloud)
         Meteor.users.update Meteor.userId(),
             $set:
-                authored_cloud: authored_cloud
-                authored_list: authored_list
+                authoredCloud: authoredCloud
+                authoredList: authoredList
 
 
-        upvoted_cloud = Docs.aggregate [
-            { $match: up_voters: $in: [Meteor.userId()] }
+        upvotedCloud = Docs.aggregate [
+            { $match: upVoters: $in: [Meteor.userId()] }
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
@@ -106,15 +108,15 @@ Meteor.methods
             { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 }
             ]
-        upvoted_list = (tag.name for tag in upvoted_cloud)
+        upvotedList = (tag.name for tag in upvotedCloud)
         Meteor.users.update Meteor.userId(),
             $set:
-                upvoted_cloud: upvoted_cloud
-                upvoted_list: upvoted_list
+                upvotedCloud: upvotedCloud
+                upvotedList: upvotedList
 
 
-        downvoted_cloud = Docs.aggregate [
-            { $match: down_voters: $in: [Meteor.userId()] }
+        downvotedCloud = Docs.aggregate [
+            { $match: downVoters: $in: [Meteor.userId()] }
             { $project: tags: 1 }
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
@@ -122,11 +124,11 @@ Meteor.methods
             { $limit: 50 }
             { $project: _id: 0, name: '$_id', count: 1 }
             ]
-        downvoted_list = (tag.name for tag in downvoted_cloud)
+        downvotedList = (tag.name for tag in downvotedCloud)
         Meteor.users.update Meteor.userId(),
             $set:
-                downvoted_cloud: downvoted_cloud
-                downvoted_list: downvoted_list
+                downvotedCloud: downvotedCloud
+                downvotedList: downvotedList
 
     calculateUserMatch: (username)->
         myCloud = Meteor.user().cloud

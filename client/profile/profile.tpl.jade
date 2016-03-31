@@ -3,31 +3,22 @@
         .panel-heading Profile
         .panel-body
             with user
-                // if hasReceivedTweets
-                //     a.btn.delete_tweets
-                //         i.material-icons.left delete
-                //         |Delete My Tweets
-                // else
-                //     a.btn.get_tweets
-                //         i.material-icons.left play_for_work
-                //         |Get My Tweets
-                // div Tweet Doc Count: #{tweetDocCount}
-                #generatePersonalCloud.btn.btn-default (re)Generate Personal Cloud
-                if authored_cloud
+                #generatePersonalCloud.btn.btn-default Calculate Clouds
+                if authoredCloud
                     .well Authored Cloud
-                        each authored_cloud
+                        each authoredCloud
                             .btn.btn-link(disabled='disabled')
                                 |#{this.name}
                                 small #{this.count}
-                if upvoted_cloud
+                if upvotedCloud
                     .well Upvoted Cloud
-                        each upvoted_cloud
+                        each upvotedCloud
                             .btn.btn-link(disabled='disabled')
                                 |#{this.name}
                                 small #{this.count}
-                if downvoted_cloud
+                if downvotedCloud
                     .well Downvoted Cloud
-                        each downvoted_cloud
+                        each downvotedCloud
                             .btn.btn-link(disabled='disabled')
                                 |#{this.name}
                                 small #{this.count}
