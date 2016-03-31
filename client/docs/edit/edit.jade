@@ -3,14 +3,13 @@ template(name='edit')
         .container
             .panel.panel-default
                 .panel-body
-                    div tags
-                    each tags
-                        .btn.btn-default.docTag
-                            span.glyphicon.glyphicon-minus
-                            |#{this}
-                    .form-group
-                        label(for='addTag')  add tag
-                        input#addTag.form-control(type=text autofocus='')
+                    .form-inline
+                        each tags
+                            .btn.btn-default.docTag
+                                span.glyphicon.glyphicon-minus
+                                |#{this}
+                        .form-group
+                            input#addTag.form-control(type=text autofocus='' placeholder='add tag')
                     div user mentions
                     each mentions
                         .btn.btn-default.docMention

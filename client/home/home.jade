@@ -1,15 +1,16 @@
 template(name='home')
     .section.text-center
-        if selected_tags
-            #clear_tags.btn.btn-default.active
-                span.glyphicon.glyphicon-remove-sign
-        each selected_tags
-            a.btn.btn-default.active.unselect_tag
-                strong #{this}
-        each global_tags
+        if selectedTags
+            .btn-group
+                #clearTags.btn.btn-default.active
+                    span.glyphicon.glyphicon-remove-sign
+                each selectedTags
+                    a.btn.btn-default.active.unselectTag
+                        strong #{this}
+        each globalTags
             // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
-            a.btn.btn-default.select_tag #{this.name}
-                span.badge #{this.count}
+            a.btn.btn-default.selectTag #{this.name}
+                // span.badge #{this.count}
     hr
     each docs
         +view

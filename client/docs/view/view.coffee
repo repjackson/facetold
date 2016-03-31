@@ -3,16 +3,16 @@ Template.view.onCreated ->
 
 Template.view.helpers
     isAuthor: -> @authorId is Meteor.userId()
-    vote_up_button_class: -> if Meteor.userId() in @up_voters then 'active' else ''
-    vote_down_button_class: -> if Meteor.userId() in @down_voters then 'active' else ''
+    voteUpButtonClass: -> if Meteor.userId() in @upVoters then 'active' else ''
+    voteDownButtonClass: -> if Meteor.userId() in @downVoters then 'active' else ''
     when: -> moment(@timestamp).fromNow()
-    doc_tag_class: -> if @valueOf() in selected_tags.array() then 'btn-default active' else 'btn-default'
+    docTagClass: -> if @valueOf() in selectedTags.array() then 'btn-default active' else 'btn-default'
     author: -> Meteor.users.findOne(@authorId)
 
 Template.view.events
-    'click .deletePost': -> if confirm 'Delete Post?' then Docs.remove @_id
-
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
 
-    'click .doc_tag': -> if @valueOf() in selected_tags.array() then selected_tags.remove @valueOf() else selected_tags.push @valueOf()
+    'click .docTag': -> if @valueOf() in selectedTags.array() then selectedTags.remove @valueOf() else selectedTags.push @valueOf()
 
+    'click .voteDown': -> Meteor.call 'voteDown', @_id
+    'click .voteUp': -> Meteor.call 'voteUp', @_id

@@ -1,14 +1,17 @@
 template(name='view')
-    .panel.panel-default
+    .panel.panel-default.text-center
         .panel-heading
-            div tags:
-                each tags
-                    .btn.btn-sm.doc_tag(class=doc_tag_class)= this
-            div mentions:
-                each mentions
-                    .btn.btn-sm.doc_tag(class=doc_mention_class)= this
+            each tags
+                .btn.btn-lg.docTag(class=docTagClass)  #{this}
+        .panel-body
+            .btn-group
+                .btn.btn-success.btn-lg.voteUp(class=voteUpButtonClass)
+                    span.glyphicon.glyphicon-thumbs-up
+                .btn.btn-danger.btn-lg.voteDown(class=voteDownButtonClass)
+                    span.glyphicon.glyphicon-thumbs-down
         .panel-footer
+            .label.label-primary.label-lg #{points}
+            | by #{username} #{when}
             if isAuthor
-                a.btn.btn-primary.btn-sm.editDoc edit
-            p doc points: #{points}
-            p by #{username} #{when}
+                a.btn.btn-primary.editDoc
+                    span.glyphicon.glyphicon-pencil

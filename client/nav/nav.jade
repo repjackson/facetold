@@ -8,7 +8,7 @@ template(name='nav')
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
-                a.navbar-brand(href='/' class="{{isActivePath '/'}}") facet
+                a.navbar-brand(href='/' class="{{isActivePath '/'}}") Facet
                     // img(src='/f_logo.png' height='42' width='42')
             // Collect the nav links, forms, and other content for toggling
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
@@ -17,20 +17,19 @@ template(name='nav')
                         li
                             a#addDoc(href='#')
                                 // span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
-                                |add
-                    p.navbar-text #{user_counter} users #{doc_counter} docs
+                                |Add
                 .navbar-form.navbar-left
-                    .form-group
-                        input#search.form-control(type='text', placeholder="global search")
-                    .form-group
-                        .form-control
-                            +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="drilldown")
+                    // .form-group
+                    //     input#search.form-control(type='text', placeholder="global search")
+                    // .form-group
+                    //     .form-control
+                    //         +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="drilldown")
                 ul.nav.navbar-nav.navbar-right
                     if currentUser
                         li(class="{{isActivePath '/mine'}}")
-                            a(href='/mine') my docs
+                            a(href='/mine') Mine
                         li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') profile
+                            a(href='/profile') Profile
                     +loginButtons align='right'
 
 

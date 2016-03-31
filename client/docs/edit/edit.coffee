@@ -8,9 +8,9 @@ Template.edit.onCreated ->
 Template.edit.onRendered ->
 
     Meteor.setTimeout (->
-        # $('.datepicker').pickadate
-        #     selectMonths: true
-        #     selectYears: 15
+    #     # $('.datepicker').pickadate
+    #     #     selectMonths: true
+    #     #     selectYears: 15
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -69,11 +69,6 @@ Template.edit.helpers
     }
 
 Template.edit.events
-    'autocompleteselect #userSelection': (event, template, doc)->
-        name =  doc.username.toString()
-        Docs.update FlowRouter.getParam('docId'),
-            $push: mentions: name
-
     'keyup #addTag': (e,t)->
         e.preventDefault
         tag = $('#addTag').val().toLowerCase()
@@ -84,20 +79,12 @@ Template.edit.events
                         $push: tags: tag
                     $('#addTag').val('')
                 else
-                    Docs.update FlowRouter.getParam('docId'),
-                        $set: body: $('#body').val()
-                    thisDocTags = @tags
                     FlowRouter.go '/'
-                    selected_tags.clear()
+            when 8
+                console.log 'back'
+                Docs.update FlowRouter.getParam('docId'),
+                    $pull: tags: tag
 
-    'click .clearDT': ->
-        tagsWithoutDate = _.difference(@tags, @datearray)
-        Docs.update FlowRouter.getParam('docId'),
-            $set:
-                tags: tagsWithoutDate
-                datearray: []
-                dateTime: null
-        $('#datetimepicker').val('')
 
     'click .docTag': ->
         tag = @valueOf()
@@ -105,21 +92,12 @@ Template.edit.events
             $pull: tags: tag
         $('#addTag').val(tag)
 
-    'click .docMention': ->
-        mention = @valueOf()
-        Docs.update FlowRouter.getParam('docId'),
-            $pull: mentions: mention
 
     'click #saveDoc': -> FlowRouter.go '/'
 
     'click #deleteDoc': ->
-        if confirm 'Delete this doc? This will return 1 point'
+        if confirm 'Delete this doc?'
             Meteor.call 'deleteDoc', @_id, (err, result)->
                 if err then console.error err
                 else
                     FlowRouter.go '/'
-
-
-    'click .docKeyword': ->
-        docId = FlowRouter.getParam('docId')
-        Docs.update docId, $addToSet: tags: @valueOf()

@@ -33,37 +33,30 @@ Meteor.publish 'me', ->
             downvoted_cloud: 1
             points: 1
 
-Meteor.publish 'docs', (selected_tags, viewMode)->
-    Counts.publish(this, 'doc_counter', Docs.find(), { noReady: true })
-
+Meteor.publish 'docs', (selectedTags, viewMode)->
     match = {}
-    if not @userId? then match.personal = false
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
-        when 'marketplace' then match.auctionable = true
-
 
     Docs.find match,
-        limit: 5
+        limit: 10
         sort: timestamp: -1
 
-Meteor.publish 'tags', (selected_tags, viewMode)->
+Meteor.publish 'tags', (selectedTags, viewMode)->
     self = @
 
     match = {}
-    if selected_tags.length > 0 then match.tags = $all: selected_tags
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
-        when 'marketplace' then match.auctionable = true
-    if not @userId? then match.personal = false
 
     cloud = Docs.aggregate [
         { $match: match }
         { $project: tags: 1 }
         { $unwind: '$tags' }
         { $group: _id: '$tags', count: $sum: 1 }
-        { $match: _id: $nin: selected_tags }
+        { $match: _id: $nin: selectedTags }
         { $sort: count: -1, _id: 1 }
         { $limit: 25 }
         { $project: _id: 0, name: '$_id', count: 1 }
@@ -74,7 +67,6 @@ Meteor.publish 'tags', (selected_tags, viewMode)->
             name: tag.name
             count: tag.count
             index: i
-
 
     self.ready()
 
@@ -194,20 +186,3 @@ Meteor.methods
 
         # console.log result
         return result
-
-    tagifyDateTime: (val)->
-        console.log moment(val).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        minute = moment(val).minute()
-        hour = moment(val).format('h')
-        date = moment(val).format('Do')
-        ampm = moment(val).format('a')
-        weekdaynum = moment(val).isoWeekday()
-        weekday = moment().isoWeekday(weekdaynum).format('dddd')
-
-        month = moment(val).format('MMMM')
-        year = moment(val).format('YYYY')
-
-        datearray = [hour, minute, ampm, weekday, month, date, year]
-        datearray = _.map(datearray, (el)-> el.toString().toLowerCase())
-        # datearray = _.each(datearray, (el)-> console.log(typeof el))
-        return datearray
