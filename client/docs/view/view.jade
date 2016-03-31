@@ -10,7 +10,7 @@ template(name='view')
                 .btn.btn-danger.btn-lg.voteDown(class=voteDownButtonClass)
                     span.glyphicon.glyphicon-thumbs-down
         .panel-footer
-            .label.label-primary.label-lg #{points}
+            | #{points}
             // | by #{username} #{when}
             if isAuthor
                 a.btn.btn-primary.btn-sm.editDoc

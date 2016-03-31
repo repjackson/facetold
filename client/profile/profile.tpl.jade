@@ -1,30 +1,46 @@
-.container
-    .panel.panel-default
-        .panel-heading Profile
-        .panel-body
-            with user
-                #generatePersonalCloud.btn.btn-default Calculate Clouds
+with user
+    .container
+        .panel.panel-default
+            .panel-heading Clouds
+                a#generatePersonalCloud.pull-right.glyphicon.glyphicon-refresh
+            .panel-body
                 if authoredCloud
-                    .well Authored Cloud
+                    .panel.panel-default
+                    .panel-heading Authored Cloud
+                    .panel-body
                         each authoredCloud
-                            .btn.btn-link(disabled='disabled')
+                            .btn.btn-default
                                 |#{this.name}
                                 small #{this.count}
                 if upvotedCloud
-                    .well Upvoted Cloud
+                    .panel.panel-default
+                    .panel-heading Upvoted Cloud
+                    .panel-body
                         each upvotedCloud
-                            .btn.btn-link(disabled='disabled')
+                            .btn.btn-default
                                 |#{this.name}
                                 small #{this.count}
                 if downvotedCloud
-                    .well Downvoted Cloud
+                    .panel.panel-default
+                    .panel-heading Downvoted Cloud
+                    .panel-body
                         each downvotedCloud
-                            .btn.btn-link(disabled='disabled')
+                            .btn.btn-default
                                 |#{this.name}
                                 small #{this.count}
-                strong Top Matched Users
-                .row
-                    // #calculateUserMatch.btn Calculate User Matches
+        .panel.panel-default
+            .panel-heading Top Matched Users
+            .panel-body
+                ul.list-group
+                each people
+                    li.list-group-item
+                        |#{this.username}
+                        a.matchTwoUsersAuthoredCloud.pull-right Calculate
+                each authoredCloudMatches
                     ul.list-group
-                        each usernames
-                            a.list-group-item.calculateUserMatch #{this.text}
+                        li.list-group-item
+                            | #{this.username}
+                            each userMatchAuthoredCloud
+                                .btn.btn-default
+                                    |#{this.name}
+                                    small #{this.count}

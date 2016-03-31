@@ -14,6 +14,7 @@ Meteor.publish 'people', ->
             downvotedCloud: 1
             points: 1
             username: 1
+            authoredCloudMatches: 1
 
 Meteor.publish 'person', (id)->
     Meteor.users.find id,
@@ -38,7 +39,9 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
-        when 'unvoted' then match.upVoters = $nin: [@userId]
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
 
     Docs.find match,
         limit: 10
@@ -51,7 +54,9 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     switch viewMode
         when 'mine' then match.authorId = @userId
-        when 'unvoted' then match.upVoters = $nin: [@userId]
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -130,18 +135,18 @@ Meteor.methods
                 downvotedCloud: downvotedCloud
                 downvotedList: downvotedList
 
-    calculateUserMatch: (username)->
-        myCloud = Meteor.user().cloud
-        otherGuy = Meteor.users.findOne "profile.name": username
-        console.log username
-        console.log otherGuy
-        Meteor.call 'generatePersonalCloud', otherGuy._id
-        otherCloud = otherGuy.cloud
+    # calculateUserMatchOld: (username)->
+    #     myCloud = Meteor.user().cloud
+    #     otherGuy = Meteor.users.findOne "profile.name": username
+    #     console.log username
+    #     console.log otherGuy
+    #     Meteor.call 'generatePersonalCloud', otherGuy._id
+    #     otherCloud = otherGuy.cloud
 
-        myLinearCloud = _.pluck(myCloud, 'name')
-        otherLinearCloud = _.pluck(otherCloud, 'name')
-        intersection = _.intersection(myLinearCloud, otherLinearCloud)
-        console.log intersection
+    #     myLinearCloud = _.pluck(myCloud, 'name')
+    #     otherLinearCloud = _.pluck(otherCloud, 'name')
+    #     intersection = _.intersection(myLinearCloud, otherLinearCloud)
+    #     console.log intersection
 
 
     matchTwoDocs: (firstId, secondId)->
@@ -188,3 +193,26 @@ Meteor.methods
 
         # console.log result
         return result
+
+    matchTwoUsersAuthoredCloud: (uId)->
+        username = Meteor.users.findOne(uId).username
+        match = {}
+        match.authorId = $in: [Meteor.userId(), uId]
+
+        userMatchAuthoredCloud = Docs.aggregate [
+            { $match: match }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 50 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+        # authoredList = (tag.name for tag in userMatchAuthoredCloud)
+        Meteor.users.update Meteor.userId(),
+            $addToSet:
+                authoredCloudMatches:
+                    uId: uId
+                    username: username
+                    userMatchAuthoredCloud: userMatchAuthoredCloud
+
