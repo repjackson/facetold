@@ -20,7 +20,6 @@ jquery
 tmeasday:publish-counts
 babrahams:constellation
 http
-perak:markdown
 raix:handlebar-helpers
 momentjs:moment
 drewy:datetimepicker
@@ -37,4 +36,3 @@ twbs:bootstrap
 ian:accounts-ui-bootstrap-3
 dburles:collection-helpers
 mizzao:autocomplete
-perak:codemirror

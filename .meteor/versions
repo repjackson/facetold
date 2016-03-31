@@ -87,9 +87,6 @@ npm-mongo@1.4.41
 observe-sequence@1.0.9
 okgrow:analytics@1.0.5
 ordered-dict@1.0.5
-perak:codemirror@1.2.9
-perak:markdown@1.0.5
-pntbr:js-yaml-client@0.0.1
 promise@0.6.5
 raix:handlebar-helpers@0.2.5
 random@1.0.7

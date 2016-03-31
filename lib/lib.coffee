@@ -2,8 +2,8 @@
 @Tags = new Meteor.Collection 'tags'
 
 Docs.before.insert (userId, doc)->
-    # doc.tags = []
-    # doc.tags = _.map(doc.tags, (tag)-> tag.toString().toLowerCase())
+    doc.tags = []
+    doc.mentions = []
     doc.timestamp = Date.now()
     doc.authorId = Meteor.userId()
     doc.username = Meteor.user().username

@@ -56,7 +56,24 @@ Template.edit.helpers
         docId = FlowRouter.getParam('docId')
         Docs.findOne docId
 
+    userSettings: -> {
+        position: 'bottom'
+        limit: 10
+        rules: [
+            {
+                collection: Meteor.users
+                field: 'username'
+                template: Template.userPill
+            }
+        ]
+    }
+
 Template.edit.events
+    'autocompleteselect #userSelection': (event, template, doc)->
+        name =  doc.username.toString()
+        Docs.update FlowRouter.getParam('docId'),
+            $push: mentions: name
+
     'keyup #addTag': (e,t)->
         e.preventDefault
         tag = $('#addTag').val().toLowerCase()
@@ -87,6 +104,11 @@ Template.edit.events
         Docs.update FlowRouter.getParam('docId'),
             $pull: tags: tag
         $('#addTag').val(tag)
+
+    'click .docMention': ->
+        mention = @valueOf()
+        Docs.update FlowRouter.getParam('docId'),
+            $pull: mentions: mention
 
     'click #saveDoc': -> FlowRouter.go '/'
 

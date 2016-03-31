@@ -30,24 +30,8 @@ template(name='nav')
                         li(class="{{isActivePath '/mine'}}")
                             a(href='/mine') my docs
                         li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') profile [#{user.points}]
-                    // li.dropdown
-                    //     a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                    //         | Profile
-                    //         span.caret
-                    //     ul.dropdown-menu
-                    //         li
-                    //             a(href='#') Action
-                    //         li
-                    //             a(href='#') Another action
-                    //         li
-                    //             a(href='#') Something else here
-                    //         li.divider(role='separator')
-                    //         li
-                    //             a(href='#') Separated link
+                            a(href='/profile') profile
                     +loginButtons align='right'
-            // /.navbar-collapse
-        // /.container-fluid
 
 
 template(name='tagresult')
