@@ -28,3 +28,7 @@ Template.view.events
     'click .voteDown': ->
         if Meteor.userId() then Meteor.call 'voteDown', @_id
     'click .voteUp': -> if Meteor.userId() then Meteor.call 'voteUp', @_id
+
+    'click .deleteDoc': ->
+        if confirm 'Delete?'
+            Meteor.call 'deleteDoc', @_id
