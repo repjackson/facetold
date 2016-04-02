@@ -1,8 +1,6 @@
 template(name='home')
-    hr
     .text-center
-        div
-            +loginButtons
+        +loginButtons
         if currentUser
             .form-inline
                 each newTags
@@ -10,11 +8,7 @@ template(name='home')
                         span.glyphicon.glyphicon-minus
                         |#{this}
                 input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
-            // select#addTag.form-control(multiple='multiple')
-                // option(value='AL') Alabama
-                // option(value='WY') Wyoming
-        hr
-        | Tags
+        h5 filter tags
         if selectedTags
             .btn-group
                 #clearTags.btn.btn-default.active
@@ -25,9 +19,8 @@ template(name='home')
         each globalTags
             // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
             a.btn.btn-default.selectTag #{this.name}
-                small #{this.count}
-        hr
-        | People
+                small #{this.countPlusPoints}
+        h5 filter authors
         if selectedUsernames
             .btn-group
                 #clearUsernames.btn.btn-default.active
@@ -38,21 +31,7 @@ template(name='home')
         each globalUsernames
             // a.btn.btn-default.select_Username(class=globalUsernameClass) #{this.name}
             a.btn.btn-default.selectUsername #{this.text}
+                // small #{this.count}
                 small #{this.count}
     each docs
-        hr
-        .text-center
-            each tags
-                // .btn.btn-link.docTag(class=docTagClass)  #{this}
-                span #{this} &nbsp;&nbsp;
-                // if isAuthor
-                //     a.btn.btn-default.btn-sm.editDoc
-                //         span.glyphicon.glyphicon-pencil
-            | by #{username}
-            // .btn-group
-            //     .btn.btn-default.voteUp(class=voteUpButtonClass)
-            //         span.glyphicon.glyphicon-thumbs-up
-            //     .btn.btn-default.disabled
-            //         | #{points}
-            //     .btn.btn-default.voteDown(class=voteDownButtonClass)
-            //         span.glyphicon.glyphicon-thumbs-down
+        +view

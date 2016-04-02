@@ -1,14 +1,13 @@
 template(name='view')
-    .text-center
-        // .panel-heading
-        h4
-            each tags
-                // .btn.btn-link.docTag(class=docTagClass)  #{this}
-                span #{this} &nbsp;&nbsp;
-            // if isAuthor
-            //     a.btn.btn-default.btn-sm.editDoc
-            //         span.glyphicon.glyphicon-pencil
-        .row
+        hr
+        .text-center
+            h4
+                each tags
+                    // .btn.btn-link.docTag(class=docTagClass)  #{this}
+                    span #{this} &nbsp;&nbsp;
+                    // if isAuthor
+                    //     a.btn.btn-default.btn-sm.editDoc
+                    //         span.glyphicon.glyphicon-pencil
             .btn-group
                 .btn.btn-default.voteUp(class=voteUpButtonClass)
                     span.glyphicon.glyphicon-thumbs-up
@@ -16,5 +15,5 @@ template(name='view')
                     | #{points}
                 .btn.btn-default.voteDown(class=voteDownButtonClass)
                     span.glyphicon.glyphicon-thumbs-down
-            // .panel-footer
-            | by #{username}
+            // .btn.btn-default.btn-sm by #{username} [#{author.points}]
+            h5 by #{username} [#{author.points}]
