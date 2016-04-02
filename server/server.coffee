@@ -34,8 +34,9 @@ Meteor.publish 'me', ->
             downvotedCloud: 1
             points: 1
 
-Meteor.publish 'docs', (selectedTags, selectedUsernames, viewMode)->
+Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
     match = {}
+    if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode
@@ -48,7 +49,15 @@ Meteor.publish 'docs', (selectedTags, selectedUsernames, viewMode)->
         limit: 10
         sort: timestamp: -1
 
-Meteor.publish 'usernames', (selectedTags, selectedUsernames, viewMode)->
+# Meteor.publish 'usernames2', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+#     self = @
+
+#     match = {}
+#     if selectedTags.length > 0 then match.tags = $all: selectedTags
+#     if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+
+
+Meteor.publish 'usernames', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
     self = @
 
     match = {}
@@ -72,10 +81,11 @@ Meteor.publish 'usernames', (selectedTags, selectedUsernames, viewMode)->
     self.ready()
 
 
-Meteor.publish 'tags', (selectedTags, selectedUsernames, viewMode)->
+Meteor.publish 'tags', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
     self = @
 
     match = {}
+    if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode

@@ -1,37 +1,44 @@
 template(name='home')
     .text-center
-        +loginButtons
+        .btn.btn-primary
+            +loginButtons
         if currentUser
-            .form-inline
-                each newTags
-                    .btn.btn-default.newDocTag
-                        span.glyphicon.glyphicon-minus
-                        |#{this}
-                input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
-        h5 filter tags
+            a.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
+                | Add
+            #collapseExample.collapse
+                .well
+                    .form-inline
+                        each newTags
+                            .btn.btn-default.newDocTag
+                                span.glyphicon.glyphicon-minus
+                                |#{this}
+                        input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
+        h5 with
             if selectedTags
                 .btn-group
-                    #clearTags.btn.btn-default.active
+                    #clearTags.btn.btn-primary
                         span.glyphicon.glyphicon-remove-sign
                     each selectedTags
-                        a.btn.btn-default.active.unselectTag
+                        a.btn.btn-primary.unselectTag
                             strong #{this}
             each globalTags
                 // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
                 a.btn.btn-default.selectTag #{this.name}
                     small #{this.countPlusPoints}
-        h5 filter authors
+        h5 by
             if selectedUsernames
                 .btn-group
-                    #clearUsernames.btn.btn-default.active
+                    #clearUsernames.btn.btn-primary
                         span.glyphicon.glyphicon-remove-sign
                     each selectedUsernames
-                        a.btn.btn-default.active.unselectUsername
+                        a.btn.btn-primary.unselectUsername
                             strong #{this}
             each globalUsernames
-                // a.btn.btn-default.select_Username(class=globalUsernameClass) #{this.name}
-                a.btn.btn-default.selectUsername #{this.text}
-                    // small #{this.count}
-                    small #{this.count}
+                .btn.btn-group
+                    .btn.btn-default.selectUsername #{this.text}
+                        small #{this.count}
+                    .btn.pinUsername(class=pinnedButtonClass)
+                        span.glyphicon.glyphicon-pushpin
+
     each docs
         +view

@@ -1,12 +1,13 @@
 @newTags = new ReactiveArray []
 @selectedTags = new ReactiveArray []
 @selectedUsernames = new ReactiveArray []
+@pinnedUsernames = new ReactiveArray []
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
-    @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
-    @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
 
 Template.home.helpers
     globalTags: ->
@@ -30,6 +31,9 @@ Template.home.helpers
     globalUsernames: -> Usernames.find()
     selectedUsernames: -> selectedUsernames.list()
 
+    pinnedUsernames: -> pinnedUsernames.list()
+
+    pinnedButtonClass: -> if @text in pinnedUsernames.array() then 'btn-primary' else 'btn-default'
 
     user: -> Meteor.user()
 
@@ -37,6 +41,9 @@ Template.home.events
     'click .selectTag': -> selectedTags.push @name
     'click .unselectTag': -> selectedTags.remove @valueOf()
     'click #clearTags': -> selectedTags.clear()
+
+
+    'click .pinUsername': -> if @text in pinnedUsernames.array() then pinnedUsernames.remove @text else pinnedUsernames.push @text
 
     'click .selectUsername': -> selectedUsernames.push @text
     'click .unselectUsername': -> selectedUsernames.remove @valueOf()
