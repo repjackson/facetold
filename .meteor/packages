@@ -27,11 +27,9 @@ kadira:blaze-layout
 jeremy:geocomplete
 mquandalle:stylus
 okgrow:analytics
-reactive-var
 matb33:collection-hooks
-zimme:active-route
 accounts-password
 twbs:bootstrap
-ian:accounts-ui-bootstrap-3
 dburles:collection-helpers
 mizzao:autocomplete
+accounts-ui

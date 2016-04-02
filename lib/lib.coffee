@@ -2,7 +2,6 @@
 @Tags = new Meteor.Collection 'tags'
 
 Docs.before.insert (userId, doc)->
-    doc.tags = []
     doc.upVoters = []
     doc.downVoters = []
     doc.timestamp = Date.now()

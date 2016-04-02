@@ -1,5 +1,16 @@
 template(name='home')
-    .section.text-center
+    .text-center
+        +loginButtons
+        hr
+        if currentUser
+            .form-inline
+                each newTags
+                    .btn.btn-default.docTag
+                        span.glyphicon.glyphicon-minus
+                        |#{this}
+                .form-group
+                    input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
+        hr
         if selectedTags
             .btn-group
                 #clearTags.btn.btn-default.active
@@ -10,7 +21,7 @@ template(name='home')
         each globalTags
             // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
             a.btn.btn-default.selectTag #{this.name}
-                // span.badge #{this.count}
-    hr
+                // small #{this.count}
     each docs
+        hr
         +view

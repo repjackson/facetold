@@ -1,3 +1,6 @@
+@newTags = new ReactiveArray []
+
+
 Template.home.onCreated ->
     Meteor.subscribe 'people'
     @autorun -> Meteor.subscribe('tags', selectedTags.array(), Session.get('view'))
@@ -20,6 +23,7 @@ Template.home.helpers
         return buttonClass
 
     selectedTags: -> selectedTags.list()
+    newTags: -> newTags.list()
 
     user: -> Meteor.user()
 
@@ -27,3 +31,20 @@ Template.home.events
     'click .selectTag': -> selectedTags.push @name
     'click .unselectTag': -> selectedTags.remove @valueOf()
     'click #clearTags': -> selectedTags.clear()
+
+    'keyup #addTag': (e,t)->
+        e.preventDefault
+        tag = $('#addTag').val().toLowerCase()
+        switch e.which
+            when 13
+                if tag.length > 0
+                    newTags.push tag
+                    $('#addTag').val('')
+                else
+                    tags = newTags.array()
+                    console.log tags
+                    Meteor.call 'createDoc', tags
+                    newTags.clear()
+                    selectedTags.clear()
+                    for tag in tags
+                        selectedTags.push tag

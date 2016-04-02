@@ -79,9 +79,9 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
 
 
 Meteor.methods
-    createDoc: ->
-        newId = Docs.insert {}
-        newId
+    createDoc: (tags)->
+        Docs.insert
+            tags: tags
 
     deleteDoc: (id)->
         Docs.remove id
