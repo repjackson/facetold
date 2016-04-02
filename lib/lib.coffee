@@ -40,7 +40,9 @@ Meteor.methods
 
     voteDown: (id)->
         doc = Docs.findOne id
-        if Meteor.userId() in doc.downVoters #undo downvote
+        if doc.points is 0 or doc.points is 1 and Meteor.userId() in doc.upVoters
+            Docs.remove id
+        else if Meteor.userId() in doc.downVoters #undo downvote
             Docs.update id,
                 $pull: downVoters: Meteor.userId()
                 $inc: points: 1

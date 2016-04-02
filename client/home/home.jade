@@ -9,29 +9,29 @@ template(name='home')
                         |#{this}
                 input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
         h5 filter tags
-        if selectedTags
-            .btn-group
-                #clearTags.btn.btn-default.active
-                    span.glyphicon.glyphicon-remove-sign
-                each selectedTags
-                    a.btn.btn-default.active.unselectTag
-                        strong #{this}
-        each globalTags
-            // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
-            a.btn.btn-default.selectTag #{this.name}
-                small #{this.countPlusPoints}
+            if selectedTags
+                .btn-group
+                    #clearTags.btn.btn-default.active
+                        span.glyphicon.glyphicon-remove-sign
+                    each selectedTags
+                        a.btn.btn-default.active.unselectTag
+                            strong #{this}
+            each globalTags
+                // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
+                a.btn.btn-default.selectTag #{this.name}
+                    small #{this.countPlusPoints}
         h5 filter authors
-        if selectedUsernames
-            .btn-group
-                #clearUsernames.btn.btn-default.active
-                    span.glyphicon.glyphicon-remove-sign
-                each selectedUsernames
-                    a.btn.btn-default.active.unselectUsername
-                        strong #{this}
-        each globalUsernames
-            // a.btn.btn-default.select_Username(class=globalUsernameClass) #{this.name}
-            a.btn.btn-default.selectUsername #{this.text}
-                // small #{this.count}
-                small #{this.count}
+            if selectedUsernames
+                .btn-group
+                    #clearUsernames.btn.btn-default.active
+                        span.glyphicon.glyphicon-remove-sign
+                    each selectedUsernames
+                        a.btn.btn-default.active.unselectUsername
+                            strong #{this}
+            each globalUsernames
+                // a.btn.btn-default.select_Username(class=globalUsernameClass) #{this.name}
+                a.btn.btn-default.selectUsername #{this.text}
+                    // small #{this.count}
+                    small #{this.count}
     each docs
         +view
