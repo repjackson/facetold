@@ -1,5 +1,6 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
+@Usernames = new Meteor.Collection 'usernames'
 
 Docs.before.insert (userId, doc)->
     doc.upVoters = []
@@ -10,8 +11,8 @@ Docs.before.insert (userId, doc)->
     doc.points = 0
     return
 
-Docs.helpers
-    author: (doc)-> Meteor.users.findOne @authorId
+# Docs.helpers
+#     author: (doc)-> Meteor.users.findOne @authorId
 
 
 Meteor.methods
@@ -78,23 +79,23 @@ Meteor.methods
     #             addresstags: loweredAddressTags
 
 
-FlowRouter.route '/', action: (params) ->
-    Session.set('view', 'all')
-    BlazeLayout.render 'layout', main: 'home'
+# FlowRouter.route '/', action: (params) ->
+#     Session.set('view', 'all')
+#     BlazeLayout.render 'layout', main: 'home'
 
-FlowRouter.route '/edit/:docId', action: (params) ->
-    BlazeLayout.render 'layout', main: 'edit'
+# FlowRouter.route '/edit/:docId', action: (params) ->
+#     BlazeLayout.render 'layout', main: 'edit'
 
-FlowRouter.route '/view/:docId', action: (params) ->
-    BlazeLayout.render 'layout', main: 'viewFull'
+# FlowRouter.route '/view/:docId', action: (params) ->
+#     BlazeLayout.render 'layout', main: 'viewFull'
 
-FlowRouter.route '/mine', action: (params) ->
-    Session.set('view', 'mine')
-    BlazeLayout.render 'layout', main: 'home'
+# FlowRouter.route '/mine', action: (params) ->
+#     Session.set('view', 'mine')
+#     BlazeLayout.render 'layout', main: 'home'
 
-FlowRouter.route '/unvoted', action: (params) ->
-    Session.set('view', 'unvoted')
-    BlazeLayout.render 'layout', main: 'home'
+# FlowRouter.route '/unvoted', action: (params) ->
+#     Session.set('view', 'unvoted')
+#     BlazeLayout.render 'layout', main: 'home'
 
-FlowRouter.route '/profile', action: (params) ->
-    BlazeLayout.render 'layout', main: 'profile'
+# FlowRouter.route '/profile', action: (params) ->
+#     BlazeLayout.render 'layout', main: 'profile'

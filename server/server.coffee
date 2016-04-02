@@ -34,9 +34,10 @@ Meteor.publish 'me', ->
             downvotedCloud: 1
             points: 1
 
-Meteor.publish 'docs', (selectedTags, viewMode)->
+Meteor.publish 'docs', (selectedTags, selectedUsernames, viewMode)->
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'
@@ -47,11 +48,36 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
         limit: 10
         sort: timestamp: -1
 
-Meteor.publish 'tags', (selectedTags, viewMode)->
+Meteor.publish 'usernames', (selectedTags, selectedUsernames, viewMode)->
+    self = @
+
+    match = {}
+    if selectedTags.length > 0 then match.keyword_array = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: username: 1 }
+        { $group: _id: '$username', count: $sum: 1 }
+        { $match: _id: $nin: selectedUsernames }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id: 0, text: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (username) ->
+        self.added 'usernames', Random.id(),
+            text: username.text
+            count: username.count
+    self.ready()
+
+
+Meteor.publish 'tags', (selectedTags, selectedUsernames, viewMode)->
     self = @
 
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'
@@ -76,6 +102,39 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
             index: i
 
     self.ready()
+
+Meteor.publish 'usernames', (selectedTags, selectedUsernames, viewMode)->
+    self = @
+
+    match = {}
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: tags: 1 }
+        { $unwind: '$tags' }
+        { $group: _id: '$tags', count: $sum: 1 }
+        { $match: _id: $nin: selectedTags }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 25 }
+        { $project: _id: 0, name: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (tag, i) ->
+        self.added 'tags', Random.id(),
+            name: tag.name
+            count: tag.count
+            index: i
+
+    self.ready()
+
+
 
 
 Meteor.methods
