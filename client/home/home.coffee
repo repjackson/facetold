@@ -5,9 +5,12 @@
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
-    @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
-    @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
+    # @autorun -> Meteor.subscribe('usernames', selectedTags.array())
+    @autorun -> Meteor.subscribe('tags', selectedTags.array())
+    @autorun -> Meteor.subscribe('docs', selectedTags.array())
+    # @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
+    # @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
+    # @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
 
 Template.home.helpers
     globalTags: ->
@@ -28,12 +31,12 @@ Template.home.helpers
     selectedTags: -> selectedTags.list()
     newTags: -> newTags.list()
 
-    globalUsernames: -> Usernames.find()
+    # globalUsernames: -> Usernames.find()
     selectedUsernames: -> selectedUsernames.list()
 
-    pinnedUsernames: -> pinnedUsernames.list()
+    # pinnedUsernames: -> pinnedUsernames.list()
 
-    pinnedButtonClass: -> if @text in pinnedUsernames.array() then 'btn-primary' else 'btn-default'
+    # pinnedButtonClass: -> if @text in pinnedUsernames.array() then 'btn-primary' else 'btn-default'
 
     user: -> Meteor.user()
 
@@ -55,23 +58,12 @@ Template.home.events
         tag = $('#addTag').val().toLowerCase()
         switch e.which
             when 13
-                if tag.length > 0
-                    newTags.push tag
+                    splitTags = tag.match(/\S+/g);
                     $('#addTag').val('')
-                else
-                    tags = newTags.array()
-                    # console.log tags
-                    Meteor.call 'createDoc', tags
-                    newTags.clear()
+                    Meteor.call 'createDoc', splitTags
                     selectedTags.clear()
-                    for tag in tags
+                    for tag in splitTags
                         selectedTags.push tag
-            when 8
-                if tag.length is 0
-                    last = newTags[-1..].toString()
-                    newTags.remove last
-                    # console.log last.toString()
-                    $('#addTag').val(last)
 
     'click .newDocTag': ->
         tag = @valueOf()

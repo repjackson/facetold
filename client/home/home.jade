@@ -1,19 +1,18 @@
 template(name='home')
     .text-center
-        .btn.btn-primary
+        .well.well-sm
             +loginButtons
-        if currentUser
-            a.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
-                | Add
-            #collapseExample.collapse
-                .well
-                    .form-inline
-                        each newTags
-                            .btn.btn-default.newDocTag
-                                span.glyphicon.glyphicon-minus
-                                |#{this}
-                        input#addTag.form-control(type=text autofocus='' placeholder='add new tags')
-        h5 with
+            if currentUser
+                .form-inline
+                    each newTags
+                        .btn.btn-default.newDocTag
+                            span.glyphicon.glyphicon-minus
+                            |#{this}
+                    input#addTag.form-control(type=text autofocus='' placeholder='say anything')
+            // a.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
+            //     | Add
+            // #collapseExample.collapse
+        h5
             if selectedTags
                 .btn-group
                     #clearTags.btn.btn-primary
@@ -22,23 +21,22 @@ template(name='home')
                         a.btn.btn-primary.unselectTag
                             strong #{this}
             each globalTags
-                // a.btn.btn-default.select_tag(class=globalTagClass) #{this.name}
+                // a.btn.btn-default.selectTag(class=globalTagClass) #{this.name}
                 a.btn.btn-default.selectTag #{this.name}
-                    small #{this.countPlusPoints}
-        h5 by
-            if selectedUsernames
-                .btn-group
-                    #clearUsernames.btn.btn-primary
-                        span.glyphicon.glyphicon-remove-sign
-                    each selectedUsernames
-                        a.btn.btn-primary.unselectUsername
-                            strong #{this}
-            each globalUsernames
-                .btn.btn-group
-                    .btn.btn-default.selectUsername #{this.text}
-                        small #{this.count}
-                    .btn.pinUsername(class=pinnedButtonClass)
-                        span.glyphicon.glyphicon-pushpin
-
+                    // small #{this.count}
+        // h5 by
+        //     if selectedUsernames
+        //         .btn-group
+        //             #clearUsernames.btn.btn-primary
+        //                 span.glyphicon.glyphicon-remove-sign
+        //             each selectedUsernames
+        //                 a.btn.btn-primary.unselectUsername
+        //                     strong #{this}
+        //     each globalUsernames
+        //         .btn.btn-group
+        //             .btn.btn-default.selectUsername #{this.text}
+        //                 small #{this.count}
+        //             .btn.pinUsername(class=pinnedButtonClass)
+        //                 span.glyphicon.glyphicon-pushpin
     each docs
         +view

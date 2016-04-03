@@ -34,16 +34,17 @@ Meteor.publish 'me', ->
             downvotedCloud: 1
             points: 1
 
-Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+# Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+Meteor.publish 'docs', (selectedTags)->
     match = {}
-    if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
+    # if pinnedUsernames and pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
-    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-    switch viewMode
-        when 'mine' then match.authorId = @userId
-        when 'unvoted'
-            match.upVoters = $nin: [@userId]
-            match.downVoters = $nin: [@userId]
+    # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+    # switch viewMode
+    #     when 'mine' then match.authorId = @userId
+    #     when 'unvoted'
+    #         match.upVoters = $nin: [@userId]
+    #         match.downVoters = $nin: [@userId]
 
     Docs.find match,
         limit: 10
@@ -57,69 +58,130 @@ Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMo
 #     if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
 
 
-Meteor.publish 'usernames', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+# Meteor.publish 'usernames', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+# Meteor.publish 'usernames', (selectedTags)->
+    # self = @
+
+    # match = {}
+    # if selectedTags.length > 0 then match.tags = $all: selectedTags
+    # # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+
+    # cloud = Docs.aggregate [
+    #     { $match: match }
+    #     { $project: username: 1 }
+    #     { $group: _id: '$username', count: $sum: 1 }
+    #     { $match: _id: $nin: selectedUsernames }
+    #     { $sort: count: -1, _id: 1 }
+    #     { $limit: 50 }
+    #     { $project: _id: 0, text: '$_id', count: 1 }
+    #     ]
+
+    # cloud.forEach (username) ->
+    #     self.added 'usernames', Random.id(),
+    #         text: username.text
+    #         count: username.count
+    # self.ready()
+
+
+# Meteor.publish 'tags', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
+# Meteor.publish 'tags', (selectedTags)->
+#     self = @
+
+#     match = {}
+#     # if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
+#     if selectedTags.length > 0 then match.tags = $all: selectedTags
+#     # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+#     # switch viewMode
+#     #     when 'mine' then match.authorId = @userId
+#     #     when 'unvoted'
+#     #         match.upVoters = $nin: [@userId]
+#     #         match.downVoters = $nin: [@userId]
+
+#     cloud = Docs.aggregate [
+#         { $match: match }
+#         { $project: tags: 1, points: 1 }
+#         { $unwind: '$tags' }
+#         {
+#             $group:
+#                 _id:'$tags'
+#                 count: $sum:1
+#                 tagPoints: $sum:'$points'
+#         }
+#         { $match: _id: $nin: selectedTags }
+#         # { $sort: count: -1, _id: 1 }
+#         { $limit: 25 }
+#         { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
+#         { $sort: countPlusPoints: -1 }
+#         ]
+#     console.log cloud
+
+#     cloud.forEach (tag, i) ->
+#         self.added 'tags', Random.id(),
+#             name: tag.name
+#             count: tag.count
+#             countPlusPoints: tag.countPlusPoints
+#             index: i
+
+#     self.ready()
+
+# with selected user
+# Meteor.publish 'tags', (selected_tags, selected_user)->
+#     self = @
+
+#     match = {}
+#     if selected_user then match.authorId = selected_user
+#     if selected_tags.length > 0 then match.tags = $all: selected_tags
+#     # match.authorId = @userId
+
+#     cloud = Docs.aggregate [
+#         { $match: match }
+#         { $project: tags: 1 }
+#         { $unwind: '$tags' }
+#         { $group: _id: '$tags', count: $sum: 1 }
+#         { $match: _id: $nin: selected_tags }
+#         { $sort: count: -1, _id: 1 }
+#         { $limit: 100 }
+#         { $project: _id: 0, name: '$_id', count: 1 }
+#         ]
+
+#     cloud.forEach (tag) ->
+#         self.added 'tags', Random.id(),
+#             name: tag.name
+#             count: tag.count
+
+#     self.ready()
+
+
+
+
+
+Meteor.publish 'tags', (selectedTags)->
     self = @
 
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
-    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+    # match.authorId = @userId
 
     cloud = Docs.aggregate [
         { $match: match }
-        { $project: username: 1 }
-        { $group: _id: '$username', count: $sum: 1 }
-        { $match: _id: $nin: selectedUsernames }
+        { $project: tags: 1 }
+        { $unwind: '$tags' }
+        { $group: _id: '$tags', count: $sum: 1 }
+        { $match: _id: $nin: selectedTags }
         { $sort: count: -1, _id: 1 }
         { $limit: 50 }
-        { $project: _id: 0, text: '$_id', count: 1 }
+        { $project: _id: 0, name: '$_id', count: 1 }
         ]
-
-    cloud.forEach (username) ->
-        self.added 'usernames', Random.id(),
-            text: username.text
-            count: username.count
-    self.ready()
-
-
-Meteor.publish 'tags', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-    self = @
-
-    match = {}
-    if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
-    if selectedTags.length > 0 then match.tags = $all: selectedTags
-    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-    switch viewMode
-        when 'mine' then match.authorId = @userId
-        when 'unvoted'
-            match.upVoters = $nin: [@userId]
-            match.downVoters = $nin: [@userId]
-
-    cloud = Docs.aggregate [
-        { $match: match }
-        { $project: tags: 1, points: 1 }
-        { $unwind: '$tags' }
-        {
-            $group:
-                _id:'$tags'
-                count: $sum:1
-                tagPoints: $sum:'$points'
-        }
-        { $match: _id: $nin: selectedTags }
-        # { $sort: count: -1, _id: 1 }
-        { $limit: 25 }
-        { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
-        { $sort: countPlusPoints: -1 }
-        ]
-    # console.log cloud
 
     cloud.forEach (tag, i) ->
         self.added 'tags', Random.id(),
             name: tag.name
             count: tag.count
-            countPlusPoints: tag.countPlusPoints
             index: i
 
+
     self.ready()
+
 
 
 Meteor.methods
