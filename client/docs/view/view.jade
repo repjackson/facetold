@@ -8,15 +8,15 @@ template(name='view')
                     // if isAuthor
                     //     a.btn.btn-default.btn-sm.editDoc
                     //         span.glyphicon.glyphicon-pencil
-            | by #{username}
-            // .btn-group
-            //     .btn.btn-default.voteUp(class=voteUpButtonClass)
-            //         span.glyphicon.glyphicon-thumbs-up
-            //     .btn.btn-default.disabled
-            //         | #{points}
-            //     .btn.btn-default.voteDown(class=voteDownButtonClass)
-            //         span.glyphicon.glyphicon-thumbs-down
+            // | by #{username}
+            .btn-group
+                .btn.btn-default.voteUp(class=voteUpButtonClass)
+                    span.glyphicon.glyphicon-thumbs-up
+                .btn.btn-default.disabled
+                    | #{points}
+                .btn.btn-default.voteDown(class=voteDownButtonClass)
+                    span.glyphicon.glyphicon-thumbs-down
             // .btn.btn-default.btn-sm by #{username} [#{author.points}]
-            // h5 by #{username} [#{author.points}]
+            h5 by #{username} [#{author.points}]
                 // if isAuthor
                 //     .glyphicon.glyphicon-trash.deleteDoc

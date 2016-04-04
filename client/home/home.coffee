@@ -72,3 +72,17 @@ Template.home.events
 
     'click .authorFilterButton': (e)->
         if e.target.innerHTML in selected_screen_names.array() then selected_screen_names.remove e.target.innerHTML else selected_screen_names.push e.target.innerHTML
+
+    'keyup #search': (e)->
+        e.preventDefault()
+        switch e.which
+            when 13
+                if e.target.value is 'clear'
+                    selectedTags.clear()
+                    $('#search').val('')
+                else
+                    selectedTags.push e.target.value.toLowerCase()
+                    $('#search').val('')
+            when 8
+                if e.target.value is ''
+                    selectedTags.pop()
