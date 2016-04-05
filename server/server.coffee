@@ -37,6 +37,7 @@ Meteor.publish 'me', ->
 # Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
 Meteor.publish 'docs', (selectedTags, viewMode)->
     match = {}
+    if not @userId then match.personal = $in: [false, null]
     # if pinnedUsernames and pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
@@ -159,8 +160,9 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
     self = @
 
     match = {}
+    if not @userId then match.personal = $in: [false, null]
     if selectedTags.length > 0 then match.tags = $all: selectedTags
-    match.authorId = @userId
+    # match.authorId = @userId
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'

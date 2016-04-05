@@ -17,6 +17,12 @@ template(name='view')
                 | Points
 
         .ui.button by #{username} [#{author.points}]
+        if personal
+            i.lock.icon
+            |Private
+        else
+            i.unlock.icon
+            |Public
     .extra.content
         .ui.icon.button.editDoc
             i.blue.pencil.icon

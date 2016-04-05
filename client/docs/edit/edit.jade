@@ -24,10 +24,14 @@ template(name='edit')
                     //     input#datetimepicker.form-control(type="text" value=dateTime)
                     //     .btn.btn-info.clearDT clear date/time
                 // +froalaReactive getFEContext
-                .ui.form
-                    .field
-                        textarea#body
-
+                .ui.basic.segment
+                    .ui.form
+                        .field
+                            textarea#body
+                .ui.basic.segment
+                    label
+                        input(type="checkbox" id="personal" checked=personal)
+                        |Private
                 #saveDoc.ui.labeled.icon.button
                     |Save
                     i.check.icon

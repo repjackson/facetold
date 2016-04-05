@@ -7,9 +7,6 @@ Template.edit.onCreated ->
 
 Template.edit.onRendered ->
     Meteor.setTimeout (->
-        $('#summernote').froalaEditor()
-            # height: 300
-
     #     # $('.datepicker').pickadate
     #     #     selectMonths: true
     #     #     selectYears: 15
@@ -124,6 +121,15 @@ Template.edit.events
         Docs.update FlowRouter.getParam('docId'),
             $set: body: body
         FlowRouter.go '/'
+
+    'click #personal': ->
+        docId = FlowRouter.getParam('docId')
+        doc = Docs.findOne docId
+        newValue = !doc.personal
+        Docs.update docId,
+            $set:
+                personal: newValue
+
 
     'click #deleteDoc': ->
         if confirm 'Delete?'
