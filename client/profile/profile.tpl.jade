@@ -1,46 +1,41 @@
 with user
     .container
-        .panel.panel-default
-            .panel-heading Clouds
-                a#generatePersonalCloud.pull-right.glyphicon.glyphicon-refresh
-            .panel-body
-                if authoredCloud
-                    .panel.panel-default
-                    .panel-heading Authored Cloud
-                    .panel-body
-                        each authoredCloud
-                            .btn.btn-default
-                                |#{this.name}
-                                small #{this.count}
-                if upvotedCloud
-                    .panel.panel-default
-                    .panel-heading Upvoted Cloud
-                    .panel-body
-                        each upvotedCloud
-                            .btn.btn-default
-                                |#{this.name}
-                                small #{this.count}
-                if downvotedCloud
-                    .panel.panel-default
-                    .panel-heading Downvoted Cloud
-                    .panel-body
-                        each downvotedCloud
-                            .btn.btn-default
-                                |#{this.name}
-                                small #{this.count}
-        .panel.panel-default
-            .panel-heading Top Matched Users
-            .panel-body
-                ul.list-group
+        .ui.segment
+            .ui.header Clouds
+            #generatePersonalCloud.ui.icon.button
+                i.refresh.icon
+            if authoredCloud
+                .ui.segment
+                    .ui.header Authored Cloud
+                    each authoredCloud
+                        .ui.button
+                            |#{this.name}
+                            small #{this.count}
+            if upvotedCloud
+                .ui.basic.segment
+                    .ui.header Upvoted Cloud
+                    each upvotedCloud
+                        .ui.label
+                            |#{this.name}
+                            small #{this.count}
+            if downvotedCloud
+                .ui.header Downvoted Cloud
+                each downvotedCloud
+                    .ui.label
+                        |#{this.name}
+                        small #{this.count}
+        .ui.segment
+            .ui.header Top Matched Users
+                .ui.divided.list
                 each people
-                    li.list-group-item
+                    .item
                         |#{this.username}
                         a.matchTwoUsersAuthoredCloud.pull-right Calculate
                 each authoredCloudMatches
-                    ul.list-group
-                        li.list-group-item
+                    .ui.divided.list
+                        .item
                             | #{this.username}
                             each userMatchAuthoredCloud
-                                .btn.btn-default
+                                .ui.button
                                     |#{this.name}
                                     small #{this.count}

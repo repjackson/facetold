@@ -11,8 +11,8 @@ Docs.before.insert (userId, doc)->
     doc.points = 0
     return
 
-# Docs.helpers
-#     author: (doc)-> Meteor.users.findOne @authorId
+Docs.helpers
+    author: (doc)-> Meteor.users.findOne @authorId
 
 
 Meteor.methods
@@ -62,42 +62,42 @@ Meteor.methods
             Meteor.users.update doc.authorId, $inc: points: -1
 
 
-    # updatelocation: (docid, result)->
-    #     addresstags = (component.long_name for component in result.address_components)
-    #     loweredAddressTags = _.map(addresstags, (tag)->
-    #         tag.toLowerCase()
-    #         )
+    updatelocation: (docid, result)->
+        addresstags = (component.long_name for component in result.address_components)
+        loweredAddressTags = _.map(addresstags, (tag)->
+            tag.toLowerCase()
+            )
 
-    #     #console.log addresstags
+        #console.log addresstags
 
-    #     doc = Docs.findOne docid
-    #     tagsWithoutAddress = _.difference(doc.tags, doc.addresstags)
-    #     tagsWithNew = _.union(tagsWithoutAddress, loweredAddressTags)
+        doc = Docs.findOne docid
+        tagsWithoutAddress = _.difference(doc.tags, doc.addresstags)
+        tagsWithNew = _.union(tagsWithoutAddress, loweredAddressTags)
 
-    #     Docs.update docid,
-    #         $set:
-    #             tags: tagsWithNew
-    #             locationob: result
-    #             addresstags: loweredAddressTags
+        Docs.update docid,
+            $set:
+                tags: tagsWithNew
+                locationob: result
+                addresstags: loweredAddressTags
 
 
-# FlowRouter.route '/', action: (params) ->
-#     Session.set('view', 'all')
-#     BlazeLayout.render 'layout', main: 'home'
+FlowRouter.route '/', action: (params) ->
+    Session.set('view', 'all')
+    BlazeLayout.render 'layout', main: 'home'
 
-# FlowRouter.route '/edit/:docId', action: (params) ->
-#     BlazeLayout.render 'layout', main: 'edit'
+FlowRouter.route '/edit/:docId', action: (params) ->
+    BlazeLayout.render 'layout', main: 'edit'
 
-# FlowRouter.route '/view/:docId', action: (params) ->
-#     BlazeLayout.render 'layout', main: 'viewFull'
+FlowRouter.route '/view/:docId', action: (params) ->
+    BlazeLayout.render 'layout', main: 'viewFull'
 
-# FlowRouter.route '/mine', action: (params) ->
-#     Session.set('view', 'mine')
-#     BlazeLayout.render 'layout', main: 'home'
+FlowRouter.route '/mine', action: (params) ->
+    Session.set('view', 'mine')
+    BlazeLayout.render 'layout', main: 'home'
 
-# FlowRouter.route '/unvoted', action: (params) ->
-#     Session.set('view', 'unvoted')
-#     BlazeLayout.render 'layout', main: 'home'
+FlowRouter.route '/unvoted', action: (params) ->
+    Session.set('view', 'unvoted')
+    BlazeLayout.render 'layout', main: 'home'
 
-# FlowRouter.route '/profile', action: (params) ->
-#     BlazeLayout.render 'layout', main: 'profile'
+FlowRouter.route '/profile', action: (params) ->
+    BlazeLayout.render 'layout', main: 'profile'

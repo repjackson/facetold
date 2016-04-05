@@ -4,7 +4,6 @@ Template.profile.onCreated ->
 
 
 Template.profile.helpers
-
     user: -> Meteor.user()
 
     people: -> Meteor.users.find()

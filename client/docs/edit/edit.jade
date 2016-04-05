@@ -1,15 +1,13 @@
 template(name='edit')
     with doc
         .container
-            .panel.panel-default
-                .panel-body
-                    .form-inline
-                        each tags
-                            .btn.btn-default.docTag
-                                span.glyphicon.glyphicon-minus
-                                |#{this}
-                        .form-group
-                            input#addTag.form-control(type=text autofocus='' placeholder='add tag')
+            .ui.segment
+                each tags
+                    .ui.button.docTag
+                        i.minus.icon
+                        |#{this}
+                .ui.input
+                    input#addTag(type='text' autofocus='' placeholder='Add Tag')
                     // div user mentions
                     // each mentions
                     //     .btn.btn-default.docMention
@@ -25,9 +23,17 @@ template(name='edit')
                     //     label(for='datetimepicker') add date/time
                     //     input#datetimepicker.form-control(type="text" value=dateTime)
                     //     .btn.btn-info.clearDT clear date/time
-                .panel-footer
-                    a#saveDoc.btn.btn-primary save
-                    a#deleteDoc.btn.btn-danger.btn-sm.pull-right delete
+                // +froalaReactive getFEContext
+                .ui.form
+                    .field
+                        textarea#body
+
+                #saveDoc.ui.labeled.icon.button
+                    |Save
+                    i.check.icon
+                #deleteDoc.ui.labeled.icon.button
+                    i.remove.icon
+                    |Delete
 
 template(name='userPill')
     span(class="label") #{username}

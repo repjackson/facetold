@@ -1,38 +1,19 @@
 template(name='nav')
-    nav.navbar.navbar-default
-        .container-fluid
-            // Brand and toggle get grouped for better mobile display
-            .navbar-header
-                button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
-                    span.sr-only Toggle navigation
-                    span.icon-bar
-                    span.icon-bar
-                    span.icon-bar
-                    // img(src='/f_logo.png' height='42' width='42')
-            // Collect the nav links, forms, and other content for toggling
-            #bs-example-navbar-collapse-1.collapse.navbar-collapse
-                ul.nav.navbar-nav
-                    a.navbar-brand(href='/' class="{{isActivePath '/'}}") Facet
-                    if currentUser
-                        li
-                            a#addDoc(href='#')
-                                span.glyphicon.glyphicon-plus-sign(aria-hidden="true")
-                                // |Add
-                        li(class="{{isActivePath '/unvoted'}}")
-                            a(href='/unvoted') Unvoted
-                        li(class="{{isActivePath '/mine'}}")
-                            a(href='/mine') Mine
-                        li(class="{{isActivePath '/profile'}}")
-                            a(href='/profile') Profile
-                    +loginButtons align='right'
+    .ui.menu
+        a#homeLink.header.item(href='/')
+            img(src='/f_logo.png' height='42' width='42')
+        .ui.input.item
+            input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
+        .right.menu
+            if currentUser
+                a#addDoc.item
+                    i.green.plus.icon
+                    |Add
+                a.item(href='/unvoted') Unvoted
+                a.item(href='/mine') Mine
+                a.item(href='/profile') Profile
+            +loginButtons align='right'
 
-                // .navbar-form.navbar-left
-                //     // .form-group
-                //     //     input#search.form-control(type='text', placeholder="global search")
-                //     // .form-group
-                //     //     .form-control
-                //     //         +inputAutocomplete(settings=tagsettings id='tagDrilldown' class='' placeholder="drilldown")
-                // ul.nav.navbar-nav.navbar-right
 
 template(name='tagresult')
     .label.label-default #{name}

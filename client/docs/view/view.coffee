@@ -6,17 +6,17 @@ Template.view.helpers
 
     voteUpButtonClass: ->
         if not Meteor.userId() then 'disabled'
-        else if Meteor.userId() in @upVoters then 'active btn-success'
+        else if Meteor.userId() in @upVoters then 'green'
         else ''
 
     voteDownButtonClass: ->
         if not Meteor.userId() then 'disabled'
-        else if Meteor.userId() in @downVoters then 'active btn-danger'
+        else if Meteor.userId() in @downVoters then 'red'
         else ''
 
     when: -> moment(@timestamp).fromNow()
 
-    docTagClass: -> if @valueOf() in selectedTags.array() then 'btn-default active' else 'btn-default'
+    docTagClass: -> if @valueOf() in selectedTags.array() then 'secondary' else ''
 
     author: -> Meteor.users.findOne(@authorId)
 

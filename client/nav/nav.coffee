@@ -27,7 +27,7 @@ Template.nav.events
         selected_tags.push doc.name.toString()
         $('#tagDrilldown').val('')
 
-    'keyup #tagDrilldown': (event, template)->
+    'keyup #pageDrilldown': (event, template)->
         event.preventDefault()
         if event.which is 13
             val = $('#tagDrilldown').val()
@@ -37,6 +37,22 @@ Template.nav.events
                     $('#tagDrilldown').val ''
                     $('#globalsearch').val ''
 
+    'keyup #quickAdd': (e,t)->
+        e.preventDefault
+        tag = $('#addTag').val().toLowerCase()
+        switch e.which
+            when 13
+                    splitTags = tag.match(/\S+/g);
+                    $('#addTag').val('')
+                    Meteor.call 'createDoc', splitTags
+                    selectedTags.clear()
+                    for tag in splitTags
+                        selectedTags.push tag
+                    FlowRouter.go '/'
+
+    'click #homeLink': ->
+        selectedTags.clear()
+
     'click #addDoc': ->
         Meteor.call 'createDoc', (err, id)->
             if err
@@ -44,17 +60,3 @@ Template.nav.events
             else
                 analytics.track 'Added Doc'
                 FlowRouter.go "/edit/#{id}"
-
-    'keyup #search': (e)->
-        e.preventDefault()
-        switch e.which
-            when 13
-                if e.target.value is 'clear'
-                    selected_tags.clear()
-                    $('#search').val('')
-                else
-                    selected_tags.push e.target.value.toLowerCase()
-                    $('#search').val('')
-            when 8
-                if e.target.value is ''
-                    selected_tags.pop()

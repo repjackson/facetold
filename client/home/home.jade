@@ -1,29 +1,21 @@
 template(name='home')
-    .text-center
-        .well.well-sm
-            +loginButtons
-            .form-inline
-                if currentUser
-                    each newTags
-                        .btn.btn-default.newDocTag
-                            span.glyphicon.glyphicon-minus
-                            |#{this}
-                    input#addTag.form-control(type='text' autofocus='' placeholder='say anything')
-                input#search.form-control(type='text', placeholder="search anything")
-            // a.btn.btn-primary(role='button', data-toggle='collapse', href='#collapseExample', aria-expanded='false', aria-controls='collapseExample')
-            //     | Add
-            // #collapseExample.collapse
-        h5
-            if selectedTags
-                .btn-group
-                    #clearTags.btn.btn-primary
-                        span.glyphicon.glyphicon-remove-sign
-                    each selectedTags
-                        a.btn.btn-primary.unselectTag
-                            strong #{this}
-            each globalTags
-                // a.btn.btn-default.selectTag(class=globalTagClass) #{this.name}
-                a.btn.btn-default.selectTag #{this.name}
-                    // small #{this.count}
-    each docs
-        +view
+    .ui.basic.center.aligned.segment
+        .row
+            .ui.input
+                input#search(type='text', placeholder="Global Search")
+            .ui.input
+                +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder="Drilldown")
+        if selectedTags
+            #clearTags.ui.icon.button
+                i.remove.icon
+            each selectedTags
+                a.ui.secondary.large.button.unselectTag
+                    strong #{this}
+        each globalTags
+            .ui.button.selectTag(class=globalTagClass) #{this.name}
+                small #{this.count}
+    .ui.container
+        .ui.cards
+            each docs
+                .ui.card
+                    +view

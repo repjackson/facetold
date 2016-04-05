@@ -6,7 +6,10 @@ Template.edit.onCreated ->
 
 
 Template.edit.onRendered ->
-    # Meteor.setTimeout (->
+    Meteor.setTimeout (->
+        $('#summernote').froalaEditor()
+            # height: 300
+
     #     # $('.datepicker').pickadate
     #     #     selectMonths: true
     #     #     selectYears: 15
@@ -41,14 +44,14 @@ Template.edit.onRendered ->
         #                 datearray: datearray
         #                 dateTime: val
         #     )
-        # ), 300
+        ), 300
 
-    @autorun ->
-        if GoogleMaps.loaded()
-            docId = FlowRouter.getParam('docId')
-            $('#place').geocomplete().bind 'geocode:result', (event, result) ->
-                # console.log result.geometry.location.lat()
-                Meteor.call 'updatelocation', docId, result, ->
+    # @autorun ->
+    #     if GoogleMaps.loaded()
+    #         docId = FlowRouter.getParam('docId')
+    #         $('#place').geocomplete().bind 'geocode:result', (event, result) ->
+    #             # console.log result.geometry.location.lat()
+    #             Meteor.call 'updatelocation', docId, result, ->
 
 Template.edit.helpers
     doc: ->
@@ -66,6 +69,30 @@ Template.edit.helpers
             }
         ]
     }
+
+	getFEContext: ->
+        self = @
+        console.log @
+        {
+          _value: self.myDoc.myHTMLField
+          _keepMarkers: true
+          _className: 'froala-reactive-meteorized-override'
+          toolbarInline: true
+          initOnClick: false
+          tabSpaces: false
+          '_onsave.before': (e, editor) ->
+            # Get edited HTML from Froala-Editor
+            newHTML = editor.html.get(true)
+            # Do something to update the edited value provided by the Froala-Editor plugin, if it has changed:
+            if !_.isEqual(newHTML, self.myDoc.myHTMLField)
+              console.log 'onSave HTML is :' + newHTML
+              myCollection.update { _id: self.myDoc._id }, $set: myHTMLField: newHTML
+            false
+            # Stop Froala Editor from POSTing to the Save URL
+
+        }
+
+
 
 Template.edit.events
     'keyup #addTag': (e,t)->
@@ -92,7 +119,11 @@ Template.edit.events
         $('#addTag').val(tag)
 
 
-    'click #saveDoc': -> FlowRouter.go '/'
+    'click #saveDoc': ->
+        body = $('#body').val()
+        Docs.update FlowRouter.getParam('docId'),
+            $set: body: body
+        FlowRouter.go '/'
 
     'click #deleteDoc': ->
         if confirm 'Delete?'

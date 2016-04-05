@@ -35,16 +35,16 @@ Meteor.publish 'me', ->
             points: 1
 
 # Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-Meteor.publish 'docs', (selectedTags)->
+Meteor.publish 'docs', (selectedTags, viewMode)->
     match = {}
     # if pinnedUsernames and pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-    # switch viewMode
-    #     when 'mine' then match.authorId = @userId
-    #     when 'unvoted'
-    #         match.upVoters = $nin: [@userId]
-    #         match.downVoters = $nin: [@userId]
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
 
     Docs.find match,
         limit: 10
@@ -155,12 +155,18 @@ Meteor.publish 'docs', (selectedTags)->
 
 
 
-Meteor.publish 'tags', (selectedTags)->
+Meteor.publish 'tags', (selectedTags, viewMode)->
     self = @
 
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
-    # match.authorId = @userId
+    match.authorId = @userId
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
+
 
     cloud = Docs.aggregate [
         { $match: match }
@@ -169,7 +175,7 @@ Meteor.publish 'tags', (selectedTags)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedTags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 70 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

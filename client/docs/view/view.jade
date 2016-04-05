@@ -1,22 +1,25 @@
 template(name='view')
-        hr
-        .text-center
-            h4
-                each tags
-                    .btn.btn-link.docTag(class=docTagClass)  #{this}
-                    // span #{this} &nbsp;&nbsp;
-                    // if isAuthor
-                    //     a.btn.btn-default.btn-sm.editDoc
-                    //         span.glyphicon.glyphicon-pencil
-            // | by #{username}
-            .btn-group
-                .btn.btn-default.voteUp(class=voteUpButtonClass)
-                    span.glyphicon.glyphicon-thumbs-up
-                .btn.btn-default.disabled
-                    | #{points}
-                .btn.btn-default.voteDown(class=voteDownButtonClass)
-                    span.glyphicon.glyphicon-thumbs-down
-            // .btn.btn-default.btn-sm by #{username} [#{author.points}]
-            h5 by #{username} [#{author.points}]
-                // if isAuthor
-                //     .glyphicon.glyphicon-trash.deleteDoc
+    .content
+        each tags
+            .ui.button.docTag(class=docTagClass)  #{this}
+    if body
+        .content
+            |#{body}
+    .extra.content
+        .ui.icon.button.voteUp(class=voteUpButtonClass)
+            i.thumbs.up.icon
+        .ui.icon.button.voteDown(class=voteDownButtonClass)
+            i.thumbs.down.icon
+        .ui.mini.statistic
+            .value
+                | #{points}
+            .label
+                | Points
+
+        .ui.button by #{username} [#{author.points}]
+    .extra.content
+        .ui.icon.button.editDoc
+            i.blue.pencil.icon
+        if isAuthor
+            .ui.icon.button.deleteDoc
+                i.red.trash.icon

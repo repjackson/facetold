@@ -22,5 +22,11 @@ raix:handlebar-helpers
 mquandalle:stylus
 matb33:collection-hooks
 accounts-password
-twbs:bootstrap
-accounts-ui
+semantic:ui
+flemay:less-autoprefixer
+iandouglas:accounts-ui-semantic-ui
+kadira:flow-router
+kadira:blaze-layout
+dburles:collection-helpers
+mizzao:autocomplete
+froala:editor-reactive
