@@ -14,3 +14,6 @@ Template.profile.events
 
     'click .matchTwoUsersAuthoredCloud': ->
         Meteor.call 'matchTwoUsersAuthoredCloud', @_id, ->
+
+    'click .matchTwoUsersUpvotedCloud': ->
+        Meteor.call 'matchTwoUsersUpvotedCloud', @_id, ->

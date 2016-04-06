@@ -5,9 +5,11 @@ template(name='home')
                 input#search(type='text', placeholder="Global Search")
             .ui.input
                 +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder="Drilldown")
+            if selectedTags
+                #clearTags.ui.primary.labeled.icon.button
+                    |Clear Selection
+                    i.remove.icon
         if selectedTags
-            #clearTags.ui.primary.icon.huge.button
-                i.remove.icon
             each selectedTags
                 a.ui.primary.huge.button.unselectTag
                     strong #{this}

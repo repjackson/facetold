@@ -5,12 +5,12 @@
 
 
 Docs.before.insert (userId, doc)->
-    doc.upVoters = []
+    doc.upVoters = [userId]
     doc.downVoters = []
     doc.timestamp = Date.now()
     doc.authorId = Meteor.userId()
     doc.username = Meteor.user().username
-    doc.points = 0
+    doc.points = 1
     return
 
 Docs.helpers
@@ -42,13 +42,14 @@ Meteor.methods
                 $addToSet: upVoters: Meteor.userId()
                 $inc: points: 1
             Meteor.users.update doc.authorId, $inc: points: 1
+        Meteor.call 'generatePersonalCloud', Meteor.userId()
 
 
     voteDown: (id)->
         doc = Docs.findOne id
-        if doc.points is 0 or doc.points is 1 and Meteor.userId() in doc.upVoters
-            Docs.remove id
-        else if Meteor.userId() in doc.downVoters #undo downvote
+        # if doc.points is 0 or doc.points is 1 and Meteor.userId() in doc.upVoters
+        #     Docs.remove id
+        if Meteor.userId() in doc.downVoters #undo downvote
             Docs.update id,
                 $pull: downVoters: Meteor.userId()
                 $inc: points: 1
@@ -66,6 +67,7 @@ Meteor.methods
                 $addToSet: downVoters: Meteor.userId()
                 $inc: points: -1
             Meteor.users.update doc.authorId, $inc: points: -1
+        Meteor.call 'generatePersonalCloud', Meteor.userId()
 
 
     updatelocation: (docid, result)->

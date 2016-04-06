@@ -25,6 +25,7 @@ Meteor.publish 'people', ->
             points: 1
             username: 1
             authoredCloudMatches: 1
+            upVotedCloudMatches: 1
 
 Meteor.publish 'person', (id)->
     Meteor.users.find id,
@@ -34,6 +35,7 @@ Meteor.publish 'person', (id)->
             upvotedCloud: 1
             downvotedCloud: 1
             points: 1
+            upVotedCloudMatches: 1
 
 Meteor.publish 'me', ->
     Meteor.users.find @userId,
@@ -43,6 +45,7 @@ Meteor.publish 'me', ->
             upvotedCloud: 1
             downvotedCloud: 1
             points: 1
+            upVotedCloudMatches: 1
 
 # Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
 Meteor.publish 'docs', (selectedTags, viewMode)->
@@ -170,7 +173,12 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
     self = @
 
     match = {}
-    if not @userId then match.personal = $in: [false, null]
+    # match =
+    #     $or: [
+    #         personal: $in: [false, null]
+    #         authorId: @userId
+    #         ]
+    # if not @userId then match.personal = $in: [false, null]
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     # match.authorId = @userId
     switch viewMode
@@ -178,6 +186,8 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
         when 'unvoted'
             match.upVoters = $nin: [@userId]
             match.downVoters = $nin: [@userId]
+
+    # console.log match
 
 
     cloud = Docs.aggregate [
@@ -339,4 +349,25 @@ Meteor.methods
                     uId: uId
                     username: username
                     userMatchAuthoredCloud: userMatchAuthoredCloud
+
+    matchTwoUsersUpvotedCloud: (uId)->
+        username = Meteor.users.findOne(uId).username
+        match = {}
+        match.upVoters = $in: [Meteor.userId(), uId]
+
+        userMatchUpvotedCloud = Docs.aggregate [
+            { $match: match }
+            { $project: tags: 1 }
+            { $unwind: '$tags' }
+            { $group: _id: '$tags', count: $sum: 1 }
+            { $sort: count: -1, _id: 1 }
+            { $limit: 50 }
+            { $project: _id: 0, name: '$_id', count: 1 }
+            ]
+        Meteor.users.update Meteor.userId(),
+            $addToSet:
+                upVotedCloudMatches:
+                    uId: uId
+                    username: username
+                    userMatchUpvotedCloud: userMatchUpvotedCloud
 

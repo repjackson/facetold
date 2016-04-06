@@ -7,11 +7,11 @@ template(name='nav')
         .right.menu
             if currentUser
                 a#addDoc.item
-                    i.green.plus.icon
+                    i.plus.icon
                     |Add
                 a.item(href='/unvoted') Unvoted
-                a.item(href='/mine') Mine
-                a.item(href='/profile') Profile
+                a.item(href='/mine') My Documents
+                a.item(href='/profile') Profile [#{user.points} points]
             +loginButtons align='right'
 
 
