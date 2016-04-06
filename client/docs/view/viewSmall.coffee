@@ -16,7 +16,7 @@ Template.viewSmall.helpers
 
     when: -> moment(@timestamp).fromNow()
 
-    docTagClass: -> if @valueOf() in selectedTags.array() then 'blue' else ''
+    docTagClass: -> if @valueOf() in selectedTags.array() then 'primary' else 'basic black'
 
     upVotedMatchCloud: ->
         myUpVotedList = Meteor.user().upvotedList

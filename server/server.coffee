@@ -53,7 +53,7 @@ Meteor.publish 'me', ->
 # Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
 Meteor.publish 'docs', (selectedTags, viewMode)->
     match = {}
-    if not @userId then match.personal = $in: [false, null]
+    # if not @userId then match.personal = $in: [false, null]
     # if pinnedUsernames and pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
     # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
@@ -200,7 +200,7 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedTags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 70 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 

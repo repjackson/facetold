@@ -1,16 +1,9 @@
-@newTags = new ReactiveArray []
 @selectedTags = new ReactiveArray []
-@selectedUsernames = new ReactiveArray []
-# @pinnedUsernames = new ReactiveArray []
 
 Template.home.onCreated ->
     Meteor.subscribe 'people'
-    # @autorun -> Meteor.subscribe('usernames', selectedTags.array())
     @autorun -> Meteor.subscribe('tags', selectedTags.array(), Session.get('view'))
     @autorun -> Meteor.subscribe('docs', selectedTags.array(), Session.get('view'))
-    # @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
-    # @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
-    # @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), pinnedUsernames.array(), Session.get('view'))
 
 Template.home.helpers
     globalTags: ->
@@ -22,24 +15,16 @@ Template.home.helpers
 
     globalTagClass: ->
         buttonClass = switch
-            when @index <= 10 then 'huge'
-            when 10 < @index <= 20 then 'big'
-            when 20 < @index <= 30 then 'large'
-            when 30 < @index <= 40 then ''
-            when 40 < @index <= 50 then 'small'
-            when 50 < @index <= 60 then 'tiny'
-            when @index > 60 then 'mini'
+            when @index <= 7 then 'big'
+            when 7 < @index <= 14 then 'large'
+            when 14 < @index <= 21 then ''
+            when 21 < @index <= 28 then ''
+            when 28 < @index <= 35 then 'small'
+            when 35 < @index <= 42 then 'tiny'
+            when @index > 42 then 'mini'
         return buttonClass
 
     selectedTags: -> selectedTags.list()
-    newTags: -> newTags.list()
-
-    # globalUsernames: -> Usernames.find()
-    selectedUsernames: -> selectedUsernames.list()
-
-    # pinnedUsernames: -> pinnedUsernames.list()
-
-    # pinnedButtonClass: -> if @text in pinnedUsernames.array() then 'btn-primary' else 'btn-default'
 
     user: -> Meteor.user()
 
@@ -64,13 +49,6 @@ Template.home.events
     'autocompleteselect #pageDrilldown': (event, template, doc)->
         selectedTags.push doc.name.toString()
         $('#pageDrilldown').val('')
-
-
-    'click .pinUsername': -> if @text in pinnedUsernames.array() then pinnedUsernames.remove @text else pinnedUsernames.push @text
-
-    'click .selectUsername': -> selectedUsernames.push @text
-    'click .unselectUsername': -> selectedUsernames.remove @valueOf()
-    'click #clearUsernames': -> selectedUsernames.clear()
 
 
     'click .newDocTag': ->

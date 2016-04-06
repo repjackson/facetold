@@ -28,13 +28,13 @@ Template.nav.events
         tag = $('#quickAdd').val().toLowerCase()
         switch e.which
             when 13
-                    splitTags = tag.match(/\S+/g);
-                    $('#quickAdd').val('')
-                    Meteor.call 'createDoc', splitTags
-                    selectedTags.clear()
-                    for tag in splitTags
-                        selectedTags.push tag
-                    FlowRouter.go '/'
+                splitTags = tag.match(/\S+/g);
+                $('#quickAdd').val('')
+                Meteor.call 'createDoc', splitTags
+                selectedTags.clear()
+                for tag in splitTags
+                    selectedTags.push tag
+                FlowRouter.go '/'
 
     'click #homeLink': ->
         selectedTags.clear()

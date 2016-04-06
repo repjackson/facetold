@@ -1,21 +1,20 @@
 template(name='home')
     .ui.basic.center.aligned.segment
-        h4.ui.header Filter Documents Below:
-        .row
-            .ui.input
-                input#search(type='text', placeholder='Global Search')
-            .ui.input
-                +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder='Page Drilldown')
-            if selectedTags
-                #clearTags.ui.primary.labeled.icon.button
-                    |Clear Selection
-                    i.remove.icon
+        // h4.ui.header Filter Documents Below:
+        .ui.input
+            input#search(type='text', placeholder='Search')
+            // .ui.input
+            //     +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder='Page Drilldown')
+        if selectedTags
+            #clearTags.ui.primary.basic.labeled.icon.button
+                |Clear
+                i.remove.icon
         if selectedTags
             each selectedTags
                 a.ui.primary.huge.button.unselectTag
                     strong #{this}
         each globalTags
-            .ui.button.selectTag(class=globalTagClass) #{this.name}
+            .ui.compact.button.selectTag(class=globalTagClass) #{this.name}
                 // small #{this.count}
     .ui.container
         each docs

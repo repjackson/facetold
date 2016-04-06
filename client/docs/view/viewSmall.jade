@@ -1,7 +1,9 @@
 template(name='viewSmall')
     // i.tags.icon
-    each tags
-        .ui.large.basic.button.docTag(class=docTagClass)  #{this}
+    .ui.huge.horizontal.list
+        each tags
+            // .ui.large.button.docTag(class=docTagClass)  #{this}
+            .item(class=docTagClass)  #{this}
     .ui.divider
     if body.length
         .description

@@ -2,8 +2,10 @@ template(name='nav')
     .ui.menu
         a#homeLink.header.item(href='/' class="{{isActivePath '/'}}")
             img(src='/f_logo.png' height='42' width='42')
-        .ui.input.item
-            input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
+        .ui.item
+            .ui.icon.input
+                i.plus.icon
+                input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
         .right.menu
             if currentUser
                 a#addDoc.item
