@@ -9,6 +9,43 @@ Template.edit.onRendered ->
     Meteor.setTimeout (->
         $('#body').froalaEditor
             height: 300
+            # toolbarButtons: [
+            #     'fullscreen'
+            #     'bold'
+            #     'italic'
+            #     'underline'
+            #     'strikeThrough'
+            #     'subscript'
+            #     'superscript'
+            #     'fontFamily'
+            #     'fontSize'
+            #     '|'
+            #     'color'
+            #     'emoticons'
+            #     'inlineStyle'
+            #     'paragraphStyle'
+            #     '|'
+            #     'paragraphFormat'
+            #     'align'
+            #     'formatOL'
+            #     'formatUL'
+            #     'outdent'
+            #     'indent'
+            #     'quote'
+            #     'insertHR'
+            #     '-'
+            #     'insertLink'
+            #     'insertImage'
+            #     'insertVideo'
+            #     'insertFile'
+            #     'insertTable'
+            #     'undo'
+            #     'redo'
+            #     'clearFormatting'
+            #     'selectAll'
+            #     'html'
+            #     ]
+
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -40,7 +77,7 @@ Template.edit.onRendered ->
                         datearray: datearray
                         dateTime: val
             )
-        ), 300
+        ), 200
 
     # @autorun ->
     #     if GoogleMaps.loaded()
