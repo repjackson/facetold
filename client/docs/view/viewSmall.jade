@@ -31,9 +31,9 @@ template(name='viewSmall')
         |by #{username} [#{author.points} points] #{when}
         unless isAuthor
             .ui.divider
-            h4.ui.header Matched Upvoted Tag List with #{username} (Count: #{upVotedMatchList.length})
-            each upVotedMatchList
-                .ui.basic.label #{this}
+            // h4.ui.header Matched Upvoted Tag List with #{username} (Count: #{upVotedMatchList.length})
+            // each upVotedMatchList
+            //     .ui.basic.label #{this}
             h4.ui.header Matched Upvoted Tag Cloud with #{username} (Total Match Points: #{upVotedMatchCloud.totalCount})
             each upVotedMatchCloud.cloud
                 .ui.basic.label #{this.tag} #{this.min}

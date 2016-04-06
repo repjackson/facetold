@@ -22,13 +22,20 @@ template(name='profile')
             //             |#{this.name}
             //             small #{this.count}
         .ui.segment
-            .ui.header Top Matched Users
-            each matchedUsersList
-                .ui.divided.list
-                    .item
-                        strong #{this.matchedUser} (#{this.length}):
-                        each this.cloudIntersection
-                            .ui.basic.label #{this}
+            .ui.header Top Matched User Cloud
+                each upVotedMatchCloud
+                    .ui.divided.list
+                        .item
+                            strong #{this.matchedUser} (Total Count: #{this.totalCount})
+                            each this.cloudIntersection
+                                .ui.basic.label #{this.tag} #{this.min}
+            // .ui.header Top Matched User List
+            // each matchedUsersList
+            //     .ui.divided.list
+            //         .item
+            //             strong #{this.matchedUser} (#{this.length}):
+            //             each this.cloudIntersection
+            //                 .ui.basic.label #{this}
                 // each people
                 //     .item
                 //         |#{this.username}
