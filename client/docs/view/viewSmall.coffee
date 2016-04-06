@@ -18,6 +18,14 @@ Template.viewSmall.helpers
 
     docTagClass: -> if @valueOf() in selectedTags.array() then 'blue' else ''
 
+    upVotedMatchCloud: ->
+        myUpVotedList = Meteor.user().upvotedList
+        otherUser = Meteor.users.findOne @authorId
+        otherUpVotedList = otherUser.upvotedList
+        intersection = _.intersection(myUpVotedList, otherUpVotedList)
+        return intersection
+
+
     author: -> Meteor.users.findOne(@authorId)
 
 Template.viewSmall.events

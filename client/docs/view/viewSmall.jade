@@ -25,6 +25,9 @@ template(name='viewSmall')
         i.unhide.icon
         |View
     .ui.label by #{username} [#{author.points}]
-    unless isAuthor
-        .ui.button.matchTwoUsersUpvotedCloud Calculate Tag Cloud Matches
     |#{when}
+    unless isAuthor
+        .ui.header Matched Upvoted Keywords
+        |Count: #{upVotedMatchCloud.length}
+        each upVotedMatchCloud
+            .ui.label #{this}

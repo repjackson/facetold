@@ -26,6 +26,7 @@ Meteor.publish 'people', ->
             username: 1
             authoredCloudMatches: 1
             upVotedCloudMatches: 1
+            upvotedList: 1
 
 Meteor.publish 'person', (id)->
     Meteor.users.find id,
@@ -36,6 +37,7 @@ Meteor.publish 'person', (id)->
             downvotedCloud: 1
             points: 1
             upVotedCloudMatches: 1
+            upvotedList: 1
 
 Meteor.publish 'me', ->
     Meteor.users.find @userId,
@@ -46,6 +48,7 @@ Meteor.publish 'me', ->
             downvotedCloud: 1
             points: 1
             upVotedCloudMatches: 1
+            upvotedList: 1
 
 # Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
 Meteor.publish 'docs', (selectedTags, viewMode)->
