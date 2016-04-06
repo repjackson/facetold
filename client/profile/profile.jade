@@ -26,7 +26,7 @@ template(name='profile')
             each matchedUsersList
                 .ui.divided.list
                     .item
-                        strong #{this.matchedUser}:
+                        strong #{this.matchedUser} (#{this.length}):
                         each this.cloudIntersection
                             .ui.basic.label #{this}
                 // each people

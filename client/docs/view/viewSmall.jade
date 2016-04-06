@@ -1,35 +1,39 @@
 template(name='viewSmall')
-    // i.tags.icon
-    .ui.huge.horizontal.list
-        each tags
-            // .ui.large.button.docTag(class=docTagClass)  #{this}
-            .item(class=docTagClass)  #{this}
-    .ui.divider
-    if body.length
-        .description
-            +markdown
-                !{body}
+    .ui.segment(class=viewSmallSegmentClass)
+        // i.tags.icon
+        .ui.huge.horizontal.list
+            each tags
+                .ui.large.button.docTag(class=docTagClass)  #{this}
+                // .item(class=docTagClass)  #{this}
+        unless isAuthor
+            .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
+                i.thumbs.up.icon
+            .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
+                i.thumbs.down.icon
         .ui.divider
-    unless isAuthor
-        .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
-            i.thumbs.up.icon
-        .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
-            i.thumbs.down.icon
-    .ui.basic.large.label
-        | #{points} Points
-    if isAuthor
-        .ui.basic.button.editDoc
-            i.blue.pencil.icon
-            |Edit
-        .ui.icon.basic.button.deleteDoc
-            // |Delete
-            i.red.trash.icon
-    // .ui.basic.button.viewFull
-    //     i.unhide.icon
-    //     |View
-    |by #{username} [#{author.points} points] #{when}
-    unless isAuthor
-        .ui.divider
-        h4.ui.header Matched Upvoted Keywords with #{username} (Count: #{upVotedMatchCloud.length})
-        each upVotedMatchCloud
-            .ui.basic.label #{this}
+        if body.length
+            .description
+                +markdown
+                    !{body}
+            .ui.divider
+        .ui.basic.large.label
+            | #{points} Points
+        if isAuthor
+            .ui.basic.button.editDoc
+                i.blue.pencil.icon
+                |Edit
+            .ui.icon.basic.button.deleteDoc
+                // |Delete
+                i.red.trash.icon
+        // .ui.basic.button.viewFull
+        //     i.unhide.icon
+        //     |View
+        |by #{username} [#{author.points} points] #{when}
+        unless isAuthor
+            .ui.divider
+            h4.ui.header Matched Upvoted Tag List with #{username} (Count: #{upVotedMatchList.length})
+            each upVotedMatchList
+                .ui.basic.label #{this}
+            h4.ui.header Matched Upvoted Tag Cloud with #{username} (Total Match Points: #{upVotedMatchCloud.totalCount})
+            each upVotedMatchCloud.cloud
+                .ui.basic.label #{this.tag} #{this.min}

@@ -109,6 +109,9 @@ Template.edit.events
         body = $('#body').val()
         Docs.update FlowRouter.getParam('docId'),
             $set: body: body
+        selectedTags.clear()
+        for tag in @tags
+            selectedTags.push tag
         FlowRouter.go '/'
 
     'click #personal': ->

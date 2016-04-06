@@ -19,12 +19,9 @@ Meteor.publish 'messages', (id)->
 Meteor.publish 'people', ->
     Meteor.users.find {},
         fields:
-            authoredCloud: 1
             upvotedCloud: 1
-            downvotedCloud: 1
             points: 1
             username: 1
-            authoredCloudMatches: 1
             upVotedCloudMatches: 1
             upvotedList: 1
 
@@ -32,9 +29,7 @@ Meteor.publish 'person', (id)->
     Meteor.users.find id,
         fields:
             username: 1
-            authoredCloud: 1
             upvotedCloud: 1
-            downvotedCloud: 1
             points: 1
             upVotedCloudMatches: 1
             upvotedList: 1
@@ -43,20 +38,14 @@ Meteor.publish 'me', ->
     Meteor.users.find @userId,
         fields:
             username: 1
-            authoredCloud: 1
             upvotedCloud: 1
-            downvotedCloud: 1
             points: 1
             upVotedCloudMatches: 1
             upvotedList: 1
 
-# Meteor.publish 'docs', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
 Meteor.publish 'docs', (selectedTags, viewMode)->
     match = {}
-    # if not @userId then match.personal = $in: [false, null]
-    # if pinnedUsernames and pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
     if selectedTags.length > 0 then match.tags = $all: selectedTags
-    # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'
@@ -67,79 +56,46 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
         limit: 10
         sort: timestamp: -1
 
-# Meteor.publish 'usernames2', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-#     self = @
-
-#     match = {}
-#     if selectedTags.length > 0 then match.tags = $all: selectedTags
-#     if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-
-
-# Meteor.publish 'usernames', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-# Meteor.publish 'usernames', (selectedTags)->
-    # self = @
-
-    # match = {}
-    # if selectedTags.length > 0 then match.tags = $all: selectedTags
-    # # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-
-    # cloud = Docs.aggregate [
-    #     { $match: match }
-    #     { $project: username: 1 }
-    #     { $group: _id: '$username', count: $sum: 1 }
-    #     { $match: _id: $nin: selectedUsernames }
-    #     { $sort: count: -1, _id: 1 }
-    #     { $limit: 50 }
-    #     { $project: _id: 0, text: '$_id', count: 1 }
-    #     ]
-
-    # cloud.forEach (username) ->
-    #     self.added 'usernames', Random.id(),
-    #         text: username.text
-    #         count: username.count
-    # self.ready()
-
 
 # Meteor.publish 'tags', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-# Meteor.publish 'tags', (selectedTags)->
-#     self = @
+Meteor.publish 'tags', (selectedTags, viewMode)->
+    self = @
 
-#     match = {}
-#     # if pinnedUsernames.length > 1 then match.username = $in: pinnedUsernames
-#     if selectedTags.length > 0 then match.tags = $all: selectedTags
-#     # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-#     # switch viewMode
-#     #     when 'mine' then match.authorId = @userId
-#     #     when 'unvoted'
-#     #         match.upVoters = $nin: [@userId]
-#     #         match.downVoters = $nin: [@userId]
+    match = {}
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
+    # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
 
-#     cloud = Docs.aggregate [
-#         { $match: match }
-#         { $project: tags: 1, points: 1 }
-#         { $unwind: '$tags' }
-#         {
-#             $group:
-#                 _id:'$tags'
-#                 count: $sum:1
-#                 tagPoints: $sum:'$points'
-#         }
-#         { $match: _id: $nin: selectedTags }
-#         # { $sort: count: -1, _id: 1 }
-#         { $limit: 25 }
-#         { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
-#         { $sort: countPlusPoints: -1 }
-#         ]
-#     console.log cloud
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: tags: 1, points: 1 }
+        { $unwind: '$tags' }
+        {
+            $group:
+                _id:'$tags'
+                count: $sum:1
+                tagPoints: $sum:'$points'
+        }
+        { $match: _id: $nin: selectedTags }
+        # { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
+        { $sort: countPlusPoints: -1 }
+        ]
+    console.log cloud
 
-#     cloud.forEach (tag, i) ->
-#         self.added 'tags', Random.id(),
-#             name: tag.name
-#             count: tag.count
-#             countPlusPoints: tag.countPlusPoints
-#             index: i
+    cloud.forEach (tag, i) ->
+        self.added 'tags', Random.id(),
+            name: tag.name
+            count: tag.count
+            countPlusPoints: tag.countPlusPoints
+            index: i
 
-#     self.ready()
+    self.ready()
 
 # with selected user
 # Meteor.publish 'tags', (selected_tags, selected_user)->
@@ -172,46 +128,36 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
 
 
 
-Meteor.publish 'tags', (selectedTags, viewMode)->
-    self = @
+# Meteor.publish 'tags', (selectedTags, viewMode)->
+#     self = @
 
-    match = {}
-    # match =
-    #     $or: [
-    #         personal: $in: [false, null]
-    #         authorId: @userId
-    #         ]
-    # if not @userId then match.personal = $in: [false, null]
-    if selectedTags.length > 0 then match.tags = $all: selectedTags
-    # match.authorId = @userId
-    switch viewMode
-        when 'mine' then match.authorId = @userId
-        when 'unvoted'
-            match.upVoters = $nin: [@userId]
-            match.downVoters = $nin: [@userId]
+#     match = {}
+#     if selectedTags.length > 0 then match.tags = $all: selectedTags
+#     switch viewMode
+#         when 'mine' then match.authorId = @userId
+#         when 'unvoted'
+#             match.upVoters = $nin: [@userId]
+#             match.downVoters = $nin: [@userId]
 
-    # console.log match
+#     cloud = Docs.aggregate [
+#         { $match: match }
+#         { $project: tags: 1 }
+#         { $unwind: '$tags' }
+#         { $group: _id: '$tags', count: $sum: 1 }
+#         { $match: _id: $nin: selectedTags }
+#         { $sort: count: -1, _id: 1 }
+#         { $limit: 50 }
+#         { $project: _id: 0, name: '$_id', count: 1 }
+#         ]
 
-
-    cloud = Docs.aggregate [
-        { $match: match }
-        { $project: tags: 1 }
-        { $unwind: '$tags' }
-        { $group: _id: '$tags', count: $sum: 1 }
-        { $match: _id: $nin: selectedTags }
-        { $sort: count: -1, _id: 1 }
-        { $limit: 50 }
-        { $project: _id: 0, name: '$_id', count: 1 }
-        ]
-
-    cloud.forEach (tag, i) ->
-        self.added 'tags', Random.id(),
-            name: tag.name
-            count: tag.count
-            index: i
+#     cloud.forEach (tag, i) ->
+#         self.added 'tags', Random.id(),
+#             name: tag.name
+#             count: tag.count
+#             index: i
 
 
-    self.ready()
+#     self.ready()
 
 
 
@@ -225,20 +171,20 @@ Meteor.methods
 
 
     generatePersonalCloud: (uid)->
-        authoredCloud = Docs.aggregate [
-            { $match: authorId: uid }
-            { $project: tags: 1 }
-            { $unwind: '$tags' }
-            { $group: _id: '$tags', count: $sum: 1 }
-            { $sort: count: -1, _id: 1 }
-            { $limit: 50 }
-            { $project: _id: 0, name: '$_id', count: 1 }
-            ]
-        authoredList = (tag.name for tag in authoredCloud)
-        Meteor.users.update Meteor.userId(),
-            $set:
-                authoredCloud: authoredCloud
-                authoredList: authoredList
+        # authoredCloud = Docs.aggregate [
+        #     { $match: authorId: uid }
+        #     { $project: tags: 1 }
+        #     { $unwind: '$tags' }
+        #     { $group: _id: '$tags', count: $sum: 1 }
+        #     { $sort: count: -1, _id: 1 }
+        #     { $limit: 50 }
+        #     { $project: _id: 0, name: '$_id', count: 1 }
+        #     ]
+        # authoredList = (tag.name for tag in authoredCloud)
+        # Meteor.users.update Meteor.userId(),
+        #     $set:
+        #         authoredCloud: authoredCloud
+        #         authoredList: authoredList
 
 
         upvotedCloud = Docs.aggregate [
@@ -247,7 +193,7 @@ Meteor.methods
             { $unwind: '$tags' }
             { $group: _id: '$tags', count: $sum: 1 }
             { $sort: count: -1, _id: 1 }
-            { $limit: 50 }
+            { $limit: 100 }
             { $project: _id: 0, name: '$_id', count: 1 }
             ]
         upvotedList = (tag.name for tag in upvotedCloud)
@@ -257,20 +203,20 @@ Meteor.methods
                 upvotedList: upvotedList
 
 
-        downvotedCloud = Docs.aggregate [
-            { $match: downVoters: $in: [Meteor.userId()] }
-            { $project: tags: 1 }
-            { $unwind: '$tags' }
-            { $group: _id: '$tags', count: $sum: 1 }
-            { $sort: count: -1, _id: 1 }
-            { $limit: 50 }
-            { $project: _id: 0, name: '$_id', count: 1 }
-            ]
-        downvotedList = (tag.name for tag in downvotedCloud)
-        Meteor.users.update Meteor.userId(),
-            $set:
-                downvotedCloud: downvotedCloud
-                downvotedList: downvotedList
+        # downvotedCloud = Docs.aggregate [
+        #     { $match: downVoters: $in: [Meteor.userId()] }
+        #     { $project: tags: 1 }
+        #     { $unwind: '$tags' }
+        #     { $group: _id: '$tags', count: $sum: 1 }
+        #     { $sort: count: -1, _id: 1 }
+        #     { $limit: 50 }
+        #     { $project: _id: 0, name: '$_id', count: 1 }
+        #     ]
+        # downvotedList = (tag.name for tag in downvotedCloud)
+        # Meteor.users.update Meteor.userId(),
+        #     $set:
+        #         downvotedCloud: downvotedCloud
+        #         downvotedList: downvotedList
 
     # calculateUserMatchOld: (username)->
     #     myCloud = Meteor.user().cloud
