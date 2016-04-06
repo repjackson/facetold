@@ -1,5 +1,5 @@
 template(name='viewSmall')
-    i.tags.icon
+    // i.tags.icon
     each tags
         .ui.large.basic.button.docTag(class=docTagClass)  #{this}
     .ui.divider
@@ -8,10 +8,11 @@ template(name='viewSmall')
             +markdown
                 !{body}
         .ui.divider
-    .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
-        i.thumbs.up.icon
-    .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
-        i.thumbs.down.icon
+    unless isAuthor
+        .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
+            i.thumbs.up.icon
+        .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
+            i.thumbs.down.icon
     .ui.basic.large.label
         | #{points} Points
     if isAuthor
@@ -21,13 +22,12 @@ template(name='viewSmall')
         .ui.icon.basic.button.deleteDoc
             // |Delete
             i.red.trash.icon
-    .ui.basic.button.viewFull
-        i.unhide.icon
-        |View
-    .ui.label by #{username} [#{author.points}]
-    |#{when}
+    // .ui.basic.button.viewFull
+    //     i.unhide.icon
+    //     |View
+    |by #{username} [#{author.points} points] #{when}
     unless isAuthor
-        .ui.header Matched Upvoted Keywords
-        |Count: #{upVotedMatchCloud.length}
+        .ui.divider
+        h4.ui.header Matched Upvoted Keywords with #{username} (Count: #{upVotedMatchCloud.length})
         each upVotedMatchCloud
-            .ui.label #{this}
+            .ui.basic.label #{this}

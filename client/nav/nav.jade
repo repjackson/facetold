@@ -1,6 +1,6 @@
 template(name='nav')
     .ui.menu
-        a#homeLink.header.item(href='/')
+        a#homeLink.header.item(href='/' class="{{isActivePath '/'}}")
             img(src='/f_logo.png' height='42' width='42')
         .ui.input.item
             input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
@@ -9,9 +9,9 @@ template(name='nav')
                 a#addDoc.item
                     i.plus.icon
                     |Add
-                a.item(href='/unvoted') Unvoted
-                a.item(href='/mine') My Documents
-                a.item(href='/profile') Profile [#{user.points} points]
+                a.item(href='/unvoted' class="{{isActivePath '/unvoted'}}") Unvoted Documents
+                a.item(href='/mine' class="{{isActivePath '/mine'}}") My Documents
+                a.item(href='/profile' class="{{isActivePath '/profile'}}") Profile [#{user.points} points]
             +loginButtons align='right'
 
 

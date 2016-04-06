@@ -1,10 +1,11 @@
 template(name='home')
     .ui.basic.center.aligned.segment
+        h4.ui.header Filter Documents Below:
         .row
             .ui.input
-                input#search(type='text', placeholder="Global Search")
+                input#search(type='text', placeholder='Global Search')
             .ui.input
-                +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder="Drilldown")
+                +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder='Page Drilldown')
             if selectedTags
                 #clearTags.ui.primary.labeled.icon.button
                     |Clear Selection
