@@ -1,0 +1,9 @@
+template(name='commentList')
+    .container
+        .ui.segment
+            .ui.header Comments
+            .ui.input
+                input#addMessage(type='text' autofocus='' placeholder='Add Comment')
+            .ui.comments
+                each comments
+                    +comment comment=this

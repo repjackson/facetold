@@ -8,7 +8,8 @@ template(name='edit')
                         |#{this}
                 .ui.form
                     .field
-                        .ui.input
+                        .ui.left.icon.input
+                            i.tag.icon
                             input#addTag(type='text' autofocus='' placeholder='Add Tag')
                         // div user mentions
                         // each mentions
@@ -22,11 +23,13 @@ template(name='edit')
                         //     label(for='place') add address
                         //     input#place.form-control(type='text' value=locationob.formatted_address)
                     .field
-                        .ui.icon.input
+                        .ui.left.icon.action.input
+                            i.calendar.outline.icon
                             input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
-                            i.link.remove.icon.clearDT
+                            .ui.icon.button
+                                i.link.remove.icon.clearDT
                     .field
-                        textarea#body
+                        textarea#body(rows='20')
                             |#{body}
                     // .field
                     //     .ui.checkbox

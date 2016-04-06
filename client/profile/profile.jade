@@ -1,6 +1,9 @@
 template(name='profile')
     .container
         .ui.segment
+            .ui.header Messages
+            +messageList
+        .ui.segment
             .ui.header Your Upvoted Tag Cloud
             // #generatePersonalCloud.ui.icon.button
                 // i.refresh.icon
@@ -23,12 +26,13 @@ template(name='profile')
             //             small #{this.count}
         .ui.segment
             .ui.header Top Matched User Cloud
+            .ui.divided.list
                 each upVotedMatchCloud
-                    .ui.divided.list
-                        .item
-                            strong #{this.matchedUser} (Total Count: #{this.totalCount})
-                            each this.cloudIntersection
-                                .ui.basic.label #{this.tag} #{this.min}
+                    .item
+                        .ui.header #{this.matchedUser}
+                            small (Common Point Count: #{this.totalCount})
+                        each this.cloudIntersection
+                            .ui.basic.label #{this.tag} #{this.min}
             // .ui.header Top Matched User List
             // each matchedUsersList
             //     .ui.divided.list

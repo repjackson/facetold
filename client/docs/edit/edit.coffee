@@ -7,6 +7,8 @@ Template.edit.onCreated ->
 
 Template.edit.onRendered ->
     Meteor.setTimeout (->
+        $('#body').froalaEditor
+            height: 300
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->
                 val = $input.val()
@@ -73,12 +75,15 @@ Template.edit.events
             when 13
                 if tag.length > 0
                     Docs.update FlowRouter.getParam('docId'),
-                        $push: tags: tag
+                        $addToSet: tags: tag
                     $('#addTag').val('')
                 else
                     body = $('#body').val()
                     Docs.update FlowRouter.getParam('docId'),
                         $set: body: body
+                    selectedTags.clear()
+                    for tag in @tags
+                        selectedTags.push tag
                     FlowRouter.go '/'
             when 8
                 if tag.length is 0

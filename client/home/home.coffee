@@ -7,9 +7,9 @@ Template.home.onCreated ->
 
 Template.home.helpers
     globalTags: ->
-        # docCount = Docs.find().count()
-        # if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
-        Tags.find()
+        docCount = Docs.find().count()
+        if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
+        # Tags.find()
 
     docs: -> Docs.find()
 

@@ -4,7 +4,7 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Messages.allow
+Comments.allow
     insert: (userId, doc)-> doc.authorId is Meteor.userId()
     update: (userId, doc)-> doc.authorId is Meteor.userId()
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
@@ -12,8 +12,8 @@ Messages.allow
 Meteor.publish 'doc', (id)-> Docs.find id
 
 
-Meteor.publish 'messages', (id)->
-    Messages.find docId: id,
+Meteor.publish 'comments', (id)->
+    Comments.find docId: id,
         sort: timestamp: -1
 
 Meteor.publish 'people', ->
@@ -86,7 +86,6 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
         { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
         { $sort: countPlusPoints: -1 }
         ]
-    console.log cloud
 
     cloud.forEach (tag, i) ->
         self.added 'tags', Random.id(),

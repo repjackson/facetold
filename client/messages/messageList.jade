@@ -1,9 +1,6 @@
 template(name='messageList')
-    .container
-        .ui.segment
-            .ui.header Messages
-            .ui.input
-                input#addMessage(type='text' autofocus='' placeholder='Add Message')
-            .ui.comments
-                each messages
-                    +message message=this
+    .ui.input
+        input#addMessage(type='text' autofocus='' placeholder='Add Message')
+    .ui.messages
+        each messages
+            +message message=this

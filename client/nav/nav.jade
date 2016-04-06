@@ -2,16 +2,16 @@ template(name='nav')
     .ui.stackable.menu
         a#homeLink.header.item(href='/' class="{{isActivePath '/'}}")
             img(src='/f_logo.png' height='42' width='42')
-        .ui.item
-            .ui.icon.input
-                i.plus.icon
-                input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
+        // .ui.item
+        //     .ui.icon.input
+        //         i.plus.icon
+        //         input#quickAdd(type='text' autofocus='' placeholder='Quick Add')
         if currentUser
             a#addDoc.item
                 i.plus.icon
                 |Add
-            a.item(href='/unvoted' class="{{isActivePath '/unvoted'}}") Unvoted Documents
-            a.item(href='/mine' class="{{isActivePath '/mine'}}") My Documents
+            a.item(href='/unvoted' class="{{isActivePath '/unvoted'}}") Unvoted Docs
+            a.item(href='/mine' class="{{isActivePath '/mine'}}") My Docs
             a.item(href='/profile' class="{{isActivePath '/profile'}}") Profile [#{user.points} points]
         +loginButtons align='right'
 
