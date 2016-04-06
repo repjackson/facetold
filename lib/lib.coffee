@@ -1,6 +1,8 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
 @Usernames = new Meteor.Collection 'usernames'
+@Messages = new Meteor.Collection 'messages'
+
 
 Docs.before.insert (userId, doc)->
     doc.upVoters = []
@@ -13,6 +15,10 @@ Docs.before.insert (userId, doc)->
 
 Docs.helpers
     author: (doc)-> Meteor.users.findOne @authorId
+
+Messages.helpers
+    from: (doc)-> Meteor.users.findOne @fromId
+    to: (doc)-> Meteor.users.findOne @toId
 
 
 Meteor.methods

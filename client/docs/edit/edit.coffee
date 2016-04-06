@@ -7,40 +7,37 @@ Template.edit.onCreated ->
 
 Template.edit.onRendered ->
     Meteor.setTimeout (->
-    #     # $('.datepicker').pickadate
-    #     #     selectMonths: true
-    #     #     selectYears: 15
-        # $('#datetimepicker').datetimepicker(
-        #     onChangeDateTime: (dp,$input)->
-        #         val = $input.val()
+        $('#datetimepicker').datetimepicker(
+            onChangeDateTime: (dp,$input)->
+                val = $input.val()
 
-        #         # console.log moment(val).format("dddd, MMMM Do YYYY, h:mm:ss a")
-        #         minute = moment(val).minute()
-        #         hour = moment(val).format('h')
-        #         date = moment(val).format('Do')
-        #         ampm = moment(val).format('a')
-        #         weekdaynum = moment(val).isoWeekday()
-        #         weekday = moment().isoWeekday(weekdaynum).format('dddd')
+                # console.log moment(val).format("dddd, MMMM Do YYYY, h:mm:ss a")
+                minute = moment(val).minute()
+                hour = moment(val).format('h')
+                date = moment(val).format('Do')
+                ampm = moment(val).format('a')
+                weekdaynum = moment(val).isoWeekday()
+                weekday = moment().isoWeekday(weekdaynum).format('dddd')
 
-        #         month = moment(val).format('MMMM')
-        #         year = moment(val).format('YYYY')
+                month = moment(val).format('MMMM')
+                year = moment(val).format('YYYY')
 
-        #         datearray = [hour, minute, ampm, weekday, month, date, year]
-        #         datearray = _.map(datearray, (el)-> el.toString().toLowerCase())
-        #         # datearray = _.each(datearray, (el)-> console.log(typeof el))
+                datearray = [hour, minute, ampm, weekday, month, date, year]
+                datearray = _.map(datearray, (el)-> el.toString().toLowerCase())
+                # datearray = _.each(datearray, (el)-> console.log(typeof el))
 
-        #         docid = FlowRouter.getParam 'docId'
+                docid = FlowRouter.getParam 'docId'
 
-        #         doc = Docs.findOne docid
-        #         tagsWithoutDate = _.difference(doc.tags, doc.datearray)
-        #         tagsWithNew = _.union(tagsWithoutDate, datearray)
+                doc = Docs.findOne docid
+                tagsWithoutDate = _.difference(doc.tags, doc.datearray)
+                tagsWithNew = _.union(tagsWithoutDate, datearray)
 
-        #         Docs.update docid,
-        #             $set:
-        #                 tags: tagsWithNew
-        #                 datearray: datearray
-        #                 dateTime: val
-        #     )
+                Docs.update docid,
+                    $set:
+                        tags: tagsWithNew
+                        datearray: datearray
+                        dateTime: val
+            )
         ), 300
 
     # @autorun ->
@@ -67,29 +64,6 @@ Template.edit.helpers
         ]
     }
 
-	getFEContext: ->
-        self = @
-        console.log @
-        {
-          _value: self.myDoc.myHTMLField
-          _keepMarkers: true
-          _className: 'froala-reactive-meteorized-override'
-          toolbarInline: true
-          initOnClick: false
-          tabSpaces: false
-          '_onsave.before': (e, editor) ->
-            # Get edited HTML from Froala-Editor
-            newHTML = editor.html.get(true)
-            # Do something to update the edited value provided by the Froala-Editor plugin, if it has changed:
-            if !_.isEqual(newHTML, self.myDoc.myHTMLField)
-              console.log 'onSave HTML is :' + newHTML
-              myCollection.update { _id: self.myDoc._id }, $set: myHTMLField: newHTML
-            false
-            # Stop Froala Editor from POSTing to the Save URL
-
-        }
-
-
 
 Template.edit.events
     'keyup #addTag': (e,t)->
@@ -102,11 +76,26 @@ Template.edit.events
                         $push: tags: tag
                     $('#addTag').val('')
                 else
+                    body = $('#body').val()
+                    Docs.update FlowRouter.getParam('docId'),
+                        $set: body: body
                     FlowRouter.go '/'
             when 8
-                console.log 'back'
-                Docs.update FlowRouter.getParam('docId'),
-                    $pull: tags: tag
+                if tag.length is 0
+                    last = @tags.pop()
+                    Docs.update FlowRouter.getParam('docId'),
+                        $pop: tags: 1
+                    $('#addTag').val(last)
+
+    'click .clearDT': ->
+        tagsWithoutDate = _.difference(@tags, @datearray)
+        Docs.update FlowRouter.getParam('docId'),
+            $set:
+                tags: tagsWithoutDate
+                datearray: []
+                dateTime: null
+        $('#datetimepicker').val('')
+
 
 
     'click .docTag': ->

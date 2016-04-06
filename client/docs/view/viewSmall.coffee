@@ -1,7 +1,7 @@
-Template.view.onCreated ->
+Template.viewSmall.onCreated ->
     Meteor.subscribe 'person', @authorId
 
-Template.view.helpers
+Template.viewSmall.helpers
     isAuthor: -> @authorId is Meteor.userId()
 
     voteUpButtonClass: ->
@@ -16,12 +16,14 @@ Template.view.helpers
 
     when: -> moment(@timestamp).fromNow()
 
-    docTagClass: -> if @valueOf() in selectedTags.array() then 'secondary' else ''
+    docTagClass: -> if @valueOf() in selectedTags.array() then 'primary' else ''
 
     author: -> Meteor.users.findOne(@authorId)
 
-Template.view.events
+Template.viewSmall.events
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
+    'click .viewFull': -> FlowRouter.go "/view/#{@_id}"
+
 
     'click .docTag': -> if @valueOf() in selectedTags.array() then selectedTags.remove @valueOf() else selectedTags.push @valueOf()
 
@@ -38,3 +40,9 @@ Template.view.events
     'click .deleteDoc': ->
         if confirm 'Delete?'
             Meteor.call 'deleteDoc', @_id
+
+    'click .togglePersonal': ->
+        newValue = !@personal
+        Docs.update @_id,
+            $set:
+                personal: newValue

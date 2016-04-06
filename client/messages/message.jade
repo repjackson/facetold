@@ -1,0 +1,10 @@
+template(name='message')
+    .comment
+        .content
+            a.author #{message.username}
+            .metadata
+                span.date #{when}
+            .text
+                | #{message.text}
+            // .actions
+            //     a.reply Reply

@@ -3,39 +3,40 @@ template(name='edit')
         .container
             .ui.segment
                 each tags
-                    .ui.button.docTag
+                    .ui.labeled.basic.large.icon.button.docTag
                         i.minus.icon
                         |#{this}
-                .ui.input
-                    input#addTag(type='text' autofocus='' placeholder='Add Tag')
-                    // div user mentions
-                    // each mentions
-                    //     .btn.btn-default.docMention
-                    //         span.glyphicon.glyphicon-minus
-                    //         |#{this}
-                    // .form-group
-                    //     .form-control
-                    //         +inputAutocomplete(settings=userSettings id='userSelection' class='' placeholder="select users")
-                    // .form-group
-                    //     label(for='place') add address
-                    //     input#place.form-control(type='text' value=locationob.formatted_address)
-                    // .form-group
-                    //     label(for='datetimepicker') add date/time
-                    //     input#datetimepicker.form-control(type="text" value=dateTime)
-                    //     .btn.btn-info.clearDT clear date/time
-                // +froalaReactive getFEContext
-                .ui.basic.segment
-                    .ui.form
-                        .field
-                            textarea#body
-                .ui.basic.segment
-                    label
-                        input(type="checkbox" id="personal" checked=personal)
-                        |Private
-                #saveDoc.ui.labeled.icon.button
+                .ui.form
+                    .field
+                        .ui.input
+                            input#addTag(type='text' autofocus='' placeholder='Add Tag')
+                        // div user mentions
+                        // each mentions
+                        //     .btn.btn-default.docMention
+                        //         span.glyphicon.glyphicon-minus
+                        //         |#{this}
+                        // .form-group
+                        //     .form-control
+                        //         +inputAutocomplete(settings=userSettings id='userSelection' class='' placeholder="select users")
+                        // .form-group
+                        //     label(for='place') add address
+                        //     input#place.form-control(type='text' value=locationob.formatted_address)
+                    .field
+                        .ui.icon.input
+                            input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
+                            i.link.remove.icon.clearDT
+                    .field
+                        textarea#body
+                            |#{body}
+                    .field
+                        .ui.checkbox
+                            input(type="checkbox" id="personal" checked=personal)
+                            label Private
+                .ui.divider
+                #saveDoc.ui.labeled.green.icon.button
                     |Save
                     i.check.icon
-                #deleteDoc.ui.labeled.icon.button
+                #deleteDoc.ui.labeled.red.icon.right.floated.button
                     i.remove.icon
                     |Delete
 

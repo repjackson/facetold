@@ -1,0 +1,56 @@
+template(name='viewSmall')
+    i.tags.icon
+    each tags
+        .ui.compact.button.docTag(class=docTagClass)  #{this}
+    .ui.divider
+    if body.length
+        .description
+            +markdown
+                !{body}
+        .ui.divider
+    unless personal
+        .ui.icon.button.voteUp(class=voteUpButtonClass)
+            i.thumbs.up.icon
+        .ui.icon.button.voteDown(class=voteDownButtonClass)
+            i.thumbs.down.icon
+        .ui.mini.statistic
+            .value
+                | #{points}
+            .label
+                | Points
+    .ui.divider
+    .ui.label by #{username} [#{author.points}]
+    |#{when}
+    if isAuthor
+        if personal
+            .ui.labeled.icon.right.floated.button.togglePersonal
+                i.lock.icon
+                |Private
+        else
+            .ui.labeled.icon.right.floated.button.togglePersonal
+                i.unlock.icon
+                |Public
+    else
+        if personal
+            .ui.label
+                i.lock.icon
+                |Private
+        else
+            .ui.label
+                i.unlock.icon
+                |Public
+    .ui.divider
+    if isAuthor
+        .ui.labeled.icon.basic.button.editDoc
+            |Edit
+            i.blue.pencil.icon
+        .ui.labeled.icon.basic.button.deleteDoc
+            |Delete
+            i.red.trash.icon
+    .ui.labeled.icon.basic.button.viewFull
+        |View
+        i.unhide.icon
+    if currentUser
+        .ui.labeled.icon.basic.button.cloneDoc
+            |Clone
+            i.fork.icon

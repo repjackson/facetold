@@ -29,3 +29,6 @@ kadira:flow-router
 kadira:blaze-layout
 dburles:collection-helpers
 mizzao:autocomplete
+momentjs:moment
+perak:markdown
+drewy:datetimepicker

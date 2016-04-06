@@ -6,16 +6,15 @@ template(name='home')
             .ui.input
                 +inputAutocomplete(settings=tagsettings id='pageDrilldown' class='' placeholder="Drilldown")
         if selectedTags
-            #clearTags.ui.icon.button
+            #clearTags.ui.primary.icon.huge.button
                 i.remove.icon
             each selectedTags
-                a.ui.secondary.large.button.unselectTag
+                a.ui.primary.huge.button.unselectTag
                     strong #{this}
         each globalTags
             .ui.button.selectTag(class=globalTagClass) #{this.name}
                 // small #{this.count}
     .ui.container
-        .ui.cards
-            each docs
-                .ui.card
-                    +view
+        each docs
+            .ui.segment
+                +viewSmall

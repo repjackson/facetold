@@ -4,7 +4,17 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
+Messages.allow
+    insert: (userId, doc)-> doc.authorId is Meteor.userId()
+    update: (userId, doc)-> doc.authorId is Meteor.userId()
+    remove: (userId, doc)-> doc.authorId is Meteor.userId()
+
 Meteor.publish 'doc', (id)-> Docs.find id
+
+
+Meteor.publish 'messages', (id)->
+    Messages.find docId: id,
+        sort: timestamp: -1
 
 Meteor.publish 'people', ->
     Meteor.users.find {},
@@ -193,7 +203,7 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
 
 
 Meteor.methods
-    createDoc: (tags)->
+    createDoc: (tags=[])->
         Docs.insert
             tags: tags
 
