@@ -53,80 +53,11 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
             match.downVoters = $nin: [@userId]
 
     Docs.find match,
-        limit: 10
-        sort: timestamp: -1
+        limit: 1
+        sort: points: -1
+        # sort: timestamp: -1
 
-
-# Meteor.publish 'tags', (selectedTags, selectedUsernames, pinnedUsernames, viewMode)->
-Meteor.publish 'tags', (selectedTags, viewMode)->
-    self = @
-
-    match = {}
-    if selectedTags.length > 0 then match.tags = $all: selectedTags
-    # if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
-    switch viewMode
-        when 'mine' then match.authorId = @userId
-        when 'unvoted'
-            match.upVoters = $nin: [@userId]
-            match.downVoters = $nin: [@userId]
-
-    cloud = Docs.aggregate [
-        { $match: match }
-        { $project: tags: 1, points: 1 }
-        { $unwind: '$tags' }
-        {
-            $group:
-                _id:'$tags'
-                count: $sum:1
-                tagPoints: $sum:'$points'
-        }
-        { $match: _id: $nin: selectedTags }
-        # { $sort: count: -1, _id: 1 }
-        { $limit: 50 }
-        { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
-        { $sort: countPlusPoints: -1 }
-        ]
-
-    cloud.forEach (tag, i) ->
-        self.added 'tags', Random.id(),
-            name: tag.name
-            count: tag.count
-            countPlusPoints: tag.countPlusPoints
-            index: i
-
-    self.ready()
-
-# with selected user
-# Meteor.publish 'tags', (selected_tags, selected_user)->
-#     self = @
-
-#     match = {}
-#     if selected_user then match.authorId = selected_user
-#     if selected_tags.length > 0 then match.tags = $all: selected_tags
-#     # match.authorId = @userId
-
-#     cloud = Docs.aggregate [
-#         { $match: match }
-#         { $project: tags: 1 }
-#         { $unwind: '$tags' }
-#         { $group: _id: '$tags', count: $sum: 1 }
-#         { $match: _id: $nin: selected_tags }
-#         { $sort: count: -1, _id: 1 }
-#         { $limit: 100 }
-#         { $project: _id: 0, name: '$_id', count: 1 }
-#         ]
-
-#     cloud.forEach (tag) ->
-#         self.added 'tags', Random.id(),
-#             name: tag.name
-#             count: tag.count
-
-#     self.ready()
-
-
-
-
-
+# count combining attempt
 # Meteor.publish 'tags', (selectedTags, viewMode)->
 #     self = @
 
@@ -140,23 +71,63 @@ Meteor.publish 'tags', (selectedTags, viewMode)->
 
 #     cloud = Docs.aggregate [
 #         { $match: match }
-#         { $project: tags: 1 }
+#         { $project: tags: 1, points: 1 }
 #         { $unwind: '$tags' }
-#         { $group: _id: '$tags', count: $sum: 1 }
+#         {
+#             $group:
+#                 _id:'$tags'
+#                 count: $sum:1
+#                 tagPoints: $sum:'$points'
+#         }
 #         { $match: _id: $nin: selectedTags }
-#         { $sort: count: -1, _id: 1 }
+#         # { $sort: count: -1, _id: 1 }
 #         { $limit: 50 }
-#         { $project: _id: 0, name: '$_id', count: 1 }
+#         { $project: _id:0, name:'$_id', count:1 , countPlusPoints: '$add':['$count', '$tagPoints'] }
+#         { $sort: countPlusPoints: -1 }
 #         ]
 
 #     cloud.forEach (tag, i) ->
 #         self.added 'tags', Random.id(),
 #             name: tag.name
 #             count: tag.count
+#             countPlusPoints: tag.countPlusPoints
 #             index: i
 
-
 #     self.ready()
+
+
+
+
+Meteor.publish 'tags', (selectedTags, viewMode)->
+    self = @
+
+    match = {}
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
+    switch viewMode
+        when 'mine' then match.authorId = @userId
+        when 'unvoted'
+            match.upVoters = $nin: [@userId]
+            match.downVoters = $nin: [@userId]
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: tags: 1 }
+        { $unwind: '$tags' }
+        { $group: _id: '$tags', count: $sum: 1 }
+        { $match: _id: $nin: selectedTags }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id: 0, name: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (tag, i) ->
+        self.added 'tags', Random.id(),
+            name: tag.name
+            count: tag.count
+            index: i
+
+
+    self.ready()
 
 
 

@@ -7,22 +7,42 @@ Template.home.onCreated ->
 
 Template.home.helpers
     globalTags: ->
-        docCount = Docs.find().count()
-        if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
-        # Tags.find()
+        # docCount = Docs.find().count()
+        # if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
+        Tags.find()
 
     docs: -> Docs.find()
 
+    # globalTagClass: ->
+    #     buttonClass = switch
+    #         when @index <= 15 then 'huge'
+    #         when @index <= 30 then 'big'
+    #         when @index <= 45 then 'large'
+    #         when @index <= 60 then ''
+    #         when @index <= 75 then 'small'
+    #         when @index <= 90 then 'tiny'
+    #         when @index > 90 then 'mini'
+    #     return buttonClass
+
     globalTagClass: ->
         buttonClass = switch
-            when @index <= 7 then 'big'
-            when 7 < @index <= 14 then 'large'
-            when 14 < @index <= 21 then ''
-            when 21 < @index <= 28 then ''
-            when 28 < @index <= 35 then 'small'
-            when 35 < @index <= 42 then 'tiny'
-            when @index > 42 then 'mini'
+            when @index <= 10 then 'big'
+            when @index <= 20 then 'large'
+            when @index <= 30 then ''
+            when @index <= 40 then 'small'
+            when @index <= 50 then 'tiny'
         return buttonClass
+
+    # globalTagClass: ->
+    #     buttonClass = switch
+    #         when @index <= 7 then 'big'
+    #         when 7 < @index <= 14 then 'large'
+    #         when 14 < @index <= 21 then ''
+    #         when 21 < @index <= 28 then ''
+    #         when 28 < @index <= 35 then 'small'
+    #         when 35 < @index <= 42 then 'tiny'
+    #         when @index > 42 then 'mini'
+    #     return buttonClass
 
     selectedTags: -> selectedTags.list()
 
@@ -50,11 +70,6 @@ Template.home.events
         selectedTags.push doc.name.toString()
         $('#pageDrilldown').val('')
 
-
-    'click .newDocTag': ->
-        tag = @valueOf()
-        newTags.remove tag
-        $('#addTag').val(tag)
 
     'click .authorFilterButton': (e)->
         if e.target.innerHTML in selected_screen_names.array() then selected_screen_names.remove e.target.innerHTML else selected_screen_names.push e.target.innerHTML

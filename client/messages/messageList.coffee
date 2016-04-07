@@ -6,6 +6,17 @@ Template.messageList.onCreated ->
 Template.messageList.helpers
     messages: -> Messages.find()
 
+    userSettings: -> {
+        position: 'bottom'
+        limit: 10
+        rules: [
+            {
+                collection: Meteor.users
+                field: 'username'
+                template: Template.userPill
+            }
+        ]
+    }
 
 Template.messageList.events
     'keyup #addMessage': (e)->

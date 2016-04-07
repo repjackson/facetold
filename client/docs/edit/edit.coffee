@@ -9,6 +9,7 @@ Template.edit.onRendered ->
     Meteor.setTimeout (->
         $('#body').froalaEditor
             height: 300
+            toolbarButtonsXS: ['bold', 'italic', 'fontFamily', 'fontSize', 'undo', 'redo', 'insertImage']
             # toolbarButtons: [
             #     'fullscreen'
             #     'bold'
@@ -77,7 +78,7 @@ Template.edit.onRendered ->
                         datearray: datearray
                         dateTime: val
             )
-        ), 200
+        ), 300
 
     # @autorun ->
     #     if GoogleMaps.loaded()
@@ -91,17 +92,6 @@ Template.edit.helpers
         docId = FlowRouter.getParam('docId')
         Docs.findOne docId
 
-    userSettings: -> {
-        position: 'bottom'
-        limit: 10
-        rules: [
-            {
-                collection: Meteor.users
-                field: 'username'
-                template: Template.userPill
-            }
-        ]
-    }
 
 
 Template.edit.events

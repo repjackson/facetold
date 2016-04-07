@@ -10,12 +10,12 @@ Template.viewSmall.helpers
         else ''
 
     voteUpButtonClass: ->
-        if not Meteor.userId() then 'disabled'
+        if not Meteor.userId() then 'disabled basic'
         else if Meteor.userId() in @upVoters then 'green'
         else 'basic'
 
     voteDownButtonClass: ->
-        if not Meteor.userId() then 'disabled'
+        if not Meteor.userId() then 'disabled basic'
         else if Meteor.userId() in @downVoters then 'red'
         else 'basic'
 
