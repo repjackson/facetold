@@ -8,28 +8,27 @@ template(name='edit')
                     i.minus.icon
                     |#{this}
         .ui.container
-            .ui.left.icon.input
-                i.tag.icon
-                input#addTag(type='text' autofocus='' placeholder='Add Tag')
-            // .form-group
-            //     .form-control
-            //         +inputAutocomplete(settings=userSettings id='userSelection' class='' placeholder="select users")
-            // .form-group
-            //     label(for='place') add address
-            //     input#place.form-control(type='text' value=locationob.formatted_address)
-            .ui.left.icon.action.input
-                i.calendar.outline.icon
-                input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
-                .ui.icon.button
-                    i.link.remove.icon.clearDT
+            .ui.form
+                .ui.left.icon.input
+                    i.tag.icon
+                    input#addTag(type='text' autofocus='' placeholder='Add Tag')
+                // .form-group
+                //     .form-control
+                //         +inputAutocomplete(settings=userSettings id='userSelection' class='' placeholder="select users")
+                .ui.left.icon.action.input
+                    i.map.icon
+                    input#place.form-control(type='text' value=locationob.formatted_address placeholder='Add Address')
+                    .ui.icon.button
+                        i.link.remove.icon.clearAddress
+                .ui.left.icon.action.input
+                    i.calendar.outline.icon
+                    input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
+                    .ui.icon.button
+                        i.link.remove.icon.clearDT
             .ui.hidden.divider
             .field
                 textarea#body(rows='20')
                     |#{body}
-                // .field
-                //     .ui.checkbox
-                //         input(type='checkbox' id='personal' checked=personal)
-                //         label Private
             .ui.hidden.divider
             if tags.length
                 #saveDoc.ui.large.labeled.green.icon.button

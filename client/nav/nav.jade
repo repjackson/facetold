@@ -1,5 +1,5 @@
 template(name='nav')
-    .ui.stackable.borderless.compact.menu
+    .ui.stackable.compact.menu
         a#homeLink.header.item(href='/' class="{{isActivePath '/'}}")
             i.home.icon
             // img(src='/f_logo.png' height='42' width='42')
@@ -14,8 +14,8 @@ template(name='nav')
             a#addDoc.item
                 i.plus.icon
                 |Add
-            a.item(href='/unvoted' class="{{isActivePath '/unvoted'}}") Unvoted Docs
-            a.item(href='/mine' class="{{isActivePath '/mine'}}") My Docs
+            // a.item(href='/unvoted' class="{{isActivePath '/unvoted'}}") Unvoted Docs
+            // a.item(href='/mine' class="{{isActivePath '/mine'}}") My Docs
             // a.item(href='/profile' class="{{isActivePath '/profile'}}") Profile [#{user.points} points]
             a.item(href='/profile' class="{{isActivePath '/profile'}}") Profile
         +loginButtons align='right'

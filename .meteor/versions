@@ -29,6 +29,7 @@ constellation:subscriptions@0.4.1
 constellation:tiny@0.4.0
 dandv:caret-position@2.1.1
 dburles:collection-helpers@1.0.4
+dburles:google-maps@1.1.5
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.4
 ddp-client@1.2.4
@@ -54,6 +55,7 @@ htmljs@1.0.8
 http@1.1.4
 iandouglas:accounts-ui-semantic-ui@1.2.3
 id-map@1.0.6
+jeremy:geocomplete@1.6.5_12
 jquery@1.11.7
 kadira:blaze-layout@2.3.0
 kadira:flow-router@2.11.0

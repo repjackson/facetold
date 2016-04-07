@@ -37,8 +37,7 @@ template(name='viewSmall')
             // each upVotedMatchList
             //     .ui.basic.label #{this}
             if currentUser
-                h4.ui.header Upvoted Tag Cloud Match with #{username}
-                h5 Match Points: #{upVotedMatchCloud.totalCount}
+                h4.ui.header Upvoted Tag Cloud Match with #{username} (Match Points: #{upVotedMatchCloud.totalCount})
                 each upVotedMatchCloud.cloud
                     .ui.basic.label #{this.tag} #{this.min}
             else

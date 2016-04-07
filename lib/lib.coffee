@@ -101,9 +101,6 @@ FlowRouter.route '/', action: (params) ->
 FlowRouter.route '/edit/:docId', action: (params) ->
     BlazeLayout.render 'layout', main: 'edit'
 
-FlowRouter.route '/view/:docId', action: (params) ->
-    BlazeLayout.render 'layout', main: 'viewFull'
-
 FlowRouter.route '/mine', action: (params) ->
     Session.set('view', 'mine')
     BlazeLayout.render 'layout', main: 'home'

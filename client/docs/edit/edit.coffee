@@ -80,12 +80,12 @@ Template.edit.onRendered ->
             )
         ), 300
 
-    # @autorun ->
-    #     if GoogleMaps.loaded()
-    #         docId = FlowRouter.getParam('docId')
-    #         $('#place').geocomplete().bind 'geocode:result', (event, result) ->
-    #             # console.log result.geometry.location.lat()
-    #             Meteor.call 'updatelocation', docId, result, ->
+    @autorun ->
+        if GoogleMaps.loaded()
+            docId = FlowRouter.getParam('docId')
+            $('#place').geocomplete().bind 'geocode:result', (event, result) ->
+                # console.log result.geometry.location.lat()
+                Meteor.call 'updatelocation', docId, result, ->
 
 Template.edit.helpers
     doc: ->
@@ -129,6 +129,15 @@ Template.edit.events
                 datearray: []
                 dateTime: null
         $('#datetimepicker').val('')
+
+    'click .clearAddress': ->
+        tagsWithoutAddress = _.difference(@tags, @addresstags)
+        Docs.update FlowRouter.getParam('docId'),
+            $set:
+                tags: tagsWithoutAddress
+                addresstags: []
+                locationob: null
+        $('#place').val('')
 
 
 
