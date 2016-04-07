@@ -5,7 +5,7 @@ Template.docs.onCreated ->
     @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
 
 Template.docs.helpers
-    docs: -> Docs.find()
+    docs: -> Docs.find({}, limit: 1)
 
 
 Template.cloud.onCreated ->
@@ -15,21 +15,10 @@ Template.cloud.onCreated ->
 
 Template.cloud.helpers
     globalTags: ->
-        # docCount = Docs.find().count()
-        # if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
-        Tags.find()
+        docCount = Docs.find().count()
+        if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
+        # Tags.find()
 
-
-    # globalTagClass: ->
-    #     buttonClass = switch
-    #         when @index <= 15 then 'huge'
-    #         when @index <= 30 then 'big'
-    #         when @index <= 45 then 'large'
-    #         when @index <= 60 then ''
-    #         when @index <= 75 then 'small'
-    #         when @index <= 90 then 'tiny'
-    #         when @index > 90 then 'mini'
-    #     return buttonClass
 
     globalTagClass: ->
         buttonClass = switch
@@ -39,17 +28,6 @@ Template.cloud.helpers
             when @index <= 40 then 'small'
             when @index <= 50 then 'tiny'
         return buttonClass
-
-    # globalTagClass: ->
-    #     buttonClass = switch
-    #         when @index <= 7 then 'big'
-    #         when 7 < @index <= 14 then 'large'
-    #         when 14 < @index <= 21 then ''
-    #         when 21 < @index <= 28 then ''
-    #         when 28 < @index <= 35 then 'small'
-    #         when 35 < @index <= 42 then 'tiny'
-    #         when @index > 42 then 'mini'
-    #     return buttonClass
 
     selectedTags: -> selectedTags.list()
 
@@ -80,21 +58,3 @@ Template.cloud.events
     'click .unselectUsername': -> selectedUsernames.remove @valueOf()
     'click #clearUsernames': -> selectedUsernames.clear()
 
-    'autocompleteselect #pageDrilldown': (event, template, doc)->
-        selectedTags.push doc.name.toString()
-        $('#pageDrilldown').val('')
-
-
-    'keyup #search': (e)->
-        e.preventDefault()
-        switch e.which
-            when 13
-                if e.target.value is 'clear'
-                    selectedTags.clear()
-                    $('#search').val('')
-                else
-                    selectedTags.push e.target.value.toLowerCase()
-                    $('#search').val('')
-            when 8
-                if e.target.value is ''
-                    selectedTags.pop()

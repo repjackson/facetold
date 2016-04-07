@@ -10,42 +10,6 @@ Template.edit.onRendered ->
         $('#body').froalaEditor
             height: 300
             toolbarButtonsXS: ['bold', 'italic', 'fontFamily', 'fontSize', 'undo', 'redo', 'insertImage']
-            # toolbarButtons: [
-            #     'fullscreen'
-            #     'bold'
-            #     'italic'
-            #     'underline'
-            #     'strikeThrough'
-            #     'subscript'
-            #     'superscript'
-            #     'fontFamily'
-            #     'fontSize'
-            #     '|'
-            #     'color'
-            #     'emoticons'
-            #     'inlineStyle'
-            #     'paragraphStyle'
-            #     '|'
-            #     'paragraphFormat'
-            #     'align'
-            #     'formatOL'
-            #     'formatUL'
-            #     'outdent'
-            #     'indent'
-            #     'quote'
-            #     'insertHR'
-            #     '-'
-            #     'insertLink'
-            #     'insertImage'
-            #     'insertVideo'
-            #     'insertFile'
-            #     'insertTable'
-            #     'undo'
-            #     'redo'
-            #     'clearFormatting'
-            #     'selectAll'
-            #     'html'
-            #     ]
 
         $('#datetimepicker').datetimepicker(
             onChangeDateTime: (dp,$input)->

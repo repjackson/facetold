@@ -1,10 +1,10 @@
-Template.viewSmall.onCreated ->
+Template.view.onCreated ->
     Meteor.subscribe 'person', @authorId
 
-Template.viewSmall.helpers
+Template.view.helpers
     isAuthor: -> @authorId is Meteor.userId()
 
-    viewSmallSegmentClass: ->
+    viewSegmentClass: ->
         if Meteor.userId() in @upVoters then 'green'
         else if Meteor.userId() in @downVoters then 'red'
         else ''
@@ -27,13 +27,6 @@ Template.viewSmall.helpers
         if Meteor.userId() in Template.parentData(1).upVoters then result += ' green'
         else if Meteor.userId() in Template.parentData(1).downVoters then result += ' red'
         return result
-
-    upVotedMatchList: ->
-        myUpVotedList = Meteor.user().upvotedList
-        otherUser = Meteor.users.findOne @authorId
-        otherUpVotedList = otherUser.upvotedList
-        intersection = _.intersection(myUpVotedList, otherUpVotedList)
-        return intersection
 
     upVotedMatchCloud: ->
         myUpVotedCloud = Meteor.user().upvotedCloud
@@ -67,7 +60,7 @@ Template.viewSmall.helpers
 
     author: -> Meteor.users.findOne(@authorId)
 
-Template.viewSmall.events
+Template.view.events
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
 
     'click .docTag': -> if @valueOf() in selectedTags.array() then selectedTags.remove @valueOf() else selectedTags.push @valueOf()
