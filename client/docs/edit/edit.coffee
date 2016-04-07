@@ -107,7 +107,9 @@ Template.edit.events
                 else
                     body = $('#body').val()
                     Docs.update FlowRouter.getParam('docId'),
-                        $set: body: body
+                        $set:
+                            body: body
+                            tagCount: @tags.length
                     selectedTags.clear()
                     for tag in @tags
                         selectedTags.push tag
@@ -140,7 +142,9 @@ Template.edit.events
     'click #saveDoc': ->
         body = $('#body').val()
         Docs.update FlowRouter.getParam('docId'),
-            $set: body: body
+            $set:
+                body: body
+                tagCount: @tags.length
         selectedTags.clear()
         for tag in @tags
             selectedTags.push tag

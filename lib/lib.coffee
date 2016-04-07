@@ -13,6 +13,7 @@ Docs.before.insert (userId, doc)->
     doc.points = 1
     return
 
+
 Docs.helpers
     author: (doc)-> Meteor.users.findOne @authorId
 

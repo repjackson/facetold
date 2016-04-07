@@ -54,7 +54,9 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
 
     Docs.find match,
         limit: 1
-        sort: points: -1
+        sort:
+            tagCount: 1
+            points: -1
         # sort: timestamp: -1
 
 # count combining attempt

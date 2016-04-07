@@ -1,16 +1,16 @@
 template(name='home')
-    // .ui.basic.center.aligned.compact.segment
-    if selectedTags
-        #clearTags.ui.primary.big.compact.icon.button
-            i.remove.icon
-    if selectedTags
-        each selectedTags
-            a.ui.primary.big.compact.button.unselectTag
-                strong #{this}
-    each globalTags
-        .ui.compact.basic.button.selectTag(class=globalTagClass) #{this.name}
-            // small #{this.count}
+    .ui.center.aligned.segment
+        // .ui.fluid.container
+        if selectedTags
+            #clearTags.ui.primary.big.compact.icon.button
+                i.remove.icon
+        if selectedTags
+            each selectedTags
+                a.ui.primary.big.compact.button.unselectTag
+                    strong #{this}
+        each globalTags
+            .ui.compact.basic.button.selectTag(class=globalTagClass) #{this.name}
+                // small #{this.count}
     .ui.container
-        .ui.hidden.divider
         each docs
             +viewSmall
