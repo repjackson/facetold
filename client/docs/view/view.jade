@@ -1,43 +1,44 @@
 template(name='view')
     // .ui.center.aligned.basic.basic.segment(class=viewSegmentClass)
     .ui.segment
-        // i.tags.icon
-        .ui.huge.horizontal.list
-            each tags
-                .ui.large.compact.button.docTag(class=docTagClass)  #{this}
-                // .item(class=docTagClass) #{this}
-        // .ui.divider
+        .ui.center.aligned.basic.segment
+            // i.tags.icon
+            .ui.huge.horizontal.list
+                each tags
+                    .ui.large.compact.button.docTag(class=docTagClass)  #{this}
+                    // .item(class=docTagClass) #{this}
+            // .ui.divider
         if body.length
             .description
                 +markdown
                     !{body}
-        .ui.hidden.divider
-        unless isAuthor
-            .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
-                i.thumbs.up.icon
-        .ui.basic.large.label
-            | #{points}
-        unless isAuthor
-            .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
-                i.thumbs.down.icon
-        .ui.hidden.divider
-        if isAuthor
-            .ui.basic.button.editDoc
-                i.blue.pencil.icon
-                |Edit
-            // .ui.icon.basic.button.deleteDoc
-            //     // |Delete
-            //     i.red.trash.icon
-        .row
-            | by
-            .ui.circular.button.authorFilterButton(class=authorFilterButtonClass)
-                |#{username}
-            |[#{author.points} points] #{when}
-        unless isAuthor
-            if currentUser
-                .ui.segment
-                    h4.ui.header Upvoted Tag Cloud Match with #{username} (Match Points: #{upVotedMatchCloud.totalCount})
-                    each upVotedMatchCloud.cloud
-                        .ui.basic.label #{this.tag} #{this.min}
-            else
-                p Log in to vote and match with #{username}'s tags
+        .ui.center.aligned.basic.segment
+            unless isAuthor
+                .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
+                    i.thumbs.up.icon
+            .ui.basic.large.label
+                | #{points}
+            unless isAuthor
+                .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
+                    i.thumbs.down.icon
+            .ui.hidden.divider
+            if isAuthor
+                .ui.basic.button.editDoc
+                    i.blue.pencil.icon
+                    |Edit
+                // .ui.icon.basic.button.deleteDoc
+                //     // |Delete
+                //     i.red.trash.icon
+            .row
+                | by
+                .ui.circular.button.authorFilterButton(class=authorFilterButtonClass)
+                    |#{username}
+                |[#{author.points} points] #{when}
+            unless isAuthor
+                if currentUser
+                    .ui.segment
+                        h4.ui.header Upvoted Tag Cloud Match with #{username} (Match Points: #{upVotedMatchCloud.totalCount})
+                        each upVotedMatchCloud.cloud
+                            .ui.basic.label #{this.tag} #{this.min}
+                else
+                    p Log in to vote and match with #{username}'s tags

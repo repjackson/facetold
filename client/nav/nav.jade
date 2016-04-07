@@ -18,10 +18,9 @@ template(name='nav')
                 i.announcement.icon
                 |Unvoted Mode
             // a.item(href='/mine' class="{{isActivePath '/mine'}}") My Docs
-            // a.item(href='/profile' class="{{isActivePath '/profile'}}") Profile [#{user.points} points]
             a.item(href='/profile' class="{{isActivePath '/profile'}}")
                 i.user.icon
-                |Profile
+                |Profile (#{user.points} points)
         +loginButtons align='right'
 
 

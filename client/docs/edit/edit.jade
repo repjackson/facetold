@@ -1,27 +1,25 @@
 template(name='edit')
     with doc
-        .ui.hidden.divider
-        // .ui.segment
-        .tags
-            each tags
-                .ui.labeled.basic.large.icon.button.docTag
-                    i.minus.icon
-                    |#{this}
-        .ui.container
+        .ui.center.aligned.segment
+            .tags
+                each tags
+                    .ui.labeled.basic.large.icon.button.docTag
+                        i.minus.icon
+                        |#{this}
             .ui.form
                 .ui.left.icon.input
                     i.tag.icon
                     input#addTag(type='text' autofocus='' placeholder='Add Tag')
-                .ui.left.icon.action.input
-                    i.map.icon
-                    input#place(type='text' value=locationob.formatted_address placeholder='Add Address')
-                .ui.icon.button
-                    i.link.remove.icon.clearAddress
-                .ui.left.icon.action.input
-                    i.calendar.outline.icon
-                    input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
-                    .ui.icon.button
-                        i.link.remove.icon.clearDT
+                // .ui.left.icon.action.input
+                //     i.map.icon
+                //     input#place(type='text' value=locationob.formatted_address placeholder='Add Address')
+                // .ui.icon.button
+                //     i.link.remove.icon.clearAddress
+                // .ui.left.icon.action.input
+                //     i.calendar.outline.icon
+                //     input#datetimepicker(type="text" value=dateTime placeholder='Add Date/Time')
+                //     .ui.icon.button
+                //         i.link.remove.icon.clearDT
             .ui.hidden.divider
             .field
                 textarea#body(rows='20')
@@ -31,7 +29,7 @@ template(name='edit')
                 #saveDoc.ui.large.labeled.green.icon.button
                     |Save
                     i.check.icon
-            #deleteDoc.ui.small.labeled.red.icon.right.floated.button
+            #deleteDoc.ui.small.labeled.red.icon.button
                 i.remove.icon
                 |Delete
 
