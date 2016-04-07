@@ -1,17 +1,24 @@
 @selectedTags = new ReactiveArray []
+@selectedUsernames = new ReactiveArray []
 
-Template.home.onCreated ->
+Template.docs.onCreated ->
+    @autorun -> Meteor.subscribe('docs', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
+
+Template.docs.helpers
+    docs: -> Docs.find()
+
+
+Template.cloud.onCreated ->
     Meteor.subscribe 'people'
-    @autorun -> Meteor.subscribe('tags', selectedTags.array(), Session.get('view'))
-    @autorun -> Meteor.subscribe('docs', selectedTags.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('usernames', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
+    @autorun -> Meteor.subscribe('tags', selectedTags.array(), selectedUsernames.array(), Session.get('view'))
 
-Template.home.helpers
+Template.cloud.helpers
     globalTags: ->
         # docCount = Docs.find().count()
         # if 0 < docCount < 3 then Tags.find { count: $lt: docCount } else Tags.find()
         Tags.find()
 
-    docs: -> Docs.find()
 
     # globalTagClass: ->
     #     buttonClass = switch
@@ -60,19 +67,23 @@ Template.home.helpers
         ]
     }
 
+    globalUsernames: -> Usernames.find()
+    selectedUsernames: -> selectedUsernames.list()
 
-Template.home.events
+
+Template.cloud.events
     'click .selectTag': -> selectedTags.push @name
     'click .unselectTag': -> selectedTags.remove @valueOf()
     'click #clearTags': -> selectedTags.clear()
+
+    'click .selectUsername': -> selectedUsernames.push @text
+    'click .unselectUsername': -> selectedUsernames.remove @valueOf()
+    'click #clearUsernames': -> selectedUsernames.clear()
 
     'autocompleteselect #pageDrilldown': (event, template, doc)->
         selectedTags.push doc.name.toString()
         $('#pageDrilldown').val('')
 
-
-    'click .authorFilterButton': (e)->
-        if e.target.innerHTML in selected_screen_names.array() then selected_screen_names.remove e.target.innerHTML else selected_screen_names.push e.target.innerHTML
 
     'keyup #search': (e)->
         e.preventDefault()

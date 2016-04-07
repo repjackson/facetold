@@ -15,10 +15,12 @@ template(name='viewSmall')
         unless isAuthor
             .ui.huge.icon.button.voteUp(class=voteUpButtonClass)
                 i.thumbs.up.icon
-            .ui.basic.large.label
-                | #{points}
+        .ui.basic.large.label
+            | #{points}
+        unless isAuthor
             .ui.huge.icon.button.voteDown(class=voteDownButtonClass)
                 i.thumbs.down.icon
+        .ui.hidden.divider
         if isAuthor
             .ui.basic.button.editDoc
                 i.blue.pencil.icon
@@ -26,19 +28,16 @@ template(name='viewSmall')
             // .ui.icon.basic.button.deleteDoc
             //     // |Delete
             //     i.red.trash.icon
-        // .ui.basic.button.viewFull
-        //     i.unhide.icon
-        //     |View
+        .row
+            | by
+            .ui.circular.button.authorFilterButton(class=authorFilterButtonClass)
+                |#{username}
+            |[#{author.points} points] #{when}
         unless isAuthor
-            h4 by #{username} [#{author.points} points] #{when}
-            // h4 by #{username}
-            // .ui.divider
-            // h4.ui.header Matched Upvoted Tag List with #{username} (Count: #{upVotedMatchList.length})
-            // each upVotedMatchList
-            //     .ui.basic.label #{this}
             if currentUser
-                h4.ui.header Upvoted Tag Cloud Match with #{username} (Match Points: #{upVotedMatchCloud.totalCount})
-                each upVotedMatchCloud.cloud
-                    .ui.basic.label #{this.tag} #{this.min}
+                .ui.segment
+                    h4.ui.header Upvoted Tag Cloud Match with #{username} (Match Points: #{upVotedMatchCloud.totalCount})
+                    each upVotedMatchCloud.cloud
+                        .ui.basic.label #{this.tag} #{this.min}
             else
                 p Log in to vote and match with #{username}'s tags

@@ -1,7 +1,7 @@
 @Docs = new Meteor.Collection 'docs'
 @Tags = new Meteor.Collection 'tags'
-@Comments = new Meteor.Collection 'comments'
 @Messages = new Meteor.Collection 'messages'
+@Usernames = new Meteor.Collection 'usernames'
 
 
 Docs.before.insert (userId, doc)->
@@ -17,9 +17,6 @@ Docs.before.insert (userId, doc)->
 Docs.helpers
     author: (doc)-> Meteor.users.findOne @authorId
 
-Comments.helpers
-    from: (doc)-> Meteor.users.findOne @fromId
-    to: (doc)-> Meteor.users.findOne @toId
 
 Messages.helpers
     from: (doc)-> Meteor.users.findOne @fromId
@@ -96,18 +93,30 @@ Meteor.methods
 
 FlowRouter.route '/', action: (params) ->
     Session.set('view', 'all')
-    BlazeLayout.render 'layout', main: 'home'
+    BlazeLayout.render 'layout',
+        nav: 'nav'
+        cloud: 'cloud'
+        main: 'docs'
 
 FlowRouter.route '/edit/:docId', action: (params) ->
-    BlazeLayout.render 'layout', main: 'edit'
+    BlazeLayout.render 'layout',
+        main: 'edit'
 
 FlowRouter.route '/mine', action: (params) ->
     Session.set('view', 'mine')
-    BlazeLayout.render 'layout', main: 'home'
+    BlazeLayout.render 'layout',
+        nav: 'nav'
+        cloud: 'cloud'
+        main: 'docs'
 
 FlowRouter.route '/unvoted', action: (params) ->
     Session.set('view', 'unvoted')
-    BlazeLayout.render 'layout', main: 'home'
+    BlazeLayout.render 'layout',
+        nav: 'nav'
+        main: 'docs'
 
 FlowRouter.route '/profile', action: (params) ->
-    BlazeLayout.render 'layout', main: 'profile'
+    BlazeLayout.render 'layout',
+        nav: 'nav'
+        cloud: 'cloud'
+        main: 'profile'

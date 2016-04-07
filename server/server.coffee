@@ -4,17 +4,9 @@ Docs.allow
     remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 
-Comments.allow
-    insert: (userId, doc)-> doc.authorId is Meteor.userId()
-    update: (userId, doc)-> doc.authorId is Meteor.userId()
-    remove: (userId, doc)-> doc.authorId is Meteor.userId()
 
 Meteor.publish 'doc', (id)-> Docs.find id
 
-
-Meteor.publish 'comments', (id)->
-    Comments.find docId: id,
-        sort: timestamp: -1
 
 Meteor.publish 'people', ->
     Meteor.users.find {},
@@ -43,9 +35,11 @@ Meteor.publish 'me', ->
             upVotedCloudMatches: 1
             upvotedList: 1
 
-Meteor.publish 'docs', (selectedTags, viewMode)->
+Meteor.publish 'docs', (selectedTags, selectedUsernames, viewMode)->
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'
@@ -53,11 +47,38 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
             match.downVoters = $nin: [@userId]
 
     Docs.find match,
-        limit: 10
+        limit: 1
         sort:
             tagCount: 1
             points: -1
-        # sort: timestamp: -1
+            timestamp: -1
+
+Meteor.publish 'usernames', (selectedTags, selectedUsernames, viewMode)->
+    self = @
+
+    match = {}
+    if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
+
+    cloud = Docs.aggregate [
+        { $match: match }
+        { $project: username: 1 }
+        { $group: _id: '$username', count: $sum: 1 }
+        { $match: _id: $nin: selectedUsernames }
+        { $sort: count: -1, _id: 1 }
+        { $limit: 50 }
+        { $project: _id: 0, text: '$_id', count: 1 }
+        ]
+
+    cloud.forEach (username) ->
+        self.added 'usernames', Random.id(),
+            text: username.text
+            count: username.count
+    self.ready()
+
+
+
+
 
 # count combining attempt
 # Meteor.publish 'tags', (selectedTags, viewMode)->
@@ -100,11 +121,12 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
 
 
 
-Meteor.publish 'tags', (selectedTags, viewMode)->
+Meteor.publish 'tags', (selectedTags, selectedUsernames, viewMode)->
     self = @
 
     match = {}
     if selectedTags.length > 0 then match.tags = $all: selectedTags
+    if selectedUsernames.length > 0 then match.username = $in: selectedUsernames
     switch viewMode
         when 'mine' then match.authorId = @userId
         when 'unvoted'

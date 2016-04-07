@@ -61,12 +61,14 @@ Template.viewSmall.helpers
         result.totalCount = totalCount
         return result
 
+    authorFilterButtonClass: ->
+        if @username in selectedUsernames.array() then 'primary' else 'basic'
+
 
     author: -> Meteor.users.findOne(@authorId)
 
 Template.viewSmall.events
     'click .editDoc': -> FlowRouter.go "/edit/#{@_id}"
-    'click .viewFull': -> FlowRouter.go "/view/#{@_id}"
 
     'click .docTag': -> if @valueOf() in selectedTags.array() then selectedTags.remove @valueOf() else selectedTags.push @valueOf()
 
@@ -84,12 +86,7 @@ Template.viewSmall.events
         if confirm 'Delete?'
             Meteor.call 'deleteDoc', @_id
 
-    # 'click .togglePersonal': ->
-    #     newValue = !@personal
-    #     Docs.update @_id,
-    #         $set:
-    #             personal: newValue
+    'click .authorFilterButton': (e)->
+        if e.target.innerHTML in selectedUsernames.array() then selectedUsernames.remove e.target.innerHTML else selectedUsernames.push e.target.innerHTML
 
-    'click .matchTwoUsersUpvotedCloud': ->
-        Meteor.call 'matchTwoUsersUpvotedCloud', @_id, ->
 
