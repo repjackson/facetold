@@ -53,7 +53,7 @@ Meteor.publish 'docs', (selectedTags, viewMode)->
             match.downVoters = $nin: [@userId]
 
     Docs.find match,
-        limit: 1
+        limit: 10
         sort:
             tagCount: 1
             points: -1

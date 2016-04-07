@@ -97,7 +97,7 @@ Template.edit.helpers
 Template.edit.events
     'keyup #addTag': (e,t)->
         e.preventDefault
-        tag = $('#addTag').val().toLowerCase()
+        tag = $('#addTag').val().toLowerCase().trim()
         switch e.which
             when 13
                 if tag.length > 0
@@ -149,14 +149,6 @@ Template.edit.events
         for tag in @tags
             selectedTags.push tag
         FlowRouter.go '/'
-
-    'click #personal': ->
-        docId = FlowRouter.getParam('docId')
-        doc = Docs.findOne docId
-        newValue = !doc.personal
-        Docs.update docId,
-            $set:
-                personal: newValue
 
 
     'click #deleteDoc': ->

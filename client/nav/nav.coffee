@@ -48,14 +48,15 @@ Template.nav.events
 
     'keyup #search': (e)->
         e.preventDefault()
+        searchTerm = e.target.value.toLowerCase().trim()
         switch e.which
             when 13
-                if e.target.value is 'clear'
+                if searchTerm is 'clear'
                     selectedTags.clear()
                     $('#search').val('')
                 else
-                    selectedTags.push e.target.value.toLowerCase()
+                    selectedTags.push searchTerm
                     $('#search').val('')
             when 8
-                if e.target.value is ''
+                if searchTerm is ''
                     selectedTags.pop()
