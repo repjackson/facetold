@@ -47,7 +47,7 @@ Meteor.publish 'docs', (selectedTags, selectedUsernames, viewMode)->
             match.downVoters = $nin: [@userId]
 
     Docs.find match,
-        limit: 3
+        limit: 5
         sort:
             tagCount: 1
             points: -1
@@ -140,7 +140,7 @@ Meteor.publish 'tags', (selectedTags, selectedUsernames, viewMode)->
         { $group: _id: '$tags', count: $sum: 1 }
         { $match: _id: $nin: selectedTags }
         { $sort: count: -1, _id: 1 }
-        { $limit: 100 }
+        { $limit: 50 }
         { $project: _id: 0, name: '$_id', count: 1 }
         ]
 
