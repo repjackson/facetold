@@ -118,5 +118,4 @@ FlowRouter.route '/unvoted', action: (params) ->
 FlowRouter.route '/profile', action: (params) ->
     BlazeLayout.render 'layout',
         nav: 'nav'
-        cloud: 'cloud'
         main: 'profile'

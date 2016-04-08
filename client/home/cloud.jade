@@ -1,31 +1,34 @@
 template(name='cloud')
     .ui.center.aligned.segment
-        // .ui.fluid.container
-        h5 with
-            if selectedTags
-                #clearTags.ui.primary.big.compact.icon.button
-                    i.remove.icon
-            if selectedTags
-                each selectedTags
-                    a.ui.primary.big.compact.button.unselectTag
-                        strong #{this}
-            each globalTags
-                .ui.compact.basic.button.selectTag(class=globalTagClass) #{this.name}
-                    // small #{this.count}
-        h5 by
-            if selectedUsernames
-                #clearUsernames.ui.circular.primary.icon.button
-                    i.remove.icon
-                each selectedUsernames
-                    a.ui.primary.circular.button.unselectUsername
-                        strong #{this}
-            each globalUsernames
-                .ui.basic.circular.button.selectUsername #{this.text}
-                    small #{this.count}
-                // .btn.pinUsername(class=pinnedButtonClass)
-                //     span.glyphicon.glyphicon-pushpin
+        // .ui.header Doc Navigator
+        // |Tags:
+        if selectedTags
+            #clearTags.ui.primary.big.compact.icon.button
+                i.remove.icon
+        if selectedTags
+            each selectedTags
+                a.ui.primary.big.compact.button.unselectTag
+                    strong #{this}
+        each globalTags
+            .ui.compact.basic.button.selectTag(class=globalTagClass) #{this.name}
+                // small #{this.count}
+        .ui.hidden.divider
+        // |Authors:
+        if selectedUsernames
+            #clearUsernames.ui.circular.primary.icon.button
+                i.remove.icon
+            each selectedUsernames
+                a.ui.primary.circular.button.unselectUsername
+                    i.user.icon
+                    strong #{this}
+        each globalUsernames
+            .ui.basic.circular.button.selectUsername
+                i.user.icon
+                |#{this.text}
+                small #{this.count}
 
 template(name='docs')
     .ui.container
+        // .ui.center.aligned.header Top Doc
         each docs
             +view

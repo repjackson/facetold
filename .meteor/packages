@@ -28,12 +28,9 @@ iandouglas:accounts-ui-semantic-ui
 kadira:flow-router
 kadira:blaze-layout
 dburles:collection-helpers
-mizzao:autocomplete
 momentjs:moment
 perak:markdown
-drewy:datetimepicker
 zimme:active-route
 uzumaxy:prevent-backspace
 froala:editor
 perak:codemirror
-jeremy:geocomplete
